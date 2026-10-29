@@ -1,30 +1,8 @@
 name: Paimon 1.0.0 compatibility
 
+# Loams fork (FC1): manual only; no push, PR or schedule triggers.
 on:
-  workflow_dispatch:
-  push:
-    branches: ['**']
-    paths:
-      - 'streamfusion-paimon1/**'
-      - 'streamfusion-paimon/**'
-      - 'src/main/java/tech/streamfusion/paimon/**'
-      - 'src/main/java/tech/streamfusion/planner/*Paimon*'
-      - 'src/main/java/tech/streamfusion/arrow/**'
-      - 'src/main/java/tech/streamfusion/parquet/**'
-      - 'src/main/java/tech/streamfusion/orc/**'
-      - 'src/main/java/tech/streamfusion/operator/**'
-      - 'native/paimon/**'
-      - 'native/parquet/**'
-      - 'native/orc/**'
-      - 'dev/flink-suite/agent/**'
-      - 'dev/flink-suite/paimon-log4j2.properties'
-      - 'native/engine/src/keyed_upsert/**'
-      - 'native/bridge/**'
-      - 'bin/ci-free-disk.py'
-      - 'bin/paimon1-suite.sh'
-      - 'bin/test_paimon1_ci.py'
-      - 'pom.xml'
-      - '.github/workflows/paimon1.yml'
+  workflow_dispatch: {}
 
 concurrency:
   group: paimon1-${{ github.ref }}

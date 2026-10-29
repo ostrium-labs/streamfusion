@@ -1,13 +1,7 @@
 name: Nested scalar release diagnostics
 
+# Loams fork (FC1): manual only; no push, PR or schedule triggers.
 on:
-  push:
-    branches: ['**']
-    paths:
-      - '.github/workflows/nested-scalars.yml'
-      - 'bin/bench-nested-scalars.py'
-      - 'src/test/java/tech/streamfusion/NestedScalarBenchmark.java'
-      - 'src/test/java/tech/streamfusion/FlinkNestedScalarSqlHarnessTest.java'
   workflow_dispatch: {}
 
 permissions:
