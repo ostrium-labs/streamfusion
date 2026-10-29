@@ -1,0 +1,6 @@
+description = "Batch mode over SQL VALUES: a join, CASE and string functions, ordered"
+mode = "batch"
+order_sensitive = true
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

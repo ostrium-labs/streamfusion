@@ -1,0 +1,6 @@
+description = "Window Top-N: the two largest amounts per 10 s tumbling window"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

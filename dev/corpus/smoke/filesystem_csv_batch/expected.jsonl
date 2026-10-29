@@ -1,0 +1,4 @@
+{"columns":[{"name":"region","type":"VARCHAR(2147483647)"},{"name":"sold_day","type":"DATE"},{"name":"n","type":"BIGINT NOT NULL"},{"name":"revenue","type":"DECIMAL(38, 3)"},{"name":"top","type":"DECIMAL(10, 3)"}]}
+{"kind":"+I","fields":["east","2024-01-03",10,66.875,12]}
+{"kind":"+I","fields":["north","2024-01-01",10,63.125,12.375]}
+{"kind":"+I","fields":["south","2024-01-02",10,58.125,11.5]}

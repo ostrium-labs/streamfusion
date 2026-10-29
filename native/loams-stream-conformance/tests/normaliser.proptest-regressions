@@ -1,0 +1,7 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 2a8f8369ab83d4d184eea4519399e620975718f6f737a4eb0576bbc02f88e33a # shrinks to t = ResultTable { columns: [Column { name: "c0", ty: "INTEGER" }, Column { name: "c1", ty: "INTEGER" }, Column { name: "c2", ty: "INTEGER" }], rows: [] }, col = 0, ty = "BIGINT NOT NULL"

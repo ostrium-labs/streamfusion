@@ -1,0 +1,25 @@
+[package]
+name = "loams-stream-conformance"
+description = "Loams Stream's differential harness: runs a corpus of Flink SQL cases on Apache Flink 2.2.1 and on Loams Stream through the SQL Gateway REST API and compares the results (preview)."
+version.workspace = true
+edition = "2024"
+license = "Apache-2.0"
+publish = false
+
+[[bin]]
+name = "loams-stream-oracle"
+path = "src/bin/loams-stream-oracle.rs"
+
+# A REST client, a case runner and a normaliser: no DataFusion, no Arrow, no JNI.
+[dependencies]
+# Plain HTTP on loopback; a TLS feature comes with the first remote target.
+reqwest = { version = "0.12", default-features = false }
+serde = { workspace = true }
+# raw_value keeps each result field's JSON text exactly as the target wrote it
+# (a float's text form is compared, never its parsed value).
+serde_json = { workspace = true, features = ["raw_value"] }
+tokio = { workspace = true, features = ["rt", "time", "macros"] }
+toml = "0.9"
+
+[dev-dependencies]
+proptest = { version = "1", default-features = false, features = ["std"] }
