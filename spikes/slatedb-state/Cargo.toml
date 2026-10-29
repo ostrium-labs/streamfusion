@@ -1,0 +1,16 @@
+# FC1 Task 8 spike (report only, never merged): slatedb as Loams Stream's keyed-state backend,
+# against RocksDB. A standalone package, outside the native workspace.
+[package]
+name = "slatedb-state-spike"
+version = "0.0.0"
+edition = "2024"
+license = "Apache-2.0"
+publish = false
+
+[workspace]
+
+[dependencies]
+slatedb = "=0.17.0"
+tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
+bytes = "1"
+rocksdb = { version = "0.22.0", default-features = false, features = ["lz4"] }
