@@ -130,6 +130,21 @@ pub async fn run_case(
     }
 }
 
+/// A restore case's monitored filesystem source emits a watermark per row, as Flink's test
+/// `values` source does: a periodic watermark can miss a file that is read in one go, and the
+/// event-time results the program expects before the savepoint would never fire.
+fn per_event_watermarks(stmt: &str) -> String {
+    const MONITOR: &str = "'source.monitor-interval' = '200ms'";
+    if stmt.contains(MONITOR) && !stmt.contains("scan.watermark.emit.strategy") {
+        stmt.replace(
+            MONITOR,
+            "'source.monitor-interval' = '200ms',\n  'scan.watermark.emit.strategy' = 'on-event'",
+        )
+    } else {
+        stmt.to_owned()
+    }
+}
+
 /// Change events in the committed sink files under `dir` (0 when there are none yet).
 fn sink_events(dir: &Path) -> usize {
     let mut files = Vec::new();
@@ -171,6 +186,21 @@ async fn wait_for_events(
             )));
         }
         tokio::time::sleep(Duration::from_millis(300)).await;
+    }
+}
+
+/// Waits until the sink has not grown for `quiet` (bounded by `timeout`).
+async fn wait_until_quiet(dir: &Path, quiet: Duration, timeout: Duration) {
+    let start = std::time::Instant::now();
+    let mut last = (sink_events(dir), std::time::Instant::now());
+    while start.elapsed() < timeout {
+        tokio::time::sleep(Duration::from_millis(300)).await;
+        let n = sink_events(dir);
+        if n != last.0 {
+            last = (n, std::time::Instant::now());
+        } else if last.1.elapsed() >= quiet {
+            return;
+        }
     }
 }
 
@@ -229,7 +259,10 @@ async fn run_in_session(
                 .await?;
         }
         for stmt in &case.setup {
-            let sql = substitute(stmt, case_dir, sink_dir)?;
+            let mut sql = substitute(stmt, case_dir, sink_dir)?;
+            if case.spec.restore {
+                sql = per_event_watermarks(&sql);
+            }
             client
                 .execute_and_collect(&session, &ExecuteStatement::new(sql), limits)
                 .await?;
@@ -307,8 +340,14 @@ async fn run_restore(
     .await?;
     let job = first_string(&run(query.to_owned()).await?.table, "job id")?;
     let total = after.map(|a| before + a);
-    match total {
-        Some(t) if t > before => {
+    let end_mode = case.spec.restore_end.unwrap_or(RestoreEnd::Drain);
+    match (end_mode, total) {
+        // A drained job fires its remaining timers and windows at the end, so the expected count
+        // is only reached after the drain: wait until the sink is quiet, then drain.
+        (RestoreEnd::Drain, _) => {
+            wait_until_quiet(local_sink, Duration::from_secs(3), timeout).await;
+        }
+        (RestoreEnd::Cancel, Some(t)) if t > before => {
             if let Err(e) = wait_for_events(local_sink, Some(t), timeout, &case.name).await {
                 let _ = run(format!("STOP JOB '{job}'")).await;
                 return Err(e);
@@ -319,7 +358,7 @@ async fn run_restore(
             tokio::time::sleep(Duration::from_secs(2)).await;
         }
     }
-    let end = match case.spec.restore_end.unwrap_or(RestoreEnd::Drain) {
+    let end = match end_mode {
         RestoreEnd::Drain => format!("STOP JOB '{job}' WITH SAVEPOINT WITH DRAIN"),
         RestoreEnd::Cancel => format!("STOP JOB '{job}' WITH SAVEPOINT"),
     };

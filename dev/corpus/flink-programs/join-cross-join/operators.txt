@@ -1,0 +1,4 @@
+Exchange
+Join
+Sink
+TableSourceScan

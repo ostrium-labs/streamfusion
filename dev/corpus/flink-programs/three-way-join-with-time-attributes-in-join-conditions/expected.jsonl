@@ -1,0 +1,7 @@
+{"columns":[{"name":"category","type":"STRING"},{"name":"avg_final","type":"DOUBLE"}]}
+{"kind":"+I","fields":["Electronics",12.0]}
+{"kind":"-D","fields":["Electronics",12.0]}
+{"kind":"+I","fields":["Electronics",15.0]}
+{"kind":"+I","fields":["Books",25.0]}
+{"kind":"-D","fields":["Electronics",15.0]}
+{"kind":"+I","fields":["Electronics",16.5]}

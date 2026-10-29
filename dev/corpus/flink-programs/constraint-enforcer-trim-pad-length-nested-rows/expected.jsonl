@@ -1,0 +1,4 @@
+{"columns":[{"name":"a","type":"ROW<`id` BIGINT NOT NULL, `ab` ROW<`aba` CHAR(2) NOT NULL, `abb` VARCHAR(2) NOT NULL, `abc` BINARY(2) NOT NULL, `abd` VARBINARY(2) NOT NULL> NOT NULL> NOT NULL"}]}
+{"kind":"+I","fields":[{"id":1,"ab":{"aba":"a ","abb":"a","abc":"AQA=","abd":"AQ=="}}]}
+{"kind":"+I","fields":[{"id":2,"ab":{"aba":"ab","abb":"ab","abc":"AQI=","abd":"AQI="}}]}
+{"kind":"+I","fields":[{"id":3,"ab":{"aba":"ab","abb":"ab","abc":"AQI=","abd":"AQI="}}]}

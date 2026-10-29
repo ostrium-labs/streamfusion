@@ -1,0 +1,4 @@
+{"columns":[{"name":"order_id","type":"BIGINT"},{"name":"user","type":"STRING"},{"name":"product","type":"STRING NOT NULL"},{"name":"order_time","type":"BIGINT"}]}
+{"kind":"+I","fields":[1,"terry","pen",1000]}
+{"kind":"+I","fields":[4,"bob","apple",4000]}
+{"kind":"+I","fields":[8,"bill","banana",8000]}

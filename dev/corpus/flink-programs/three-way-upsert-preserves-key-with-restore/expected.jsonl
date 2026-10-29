@@ -1,0 +1,9 @@
+{"columns":[{"name":"user_id","type":"INT NOT NULL"},{"name":"order_id","type":"BIGINT NOT NULL"},{"name":"user_id2","type":"INT NOT NULL"},{"name":"payment_id","type":"BIGINT NOT NULL"},{"name":"user_id3","type":"INT NOT NULL"},{"name":"description","type":"STRING"}]}
+{"kind":"+I","fields":[1,1,1,1,1,"shard_a"]}
+{"kind":"+I","fields":[1,2,1,1,1,"shard_a"]}
+{"kind":"+I","fields":[1,1,1,2,1,"shard_a"]}
+{"kind":"+I","fields":[1,2,1,2,1,"shard_a"]}
+{"kind":"+I","fields":[2,1,2,2,2,"shard_b"]}
+{"kind":"+I","fields":[2,1,2,1,2,"shard_b"]}
+{"kind":"+I","fields":[2,2,2,2,2,"shard_b"]}
+{"kind":"+I","fields":[2,2,2,1,2,"shard_b"]}

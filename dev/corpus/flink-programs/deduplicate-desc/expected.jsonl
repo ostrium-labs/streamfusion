@@ -1,0 +1,16 @@
+{"columns":[{"name":"order_id","type":"BIGINT"},{"name":"user","type":"STRING"},{"name":"product","type":"STRING NOT NULL"},{"name":"order_time","type":"BIGINT"}]}
+{"kind":"+I","fields":[1,"terry","pen",1000]}
+{"kind":"-D","fields":[1,"terry","pen",1000]}
+{"kind":"+I","fields":[2,"alice","pen",2000]}
+{"kind":"-D","fields":[2,"alice","pen",2000]}
+{"kind":"+I","fields":[3,"bob","pen",3000]}
+{"kind":"+I","fields":[4,"bob","apple",4000]}
+{"kind":"-D","fields":[4,"bob","apple",4000]}
+{"kind":"+I","fields":[5,"fish","apple",5000]}
+{"kind":"-D","fields":[3,"bob","pen",3000]}
+{"kind":"+I","fields":[6,"jerry","pen",6000]}
+{"kind":"-D","fields":[5,"fish","apple",5000]}
+{"kind":"+I","fields":[7,"larry","apple",7000]}
+{"kind":"+I","fields":[8,"bill","banana",8000]}
+{"kind":"-D","fields":[7,"larry","apple",7000]}
+{"kind":"+I","fields":[9,"carol","apple",9000]}

@@ -1,0 +1,2 @@
+{"columns":[{"name":"a","type":"ROW<`id` BIGINT NOT NULL, `ab` ARRAY<ARRAY<BIGINT NOT NULL> NOT NULL> NOT NULL> NOT NULL"}]}
+{"kind":"+I","fields":[{"id":3,"ab":[[1]]}]}

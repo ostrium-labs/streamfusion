@@ -1,0 +1,57 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"department_name","type":"STRING"}]}
+{"kind":"+I","fields":["Adam","Accounting"]}
+{"kind":"+I","fields":["Adam","Research"]}
+{"kind":"+I","fields":["Adam","Human Resources"]}
+{"kind":"+I","fields":["Baker","Accounting"]}
+{"kind":"+I","fields":["Baker","Human Resources"]}
+{"kind":"+I","fields":["Baker","Research"]}
+{"kind":"+I","fields":["Adam","HR"]}
+{"kind":"+I","fields":["Baker","HR"]}
+{"kind":"+I","fields":["Charlie","Accounting"]}
+{"kind":"+I","fields":["Charlie","Human Resources"]}
+{"kind":"+I","fields":["Charlie","HR"]}
+{"kind":"+I","fields":["Charlie","Research"]}
+{"kind":"+I","fields":["Adam","Sales"]}
+{"kind":"+I","fields":["Baker","Sales"]}
+{"kind":"+I","fields":["Charlie","Sales"]}
+{"kind":"+I","fields":["Don","Accounting"]}
+{"kind":"+I","fields":["Don","Human Resources"]}
+{"kind":"+I","fields":["Don","HR"]}
+{"kind":"+I","fields":["Don","Sales"]}
+{"kind":"+I","fields":["Don","Research"]}
+{"kind":"+I","fields":["Victor","Accounting"]}
+{"kind":"+I","fields":["Victor","Human Resources"]}
+{"kind":"+I","fields":["Victor","HR"]}
+{"kind":"+I","fields":["Victor","Sales"]}
+{"kind":"+I","fields":["Victor","Research"]}
+{"kind":"+I","fields":["Don","People Operations"]}
+{"kind":"+I","fields":["Adam","People Operations"]}
+{"kind":"+I","fields":["Victor","People Operations"]}
+{"kind":"+I","fields":["Baker","People Operations"]}
+{"kind":"+I","fields":["Charlie","People Operations"]}
+{"kind":"+I","fields":["Don","Engineering"]}
+{"kind":"+I","fields":["Adam","Engineering"]}
+{"kind":"+I","fields":["Victor","Engineering"]}
+{"kind":"+I","fields":["Baker","Engineering"]}
+{"kind":"+I","fields":["Charlie","Engineering"]}
+{"kind":"+I","fields":["Juliet","Accounting"]}
+{"kind":"+I","fields":["Juliet","Human Resources"]}
+{"kind":"+I","fields":["Juliet","HR"]}
+{"kind":"+I","fields":["Juliet","Engineering"]}
+{"kind":"+I","fields":["Juliet","People Operations"]}
+{"kind":"+I","fields":["Juliet","Sales"]}
+{"kind":"+I","fields":["Juliet","Research"]}
+{"kind":"+I","fields":["Helena","Accounting"]}
+{"kind":"+I","fields":["Helena","Human Resources"]}
+{"kind":"+I","fields":["Helena","HR"]}
+{"kind":"+I","fields":["Helena","Engineering"]}
+{"kind":"+I","fields":["Helena","People Operations"]}
+{"kind":"+I","fields":["Helena","Sales"]}
+{"kind":"+I","fields":["Helena","Research"]}
+{"kind":"+I","fields":["Ivana","Accounting"]}
+{"kind":"+I","fields":["Ivana","Human Resources"]}
+{"kind":"+I","fields":["Ivana","HR"]}
+{"kind":"+I","fields":["Ivana","Engineering"]}
+{"kind":"+I","fields":["Ivana","People Operations"]}
+{"kind":"+I","fields":["Ivana","Sales"]}
+{"kind":"+I","fields":["Ivana","Research"]}

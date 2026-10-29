@@ -1,0 +1,13 @@
+{"columns":[{"name":"id","type":"STRING"},{"name":"val","type":"STRING"},{"name":"data","type":"STRING"},{"name":"status","type":"STRING"}]}
+{"kind":"+I","fields":["1","append1",null,"active"]}
+{"kind":"-D","fields":["1","append1",null,"active"]}
+{"kind":"+I","fields":["1","append1","retract1","active"]}
+{"kind":"+I","fields":["2","append2",null,"active"]}
+{"kind":"-D","fields":["2","append2",null,"active"]}
+{"kind":"+I","fields":["2","append2","retract2","active"]}
+{"kind":"+I","fields":["3","append3",null,null]}
+{"kind":"-D","fields":["3","append3",null,null]}
+{"kind":"+I","fields":["3","append3","retract3",null]}
+{"kind":"-D","fields":["3","append3","retract3",null]}
+{"kind":"+I","fields":["3","append3",null,null]}
+{"kind":"+I","fields":["1","append1","retract1_new","active"]}

@@ -1,0 +1,5 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"department_name","type":"STRING"}]}
+{"kind":"+I","fields":["Baker","Research"]}
+{"kind":"+I","fields":["Baker","Sales"]}
+{"kind":"+I","fields":["Ivana","Sales"]}
+{"kind":"+I","fields":["Ivana","Research"]}

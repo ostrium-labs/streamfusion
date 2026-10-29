@@ -1,0 +1,11 @@
+{"columns":[{"name":"a","type":"STRING NOT NULL"},{"name":"b","type":"INT"},{"name":"c","type":"STRING"}]}
+{"kind":"+I","fields":["one",1,"a"]}
+{"kind":"-D","fields":["one",1,"a"]}
+{"kind":"+I","fields":["one",2,"bb"]}
+{"kind":"+I","fields":["one",4,"aaaa"]}
+{"kind":"-D","fields":["one",4,"aaaa"]}
+{"kind":"+I","fields":["one",4,"aaaa"]}
+{"kind":"+I","fields":["two",1,"d"]}
+{"kind":"-D","fields":["two",1,"d"]}
+{"kind":"+I","fields":["two",1,"d"]}
+{"kind":"-D","fields":["two",1,"d"]}

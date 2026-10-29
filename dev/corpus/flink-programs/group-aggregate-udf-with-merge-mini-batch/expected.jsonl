@@ -1,0 +1,9 @@
+{"columns":[{"name":"d","type":"BIGINT NOT NULL"},{"name":"s1","type":"BIGINT"},{"name":"c1","type":"STRING"}]}
+{"kind":"+I","fields":[3,3,"HIJ|IJK|BCD"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE|JKL"]}
+{"kind":"+I","fields":[1,1,"Hello World Like|Hello|GHI|EFG"]}
+{"kind":"-D","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE|JKL"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE|JKL|KLM"]}
+{"kind":"-D","fields":[1,1,"Hello World Like|Hello|GHI|EFG"]}
+{"kind":"+I","fields":[1,1,"Hello World Like|Hello|GHI|EFG|DEF"]}
+{"kind":"+I","fields":[7,7,"MNO|XYZ"]}

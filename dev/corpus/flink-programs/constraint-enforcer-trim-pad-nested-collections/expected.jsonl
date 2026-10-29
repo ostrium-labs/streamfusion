@@ -1,0 +1,2 @@
+{"columns":[{"name":"error","type":"STRING"}]}
+{"kind":"+I","fields":["Trimming and/or padding is not supported if constraint checking is enabled on types nested in collections."]}

@@ -1,0 +1,8 @@
+{"columns":[{"name":"window_start","type":"TIMESTAMP(3)"},{"name":"window_end","type":"TIMESTAMP(3)"},{"name":"name","type":"STRING"},{"name":"L_id","type":"STRING"},{"name":"L_num","type":"INT"},{"name":"R_id","type":"STRING"},{"name":"R_num","type":"INT"}]}
+{"kind":"+I","fields":["2020-10-10 00:00:00","2020-10-10 00:00:05","a","L1",1,"NOT_PRESENT",0]}
+{"kind":"+I","fields":["2020-10-10 00:00:00","2020-10-10 00:00:05","a","L7",5,"NOT_PRESENT",0]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","b","L8",3,"NOT_PRESENT",0]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","b","L6",6,"NOT_PRESENT",0]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","a","L9",3,"NOT_PRESENT",0]}
+{"kind":"+I","fields":["2020-10-10 00:00:30","2020-10-10 00:00:35","b","L12",1,"NOT_PRESENT",0]}
+{"kind":"+I","fields":["2020-10-10 00:00:40","2020-10-10 00:00:45","c","L43",12,"NOT_PRESENT",0]}

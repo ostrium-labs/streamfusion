@@ -1,0 +1,6 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"out","type":"STRING"}]}
+{"kind":"+I","fields":["Bob","{{}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 12]}"]}
+{"kind":"+I","fields":["Alice","{{}, KeyedStateMapViewWithKeysNotNull, +I[Alice, 42]}"]}
+{"kind":"+I","fields":["Bob","{{Bob=2, oldBob=1}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 99]}"]}
+{"kind":"+I","fields":["Bob","{{}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 100]}"]}
+{"kind":"+I","fields":["Alice","{{Alice=2, oldAlice=1}, KeyedStateMapViewWithKeysNotNull, +I[Alice, 400]}"]}

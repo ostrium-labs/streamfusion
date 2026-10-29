@@ -1,0 +1,3 @@
+{"columns":[{"name":"record_id","type":"STRING"},{"name":"user_id","type":"INT"},{"name":"id","type":"STRING"}]}
+{"kind":"+I","fields":["record_1",1,"record_1"]}
+{"kind":"+I","fields":["record_2",2,"record_2"]}

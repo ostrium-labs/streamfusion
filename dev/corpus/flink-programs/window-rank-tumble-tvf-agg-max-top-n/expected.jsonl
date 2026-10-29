@@ -1,0 +1,10 @@
+{"columns":[{"name":"window_start","type":"TIMESTAMP(3)"},{"name":"window_end","type":"TIMESTAMP(3)"},{"name":"supplier_id","type":"STRING"},{"name":"total_price","type":"DECIMAL(10, 2)"},{"name":"cnt","type":"BIGINT"},{"name":"row_num","type":"BIGINT"}]}
+{"kind":"+I","fields":["2020-04-15 08:00:00","2020-04-15 08:00:10","supplier1",6,2,1]}
+{"kind":"+I","fields":["2020-04-15 08:00:00","2020-04-15 08:00:10","supplier4",5,1,2]}
+{"kind":"+I","fields":["2020-04-15 08:00:00","2020-04-15 08:00:10","supplier2",4,1,3]}
+{"kind":"+I","fields":["2020-04-15 08:00:10","2020-04-15 08:00:20","supplier5",6,1,1]}
+{"kind":"+I","fields":["2020-04-15 08:00:10","2020-04-15 08:00:20","supplier2",3,1,2]}
+{"kind":"+I","fields":["2020-04-15 08:00:10","2020-04-15 08:00:20","supplier3",2,1,3]}
+{"kind":"+I","fields":["2020-04-15 08:00:20","2020-04-15 08:00:30","supplier8",6,1,1]}
+{"kind":"+I","fields":["2020-04-15 08:00:20","2020-04-15 08:00:30","supplier3",3,1,2]}
+{"kind":"+I","fields":["2020-04-15 08:00:20","2020-04-15 08:00:30","supplier7",2,1,3]}

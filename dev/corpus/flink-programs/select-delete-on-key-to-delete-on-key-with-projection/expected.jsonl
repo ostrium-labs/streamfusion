@@ -1,0 +1,6 @@
+{"columns":[{"name":"id","type":"INT NOT NULL"},{"name":"name","type":"STRING"},{"name":"value","type":"INT"}]}
+{"kind":"+I","fields":[1,"Alice",12]}
+{"kind":"+I","fields":[2,"Bob",22]}
+{"kind":"-D","fields":[1,"Alice",12]}
+{"kind":"-D","fields":[2,"Bob",22]}
+{"kind":"+I","fields":[2,"Bob",32]}

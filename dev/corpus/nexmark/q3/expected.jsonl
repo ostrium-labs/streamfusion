@@ -1,0 +1,1 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"city","type":"STRING"},{"name":"state","type":"STRING"},{"name":"id","type":"BIGINT"}]}

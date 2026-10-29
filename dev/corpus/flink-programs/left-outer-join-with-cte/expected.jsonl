@@ -1,0 +1,5 @@
+{"columns":[{"name":"user_id","type":"STRING"},{"name":"name","type":"STRING"},{"name":"cnt","type":"BIGINT"}]}
+{"kind":"+I","fields":["2","Bob",1]}
+{"kind":"+I","fields":["1","Gus",1]}
+{"kind":"-D","fields":["1","Gus",1]}
+{"kind":"+I","fields":["1","Gus",2]}

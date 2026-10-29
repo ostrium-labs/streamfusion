@@ -1,0 +1,12 @@
+{"columns":[{"name":"name","type":"STRING"}]}
+{"kind":"+I","fields":["Adam"]}
+{"kind":"+I","fields":["Baker"]}
+{"kind":"-D","fields":["Baker"]}
+{"kind":"-D","fields":["Adam"]}
+{"kind":"+I","fields":["Charlie"]}
+{"kind":"-D","fields":["Charlie"]}
+{"kind":"+I","fields":["Don"]}
+{"kind":"+I","fields":["Victor"]}
+{"kind":"-D","fields":["Don"]}
+{"kind":"+I","fields":["Juliet"]}
+{"kind":"+I","fields":["Helena"]}

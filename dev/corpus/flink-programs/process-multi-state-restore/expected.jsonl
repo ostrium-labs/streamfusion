@@ -1,0 +1,6 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"out","type":"STRING"}]}
+{"kind":"+I","fields":["Bob","{+I[null], +I[null], +I[Bob, 12]}"]}
+{"kind":"+I","fields":["Alice","{+I[null], +I[null], +I[Alice, 42]}"]}
+{"kind":"+I","fields":["Bob","{+I[1], +I[0], +I[Bob, 99]}"]}
+{"kind":"+I","fields":["Bob","{+I[2], +I[1], +I[Bob, 100]}"]}
+{"kind":"+I","fields":["Alice","{+I[1], +I[0], +I[Alice, 400]}"]}

@@ -1,0 +1,12 @@
+{"columns":[{"name":"key","type":"STRING"},{"name":"val","type":"BIGINT"},{"name":"ts","type":"BIGINT"},{"name":"avg_val","type":"BIGINT"}]}
+{"kind":"+I","fields":["key1",1,100,1]}
+{"kind":"+I","fields":["key1",2,200,1]}
+{"kind":"+I","fields":["key1",5,500,2]}
+{"kind":"+I","fields":["key1",6,600,3]}
+{"kind":"+I","fields":["key2",1,100,1]}
+{"kind":"+I","fields":["key2",2,200,1]}
+{"kind":"+I","fields":["key1",4,400,2]}
+{"kind":"-D","fields":["key1",5,500,2]}
+{"kind":"+I","fields":["key1",5,500,3]}
+{"kind":"-D","fields":["key1",6,600,3]}
+{"kind":"+I","fields":["key1",6,600,3]}

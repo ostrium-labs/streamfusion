@@ -1,0 +1,8 @@
+{"columns":[{"name":"user_id","type":"INT NOT NULL"},{"name":"order_id","type":"BIGINT NOT NULL"},{"name":"product","type":"STRING"},{"name":"user_shard_id","type":"INT"}]}
+{"kind":"+I","fields":[1,1,"a",null]}
+{"kind":"-D","fields":[1,1,"a",null]}
+{"kind":"+I","fields":[1,1,"a_updated",1]}
+{"kind":"+I","fields":[1,2,"b",1]}
+{"kind":"-D","fields":[1,2,"b",1]}
+{"kind":"+I","fields":[3,1,"b",1]}
+{"kind":"+I","fields":[9,9,"b",null]}

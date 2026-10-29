@@ -1,0 +1,6 @@
+{"columns":[{"name":"a","type":"INT"},{"name":"b","type":"STRING"}]}
+{"kind":"+I","fields":[1,"hi"]}
+{"kind":"+I","fields":[2,"hello"]}
+{"kind":"+I","fields":[3,"hello world"]}
+{"kind":"+I","fields":[4,"foo"]}
+{"kind":"+I","fields":[5,"foo bar"]}

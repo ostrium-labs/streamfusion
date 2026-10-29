@@ -1,0 +1,4 @@
+{"columns":[{"name":"a","type":"INT"},{"name":"b","type":"STRING"},{"name":"c","type":"BIGINT"}]}
+{"kind":"+I","fields":[2,"a",6]}
+{"kind":"+I","fields":[4,"b",8]}
+{"kind":"+I","fields":[6,"c",10]}

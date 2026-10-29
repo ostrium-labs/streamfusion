@@ -1,0 +1,4 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"order_id","type":"STRING"},{"name":"payment_id","type":"STRING"},{"name":"ship_id","type":"STRING"},{"name":"k1","type":"STRING"},{"name":"k2","type":"INT"},{"name":"k3","type":"BOOLEAN"},{"name":"k4","type":"STRING"}]}
+{"kind":"+I","fields":["Bob","order2","payment2",null,"A1",200,false,"k4_val2"]}
+{"kind":"+I","fields":["John","order2","payment2",null,"A1",200,false,"k4_val2"]}
+{"kind":"-D","fields":["John","order2","payment2",null,"A1",200,false,"k4_val2"]}

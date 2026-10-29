@@ -1,0 +1,7 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"nested","type":"STRING"}]}
+{"kind":"+I","fields":["Bob","1"]}
+{"kind":"+I","fields":["Bob","2"]}
+{"kind":"+I","fields":["Bob","3"]}
+{"kind":"+I","fields":["Alice","4"]}
+{"kind":"+I","fields":["Alice","5"]}
+{"kind":"+I","fields":["Alice","6"]}

@@ -1,0 +1,15 @@
+{"columns":[{"name":"e","type":"BIGINT NOT NULL"},{"name":"cnt_a1","type":"BIGINT"},{"name":"cnt_a2","type":"BIGINT"},{"name":"sum_a","type":"BIGINT"},{"name":"sum_b","type":"BIGINT"},{"name":"avg_b","type":"DOUBLE"},{"name":"cnt_d","type":"BIGINT"}]}
+{"kind":"+I","fields":[3,1,2,8,31,10.0,3]}
+{"kind":"+I","fields":[2,1,4,14,42,7.0,6]}
+{"kind":"+I","fields":[1,1,4,12,24,6.0,4]}
+{"kind":"-D","fields":[2,1,4,14,42,7.0,6]}
+{"kind":"+I","fields":[2,1,4,14,57,8.0,7]}
+{"kind":"-D","fields":[1,1,4,12,24,6.0,4]}
+{"kind":"+I","fields":[1,1,4,12,32,6.0,5]}
+{"kind":"-D","fields":[3,1,2,8,31,10.0,3]}
+{"kind":"+I","fields":[3,1,2,8,31,9.0,3]}
+{"kind":"+I","fields":[7,0,1,7,7,7.0,2]}
+{"kind":"-D","fields":[2,1,4,14,57,8.0,7]}
+{"kind":"+I","fields":[2,1,4,14,57,7.0,7]}
+{"kind":"-D","fields":[1,1,4,12,32,6.0,5]}
+{"kind":"+I","fields":[1,1,4,12,32,5.0,5]}
