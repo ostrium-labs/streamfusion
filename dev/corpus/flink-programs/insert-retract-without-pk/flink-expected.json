@@ -1,0 +1,12 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Alice, 3]", "+I[Bob, 5]", "-U[Bob, 5]", "+U[Bob, 11]", "+I[Charly, 33]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Alice, 3]", "+I[Bob, 5]", "-U[Bob, 5]", "+U[Bob, 11]", "+I[Charly, 33]" ],
+    "primary_key" : [ ],
+    "options" : {
+      "sink-changelog-mode-enforced" : "I,UB,UA,D"
+    }
+  }
+}

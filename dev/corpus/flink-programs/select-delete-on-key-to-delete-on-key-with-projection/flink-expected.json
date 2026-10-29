@@ -1,0 +1,13 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, Alice, 12]", "+I[2, Bob, 22]", "-D[1, , -1]", "+U[2, Bob, 32]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[1, Alice, 12]", "+I[2, Bob, 22]", "-D[1, , -1]", "+U[2, Bob, 32]" ],
+    "primary_key" : [ "id" ],
+    "options" : {
+      "changelog-mode" : "I,UA,D",
+      "sink.supports-delete-by-key" : "true"
+    }
+  }
+}

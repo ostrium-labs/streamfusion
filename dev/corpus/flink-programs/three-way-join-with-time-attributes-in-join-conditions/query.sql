@@ -1,0 +1,1 @@
+INSERT INTO sink SELECT Q.category, AVG(Q.final) FROM (     SELECT MAX(B.price) AS final, A.category     FROM auctions A, bids B     WHERE A.id = B.auction AND B.bidDateTime BETWEEN A.auctionDateTime AND A.expires     GROUP BY A.id, A.category ) Q GROUP BY Q.category;

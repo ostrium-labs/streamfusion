@@ -1,0 +1,5 @@
+{"before":null,"after":{"k1":"K1","k2":100,"k3":true,"k4":"k4_val1","name":"Gus"},"op":"c"}
+{"before":null,"after":{"k1":"A1","k2":200,"k3":false,"k4":"k4_val2","name":"Bob"},"op":"c"}
+{"before":null,"after":{"k1":"A1","k2":200,"k3":false,"k4":"k4_val2","name":"John"},"op":"c"}
+{"before":{"k1":"A1","k2":200,"k3":false,"k4":"k4_val2","name":"John"},"after":null,"op":"d"}
+{"before":null,"after":{"k1":"U_NO_MATCH","k2":1,"k3":true,"k4":"k4_u","name":"UserNoMatch"},"op":"c"}

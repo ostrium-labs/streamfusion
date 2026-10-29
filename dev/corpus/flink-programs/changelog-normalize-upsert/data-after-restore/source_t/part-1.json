@@ -1,0 +1,6 @@
+{"before":null,"after":{"a":"four","b":4,"c":"d"},"op":"c"}
+{"before":null,"after":{"a":"five","b":5,"c":"e"},"op":"c"}
+{"before":null,"after":{"a":"six","b":6,"c":"f"},"op":"c"}
+{"before":{"a":"five","b":5,"c":"e"},"after":{"a":"five","b":5,"c":"ee"},"op":"u"}
+{"before":{"a":"six","b":6,"c":"f"},"after":null,"op":"d"}
+{"before":{"a":"four","b":4,"c":"d"},"after":{"a":"four","b":4,"c":"dd"},"op":"u"}

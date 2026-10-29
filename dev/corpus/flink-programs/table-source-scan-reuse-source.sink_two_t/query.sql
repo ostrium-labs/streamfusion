@@ -1,0 +1,5 @@
+EXECUTE STATEMENT SET
+BEGIN
+INSERT INTO sink_one_t SELECT a, c FROM source_t;
+INSERT INTO sink_two_t SELECT a, b FROM source_t;
+END;

@@ -1,0 +1,16 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[1, order1, 1, payment1, 1, Gus, London]" ],
+    "after" : [ "+I[2, order2, 2, payment2, 2, Bob, Paris]" ],
+    "materialized" : [ "+I[1, order1, 1, payment1, 1, Gus, London]", "+I[2, order2, 2, payment2, 2, Bob, Paris]" ],
+    "primary_key" : [ "user_id_0", "order_id", "user_id_1", "payment_id", "user_id_2" ],
+    "options" : {
+      "changelog-mode" : "I,UA,D",
+      "connector" : "values",
+      "sink-changelog-mode-enforced" : "I,UA,D",
+      "sink.supports-delete-by-key" : "true",
+      "source.produces-delete-by-key" : "true"
+    }
+  }
+}

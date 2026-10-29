@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL]", "+I[1, 1, Hello World Like|Hello|GHI|EFG]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL|KLM]", "+U[1, 1, Hello World Like|Hello|GHI|EFG|DEF]", "+I[3, 3, HIJ|IJK|BCD]" ],
+    "after" : [ "+I[7, 7, MNO|XYZ]" ],
+    "materialized" : [ "+I[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL]", "+I[1, 1, Hello World Like|Hello|GHI|EFG]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL|KLM]", "+U[1, 1, Hello World Like|Hello|GHI|EFG|DEF]", "+I[3, 3, HIJ|IJK|BCD]", "+I[7, 7, MNO|XYZ]" ],
+    "primary_key" : [ "d" ],
+    "options" : { }
+  }
+}

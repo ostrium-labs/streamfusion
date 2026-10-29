@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT a, b FROM source_t WHERE a > CAST(420 AS BIGINT);

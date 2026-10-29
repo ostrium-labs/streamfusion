@@ -1,0 +1,10 @@
+{
+  "MySink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, BakerBaker, Baker2]", "+I[1, BakerBaker, Baker2]", "+I[1, BakerBaker, Baker3]", "+I[2, HeHe, Baker5]", "+I[1, BakerBaker, Baker6]", "+I[1, BakerBaker, Baker8]", "+I[null, HeHe, Baker9]" ],
+    "after" : [ "+I[2, PostRestoreRight, Baker5]" ],
+    "materialized" : [ "+I[1, BakerBaker, Baker2]", "+I[1, BakerBaker, Baker2]", "+I[1, BakerBaker, Baker3]", "+I[2, HeHe, Baker5]", "+I[1, BakerBaker, Baker6]", "+I[1, BakerBaker, Baker8]", "+I[null, HeHe, Baker9]", "+I[2, PostRestoreRight, Baker5]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

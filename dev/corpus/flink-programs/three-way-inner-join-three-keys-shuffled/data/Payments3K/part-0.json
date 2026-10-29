@@ -1,0 +1,4 @@
+{"k1":"K1","payment_id":"payment1","k3":true,"k2":100}
+{"k1":"A1","payment_id":"payment2","k3":false,"k2":200}
+{"k1":"K1","payment_id":"payment_partial1","k3":false,"k2":100}
+{"k1":"A1","payment_id":"payment_partial2","k3":false,"k2":300}

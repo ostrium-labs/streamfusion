@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT O.order_id, O.total, C.id, C.name, C.age, C.city, C.state, C.zipcode FROM orders_t as O LEFT JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C ON O.customer_id = C.id AND O.total > 15.3 AND CAST(O.total AS INT) < C.age;

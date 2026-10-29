@@ -1,0 +1,4 @@
+{"before":null,"after":{"user_id":"2","order_id":"order2","product":"Product B"},"op":"c"}
+{"before":{"user_id":"2","order_id":"order2","product":"Product B"},"after":{"user_id":"2","order_id":"order2","product":"Product B"},"op":"u"}
+{"before":{"user_id":"2","order_id":"order2","product":"Product B"},"after":{"user_id":"2","order_id":"order2","product":"Product C"},"op":"u"}
+{"before":{"user_id":"2","order_id":"order2","product":"Product C"},"after":{"user_id":"2","order_id":"order2","product":"Product C"},"op":"u"}

@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 1]", "+I[2, 2]" ],
+    "after" : [ "-U[2, 2]", "+U[2, 3]", "+I[4, 1]" ],
+    "materialized" : [ "+I[1, 1]", "+I[2, 2]", "-U[2, 2]", "+U[2, 3]", "+I[4, 1]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

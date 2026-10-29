@@ -1,0 +1,16 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[1, append1, retract1, active]", "+I[2, append2, retract2, active]", "+I[1, append1, retract1_new, active]", "+I[3, append3, null, null]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[1, append1, retract1, active]", "+I[2, append2, retract2, active]", "+I[1, append1, retract1_new, active]", "+I[3, append3, null, null]" ],
+    "primary_key" : [ ],
+    "options" : {
+      "changelog-mode" : "I,UB,UA,D",
+      "connector" : "values",
+      "sink-changelog-mode-enforced" : "I,UB,UA,D",
+      "sink.supports-delete-by-key" : "false",
+      "source.produces-delete-by-key" : "false"
+    }
+  }
+}

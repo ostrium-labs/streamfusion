@@ -1,0 +1,7 @@
+{"before":null,"after":{"key":"key1","val":1,"ts":100},"op":"c"}
+{"before":null,"after":{"key":"key1","val":2,"ts":200},"op":"c"}
+{"before":null,"after":{"key":"key1","val":5,"ts":500},"op":"c"}
+{"before":null,"after":{"key":"key1","val":6,"ts":600},"op":"c"}
+{"before":{"key":"key1","val":2,"ts":200},"after":{"key":"key1","val":3,"ts":200},"op":"u"}
+{"before":null,"after":{"key":"key2","val":1,"ts":100},"op":"c"}
+{"before":null,"after":{"key":"key2","val":2,"ts":200},"op":"c"}

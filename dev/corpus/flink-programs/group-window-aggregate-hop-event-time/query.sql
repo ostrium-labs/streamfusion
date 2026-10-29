@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT name, COUNT(*) FROM source_t GROUP BY name, HOP(rowtime, INTERVAL '5' SECOND, INTERVAL '10' SECOND);

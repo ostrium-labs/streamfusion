@@ -1,0 +1,16 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[3, Nomad, order3, payment3, New York]", "+I[1, Gus, order0, payment1, London]", "+I[1, Gus, order1, payment1, London]", "+I[5, Eve, null, payment5, null]", "+I[6, Frank, order6, payment6, null]", "+I[9, Charlie Taylor, order9, payment9, Melbourne]", "+I[3, Nomad, order3, payment3, Brasília]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[3, Nomad, order3, payment3, New York]", "+I[1, Gus, order0, payment1, London]", "+I[1, Gus, order1, payment1, London]", "+I[5, Eve, null, payment5, null]", "+I[6, Frank, order6, payment6, null]", "+I[9, Charlie Taylor, order9, payment9, Melbourne]", "+I[3, Nomad, order3, payment3, Brasília]" ],
+    "primary_key" : [ ],
+    "options" : {
+      "changelog-mode" : "I,UB,UA,D",
+      "connector" : "values",
+      "sink-changelog-mode-enforced" : "I,UB,UA,D",
+      "sink.supports-delete-by-key" : "false",
+      "source.produces-delete-by-key" : "false"
+    }
+  }
+}

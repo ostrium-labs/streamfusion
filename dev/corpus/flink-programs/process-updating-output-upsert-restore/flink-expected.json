@@ -1,0 +1,12 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, Bob, 1, upsert-full-delete]", "+I[Alice, Alice, 1, upsert-full-delete]" ],
+    "after" : [ "+U[Bob, Bob, 2, upsert-full-delete]", "-D[Alice, Alice, 1, upsert-full-delete]" ],
+    "materialized" : [ "+I[Bob, Bob, 1, upsert-full-delete]", "+I[Alice, Alice, 1, upsert-full-delete]", "+U[Bob, Bob, 2, upsert-full-delete]", "-D[Alice, Alice, 1, upsert-full-delete]" ],
+    "primary_key" : [ "name" ],
+    "options" : {
+      "sink-changelog-mode-enforced" : "I,UA,D"
+    }
+  }
+}

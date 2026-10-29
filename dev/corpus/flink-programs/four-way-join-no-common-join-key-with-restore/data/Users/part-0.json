@@ -1,0 +1,4 @@
+{"before":null,"after":{"name":"Gus","user_id_0":"1","cash":100},"op":"c"}
+{"before":null,"after":{"name":"Nomad","user_id_0":"3","cash":50},"op":"c"}
+{"before":null,"after":{"name":"Bob","user_id_0":"2","cash":20},"op":"c"}
+{"before":{"name":"Bob","user_id_0":"2","cash":20},"after":null,"op":"d"}

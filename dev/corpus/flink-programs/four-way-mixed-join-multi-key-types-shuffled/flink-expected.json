@@ -1,0 +1,16 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[Bob, order2, payment2, null, A1, 200, false, k4_val2]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, order2, payment2, null, A1, 200, false, k4_val2]" ],
+    "primary_key" : [ ],
+    "options" : {
+      "changelog-mode" : "I,UB,UA,D",
+      "connector" : "values",
+      "sink-changelog-mode-enforced" : "I,UB,UA,D",
+      "sink.supports-delete-by-key" : "false",
+      "source.produces-delete-by-key" : "false"
+    }
+  }
+}

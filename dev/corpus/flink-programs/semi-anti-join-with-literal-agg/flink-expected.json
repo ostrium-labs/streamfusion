@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[2]", "+I[34]", "-D[2]", "-D[34]", "+I[2]", "+I[34]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[2]", "+I[34]", "-D[2]", "-D[34]", "+I[2]", "+I[34]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

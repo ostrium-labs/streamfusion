@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[2020-04-15T08:00:05, supplier1]", "+I[2020-04-15T08:00:05, supplier1]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[2020-04-15T08:00:05, supplier1]", "+I[2020-04-15T08:00:05, supplier1]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

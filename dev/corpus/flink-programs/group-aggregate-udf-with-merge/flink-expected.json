@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 1, Hello World Like]", "+I[2, 2, Hello World Its nice]", "+U[2, 2, Hello World Its nice|Hello World]", "+U[1, 1, Hello World Like|Hello]", "+U[1, 1, Hello World Like|Hello|GHI]", "+U[2, 2, Hello World Its nice|Hello World|ABC]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL]", "+U[1, 1, Hello World Like|Hello|GHI|EFG]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL|KLM]", "+I[3, 3, HIJ]", "+U[1, 1, Hello World Like|Hello|GHI|EFG|DEF]", "+U[3, 3, HIJ|IJK]", "+U[3, 3, HIJ|IJK|BCD]" ],
+    "after" : [ "+I[7, 7, MNO]", "+U[7, 7, MNO|XYZ]" ],
+    "materialized" : [ "+I[1, 1, Hello World Like]", "+I[2, 2, Hello World Its nice]", "+U[2, 2, Hello World Its nice|Hello World]", "+U[1, 1, Hello World Like|Hello]", "+U[1, 1, Hello World Like|Hello|GHI]", "+U[2, 2, Hello World Its nice|Hello World|ABC]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL]", "+U[1, 1, Hello World Like|Hello|GHI|EFG]", "+U[2, 2, Hello World Its nice|Hello World|ABC|FGH|CDE|JKL|KLM]", "+I[3, 3, HIJ]", "+U[1, 1, Hello World Like|Hello|GHI|EFG|DEF]", "+U[3, 3, HIJ|IJK]", "+U[3, 3, HIJ|IJK|BCD]", "+I[7, 7, MNO]", "+U[7, 7, MNO|XYZ]" ],
+    "primary_key" : [ "d" ],
+    "options" : { }
+  }
+}

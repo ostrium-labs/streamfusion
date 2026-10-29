@@ -1,0 +1,1 @@
+INSERT INTO MySink SELECT /*+ STATE_TTL('v1' = '1d', 'v2' = '4d'), STATE_TTL('v2' = '8d') */deptno, department_num FROM (SELECT MIN(salary) AS salary, deptno FROM EMPLOYEE GROUP BY deptno) v1 JOIN (SELECT MIN(b2) AS b2, department_num FROM DEPARTMENT GROUP BY department_num) v2 ON deptno = department_num;

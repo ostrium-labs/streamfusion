@@ -1,0 +1,13 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, score 5 in city London]", "+I[Alice, score 2 in city Zurich]", "+U[Bob, score 3 in city London]", "+U[Bob, score 3 in city Berlin]", "-D[Bob, null]", "+I[Bob, score 2 in city Berlin]", "-D[Alice, null]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, score 5 in city London]", "+I[Alice, score 2 in city Zurich]", "+U[Bob, score 3 in city London]", "+U[Bob, score 3 in city Berlin]", "-D[Bob, null]", "+I[Bob, score 2 in city Berlin]", "-D[Alice, null]" ],
+    "primary_key" : [ "name" ],
+    "options" : {
+      "sink-changelog-mode-enforced" : "I,UA,D",
+      "sink.supports-delete-by-key" : "true"
+    }
+  }
+}

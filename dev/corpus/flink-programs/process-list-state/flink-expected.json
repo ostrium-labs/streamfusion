@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, {[], KeyedStateListView, +I[Bob, 12]}]", "+I[Alice, {[], KeyedStateListView, +I[Alice, 42]}]", "+I[Bob, {[0], KeyedStateListView, +I[Bob, 99]}]", "+I[Bob, {[0, 1], KeyedStateListView, +I[Bob, 100]}]", "+I[Alice, {[0], KeyedStateListView, +I[Alice, 400]}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, {[], KeyedStateListView, +I[Bob, 12]}]", "+I[Alice, {[], KeyedStateListView, +I[Alice, 42]}]", "+I[Bob, {[0], KeyedStateListView, +I[Bob, 99]}]", "+I[Bob, {[0, 1], KeyedStateListView, +I[Bob, 100]}]", "+I[Alice, {[0], KeyedStateListView, +I[Alice, 400]}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

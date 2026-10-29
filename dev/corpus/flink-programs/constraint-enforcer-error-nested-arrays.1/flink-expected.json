@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ ],
+    "after" : [ ],
+    "materialized" : [ ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

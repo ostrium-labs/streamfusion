@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, {+I[Bob, 1], upsert-no-delete}]", "+I[Alice, {+I[Alice, 1], upsert-no-delete}]", "+I[Bob, {+U[Bob, 2], upsert-no-delete}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, {+I[Bob, 1], upsert-no-delete}]", "+I[Alice, {+I[Alice, 1], upsert-no-delete}]", "+I[Bob, {+U[Bob, 2], upsert-no-delete}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

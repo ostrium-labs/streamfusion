@@ -1,0 +1,4 @@
+{"amount":2,"nested_row":{"currency":"Euro"},"nested_map":{"currency":"Euro"},"order_time":"2020-10-10 00:00:42"}
+{"amount":1,"nested_row":{"currency":"usd"},"nested_map":{"currency":"USD"},"order_time":"2020-10-10 00:00:43"}
+{"amount":50,"nested_row":{"currency":"Yen"},"nested_map":{"currency":"Yen"},"order_time":"2020-10-10 00:00:44"}
+{"amount":3,"nested_row":{"currency":"Euro"},"nested_map":{"currency":"Euro"},"order_time":"2020-10-10 00:00:45"}

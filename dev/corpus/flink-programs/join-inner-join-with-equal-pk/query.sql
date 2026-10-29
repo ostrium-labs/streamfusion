@@ -1,0 +1,1 @@
+INSERT INTO MySink SELECT deptno, department_num FROM (SELECT MIN(salary) AS salary, deptno FROM EMPLOYEE GROUP BY deptno) JOIN (SELECT MIN(b2) AS b2, department_num FROM DEPARTMENT GROUP BY department_num) ON deptno = department_num;

@@ -1,0 +1,1 @@
+INSERT INTO sink_t PARTITION (b=2) SELECT * FROM source_t;

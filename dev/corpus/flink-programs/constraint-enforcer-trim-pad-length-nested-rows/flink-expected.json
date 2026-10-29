@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[+I[1, +I[a , a, [1, 0], [1]]]]", "+I[+I[2, +I[ab, ab, [1, 2], [1, 2]]]]", "+I[+I[3, +I[ab, ab, [1, 2], [1, 2]]]]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[+I[1, +I[a , a, [1, 0], [1]]]]", "+I[+I[2, +I[ab, ab, [1, 2], [1, 2]]]]", "+I[+I[3, +I[ab, ab, [1, 2], [1, 2]]]]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

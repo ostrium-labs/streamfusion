@@ -1,0 +1,11 @@
+{"before":null,"after":{"ts":"2020-10-10 00:00:01","a_int":1,"b_double":1.0,"c_float":1.0,"d_bigdec":1.11,"comment":"Hi","name":"a"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:02","a_int":2,"b_double":2.0,"c_float":2.0,"d_bigdec":2.22,"comment":"Comment#1","name":"a"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:03","a_int":2,"b_double":2.0,"c_float":2.0,"d_bigdec":2.22,"comment":"Comment#1","name":"a"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:04","a_int":5,"b_double":5.0,"c_float":5.0,"d_bigdec":5.55,"comment":null,"name":"a"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:07","a_int":3,"b_double":3.0,"c_float":3.0,"d_bigdec":null,"comment":"Hello","name":"b"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:06","a_int":6,"b_double":6.0,"c_float":6.0,"d_bigdec":6.66,"comment":"Hi","name":"b"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:08","a_int":3,"b_double":null,"c_float":3.0,"d_bigdec":3.33,"comment":"Comment#2","name":"a"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:04","a_int":5,"b_double":5.0,"c_float":null,"d_bigdec":5.55,"comment":"Hi","name":"a"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:16","a_int":4,"b_double":4.0,"c_float":4.0,"d_bigdec":4.44,"comment":"Hi","name":"b"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:32","a_int":7,"b_double":7.0,"c_float":7.0,"d_bigdec":7.77,"comment":null,"name":null},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:34","a_int":1,"b_double":3.0,"c_float":3.0,"d_bigdec":3.33,"comment":"Comment#3","name":"b"},"op":"c"}

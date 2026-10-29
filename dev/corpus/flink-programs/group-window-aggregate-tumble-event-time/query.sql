@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT name, TUMBLE_START(rowtime, INTERVAL '5' SECOND) AS window_start, TUMBLE_END(rowtime, INTERVAL '5' SECOND) AS window_end, COUNT(*), SUM(a_int), COUNT(DISTINCT `comment`) FROM source_t GROUP BY name, TUMBLE(rowtime, INTERVAL '5' SECOND);

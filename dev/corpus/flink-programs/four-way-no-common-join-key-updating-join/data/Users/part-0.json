@@ -1,0 +1,11 @@
+{"before":null,"after":{"name":"Gus","cash":100,"user_id_0":"1"},"op":"c"}
+{"before":null,"after":{"name":"Joe no order","cash":10,"user_id_0":"8"},"op":"c"}
+{"before":null,"after":{"name":"Bob","cash":20,"user_id_0":"2"},"op":"c"}
+{"before":null,"after":{"name":"Nomad","cash":50,"user_id_0":"3"},"op":"c"}
+{"before":null,"after":{"name":"David","cash":5,"user_id_0":"4"},"op":"c"}
+{"before":null,"after":{"name":"Eve","cash":0,"user_id_0":"5"},"op":"c"}
+{"before":null,"after":{"name":"Frank","cash":70,"user_id_0":"6"},"op":"c"}
+{"before":null,"after":{"name":"Welcher","cash":100,"user_id_0":"7"},"op":"c"}
+{"before":null,"after":{"name":"Charlie Smith","cash":50,"user_id_0":"9"},"op":"c"}
+{"before":{"name":"Bob","cash":20,"user_id_0":"2"},"after":null,"op":"d"}
+{"before":{"name":"Charlie Smith","cash":50,"user_id_0":"9"},"after":{"name":"Charlie Taylor","cash":50,"user_id_0":"9"},"op":"u"}

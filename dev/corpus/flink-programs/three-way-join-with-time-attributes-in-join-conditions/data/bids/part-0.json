@@ -1,0 +1,5 @@
+{"auction":1,"price":12.0,"bidTimestamp":"2024-01-01 12:15:00"}
+{"auction":1,"price":15.0,"bidTimestamp":"2024-01-01 12:20:00"}
+{"auction":2,"price":25.0,"bidTimestamp":"2024-01-01 12:25:00"}
+{"auction":3,"price":18.0,"bidTimestamp":"2024-01-01 12:30:00"}
+{"auction":1,"price":20.0,"bidTimestamp":"2024-01-01 12:45:00"}

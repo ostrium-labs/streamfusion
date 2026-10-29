@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, {+I[null], +I[null], +I[Bob, 12]}]", "+I[Alice, {+I[null], +I[null], +I[Alice, 42]}]", "+I[Bob, {+I[1], +I[0], +I[Bob, 99]}]", "+I[Bob, {+I[2], +I[1], +I[Bob, 100]}]", "+I[Alice, {+I[1], +I[0], +I[Alice, 400]}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, {+I[null], +I[null], +I[Bob, 12]}]", "+I[Alice, {+I[null], +I[null], +I[Alice, 42]}]", "+I[Bob, {+I[1], +I[0], +I[Bob, 99]}]", "+I[Bob, {+I[2], +I[1], +I[Bob, 100]}]", "+I[Alice, {+I[1], +I[0], +I[Alice, 400]}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[Electronics, 16.5]", "+I[Books, 25.0]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Electronics, 16.5]", "+I[Books, 25.0]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

@@ -1,0 +1,1 @@
+INSERT INTO sink SELECT * FROM f(i => 42, b => CAST('TRUE' AS BOOLEAN));

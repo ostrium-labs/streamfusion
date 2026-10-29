@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[{+I[Bob, 1], retract-no-delete}]", "+I[{+I[Alice, 1], retract-no-delete}]", "+I[{-U[Bob, 1], retract-no-delete}]", "+I[{+U[Bob, 2], retract-no-delete}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[{+I[Bob, 1], retract-no-delete}]", "+I[{+I[Alice, 1], retract-no-delete}]", "+I[{-U[Bob, 1], retract-no-delete}]", "+I[{+U[Bob, 2], retract-no-delete}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}
