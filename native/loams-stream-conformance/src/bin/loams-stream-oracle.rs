@@ -6,6 +6,8 @@
 //! loams-stream-oracle record <corpus>            run every case on the oracle, write expected.jsonl
 //! loams-stream-oracle run <corpus>               run every case, compare with expected.jsonl
 //! loams-stream-oracle fixtures <dir>             record the gateway fixtures for v1..v4
+//! loams-stream-oracle nexmark-gen --events N     write person.json, auction.json, bid.json
+//!                                                (Nexmark events, JSON lines) into --out [.]
 //!
 //! options:
 //!   --compose <file>          the oracle's compose file   [dev/oracle/compose.yaml]
@@ -15,6 +17,13 @@
 //!   --only <substring>        only cases whose name contains it
 //!   --out <dir>               where triage.jsonl and summary.md go [<shared>/reports/<run>]
 //!   --keep                    keep each case's data and sink files
+//!
+//! nexmark-gen options:
+//!   --events N                events to generate (required)
+//!   --seed S                  perturbs every random seed; 0 = Beam's per-event-id seeding [0]
+//!   --base-time-ms T          event time of event number 0, ms since the epoch [1767225600000]
+//!   --rate R                  first-event.rate, events per second of event time [10000]
+//!   --side-input ROWS         also write side_input.csv (q13's side input, ROWS lines)
 //! ```
 //!
 //! Exit status: 0 when every case passed, 1 otherwise, 2 for bad usage.
@@ -28,7 +37,7 @@ use loams_stream_conformance::client::{ApiVersion, GatewayClient, Recorder};
 use loams_stream_conformance::compose::Oracle;
 use loams_stream_conformance::harness::{self, RunOptions};
 use loams_stream_conformance::runner::{Shared, Target};
-use loams_stream_conformance::{Error, Result, conversation};
+use loams_stream_conformance::{Error, Result, conversation, nexmark};
 
 #[derive(Default)]
 struct Args {
@@ -41,11 +50,18 @@ struct Args {
     only: Option<String>,
     out: Option<PathBuf>,
     keep: bool,
+    events: Option<u64>,
+    seed: Option<u64>,
+    base_time_ms: Option<i64>,
+    rate: Option<u32>,
+    side_input: Option<u64>,
 }
 
 fn usage() -> &'static str {
     "usage: loams-stream-oracle <up|down|record|run|fixtures> [path] [--compose F] [--target N=URL]... \
-     [--api vN] [--shared LOCAL=REMOTE] [--only S] [--out DIR] [--keep]"
+     [--api vN] [--shared LOCAL=REMOTE] [--only S] [--out DIR] [--keep]\n       \
+     loams-stream-oracle nexmark-gen --events N [--seed S] [--out DIR] [--base-time-ms T] [--rate R] \
+     [--side-input ROWS]"
 }
 
 fn parse(mut it: impl Iterator<Item = String>) -> std::result::Result<Args, String> {
@@ -74,6 +90,13 @@ fn parse(mut it: impl Iterator<Item = String>) -> std::result::Result<Args, Stri
             "--only" => a.only = Some(value("--only")?),
             "--out" => a.out = Some(value("--out")?.into()),
             "--keep" => a.keep = true,
+            "--events" => a.events = Some(number(&value("--events")?, "--events")?),
+            "--seed" => a.seed = Some(number(&value("--seed")?, "--seed")?),
+            "--base-time-ms" => {
+                a.base_time_ms = Some(number(&value("--base-time-ms")?, "--base-time-ms")?);
+            }
+            "--rate" => a.rate = Some(number(&value("--rate")?, "--rate")?),
+            "--side-input" => a.side_input = Some(number(&value("--side-input")?, "--side-input")?),
             "-h" | "--help" => return Err(String::new()),
             s if s.starts_with('-') => return Err(format!("unknown option {s}")),
             s if a.path.is_none() => a.path = Some(s.into()),
@@ -81,6 +104,46 @@ fn parse(mut it: impl Iterator<Item = String>) -> std::result::Result<Args, Stri
         }
     }
     Ok(a)
+}
+
+fn number<T: std::str::FromStr>(v: &str, name: &str) -> std::result::Result<T, String> {
+    v.parse()
+        .map_err(|_| format!("{name} takes a number, not {v:?}"))
+}
+
+/// `nexmark-gen`: no gateway, no runtime.
+fn nexmark_gen(a: &Args) -> Result<bool> {
+    let events = a
+        .events
+        .ok_or_else(|| Error::Invalid("nexmark-gen needs --events N".into()))?;
+    let rate = a.rate.unwrap_or(10_000);
+    if rate == 0 {
+        return Err(Error::Invalid("--rate must be positive".into()));
+    }
+    let config = nexmark::Config {
+        events,
+        seed: a.seed.unwrap_or(0),
+        base_time_ms: a.base_time_ms.unwrap_or(nexmark::DEFAULT_BASE_TIME_MS),
+        first_event_rate: rate,
+        ..nexmark::Config::default()
+    };
+    let out = a.out.clone().unwrap_or_else(|| ".".into());
+    let io = |e: std::io::Error| Error::Io {
+        path: out.display().to_string(),
+        message: e.to_string(),
+    };
+    let counts = nexmark::write_dataset(config, &out).map_err(io)?;
+    if let Some(rows) = a.side_input {
+        nexmark::write_side_input(rows, &out).map_err(io)?;
+    }
+    eprintln!(
+        "wrote {} persons, {} auctions, {} bids to {}",
+        counts.persons,
+        counts.auctions,
+        counts.bids,
+        out.display()
+    );
+    Ok(true)
 }
 
 async fn client(url: &str, api: Option<ApiVersion>) -> Result<GatewayClient> {
@@ -208,6 +271,15 @@ fn main() -> ExitCode {
             return ExitCode::from(2);
         }
     };
+    if args.command == "nexmark-gen" {
+        return match nexmark_gen(&args) {
+            Ok(_) => ExitCode::SUCCESS,
+            Err(e) => {
+                eprintln!("loams-stream-oracle: {e}");
+                ExitCode::from(1)
+            }
+        };
+    }
     let rt = tokio::runtime::Builder::new_current_thread()
         .enable_all()
         .build()
