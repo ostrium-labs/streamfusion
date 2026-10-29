@@ -1,0 +1,6 @@
+description = "Unbounded GROUP BY: every -U/+U of COUNT, SUM, MIN and AVG per user, in order"
+mode = "streaming"
+order_sensitive = true
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

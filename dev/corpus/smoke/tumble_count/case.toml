@@ -1,0 +1,6 @@
+description = "Tumbling window TVF: COUNT, SUM and AVG per user and 10 s window, with window_time"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

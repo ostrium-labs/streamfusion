@@ -1,0 +1,6 @@
+description = "Hopping window TVF: 10 s windows every 5 s, SUM and COUNT DISTINCT"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

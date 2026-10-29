@@ -1,0 +1,6 @@
+description = "Batch mode over a shipped CSV file: GROUP BY with ORDER BY (order-sensitive)"
+mode = "batch"
+order_sensitive = true
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

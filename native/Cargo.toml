@@ -19,6 +19,7 @@ members = [
   "integration-tests",
   "benchmark-support",
   "loams-stream-sql",
+  "loams-stream-conformance",
 ]
 
 [workspace.package]

@@ -1,0 +1,6 @@
+description = "Top-N per user (ROW_NUMBER <= 2 by amount): the full changelog in arrival order"
+mode = "streaming"
+order_sensitive = true
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

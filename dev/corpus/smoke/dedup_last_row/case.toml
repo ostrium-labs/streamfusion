@@ -1,0 +1,6 @@
+description = "Deduplication keeping the last row per user by event time: the -U/+U changelog in order"
+mode = "streaming"
+order_sensitive = true
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

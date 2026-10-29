@@ -1,0 +1,6 @@
+{"columns":[{"name":"oid","type":"INTEGER NOT NULL"},{"name":"cust","type":"CHAR(3) NOT NULL"},{"name":"tier","type":"VARCHAR(6)"},{"name":"amount","type":"DECIMAL(16, 2) NOT NULL"},{"name":"size","type":"VARCHAR(5) NOT NULL"}]}
+{"kind":"+I","fields":[1,"ANN","gold",19.98,"small"]}
+{"kind":"+I","fields":[2,"BOB","silver",1.2E+2,"big"]}
+{"kind":"+I","fields":[3,"ANN","gold",2.5,"small"]}
+{"kind":"+I","fields":[4,"CYD",null,99.99,"big"]}
+{"kind":"+I","fields":[5,"BOB","silver",8.75,"small"]}
