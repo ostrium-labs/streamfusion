@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT name, ts, CURRENT_WATERMARK(ts) AS w FROM t;

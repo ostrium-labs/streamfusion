@@ -1,0 +1,7 @@
+{"before":null,"after":{"name":"Frank","user_id_0":"6","cash":70},"op":"c"}
+{"before":null,"after":{"name":"David","user_id_0":"4","cash":5},"op":"c"}
+{"before":null,"after":{"name":"Joe no order","user_id_0":"8","cash":10},"op":"c"}
+{"before":null,"after":{"name":"Eve","user_id_0":"5","cash":0},"op":"c"}
+{"before":null,"after":{"name":"Welcher","user_id_0":"7","cash":100},"op":"c"}
+{"before":null,"after":{"name":"Charlie Smith","user_id_0":"9","cash":50},"op":"c"}
+{"before":{"name":"Charlie Smith","user_id_0":"9","cash":50},"after":{"name":"Charlie Taylor","user_id_0":"9","cash":50},"op":"u"}

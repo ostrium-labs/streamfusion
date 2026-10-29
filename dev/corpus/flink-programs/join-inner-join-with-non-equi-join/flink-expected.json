@@ -1,0 +1,10 @@
+{
+  "MySink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Don, Sales]" ],
+    "after" : [ "+I[Helena, Engineering]", "+I[Juliet, Engineering]" ],
+    "materialized" : [ "+I[Don, Sales]", "+I[Helena, Engineering]", "+I[Juliet, Engineering]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 1, hi, null, null]", "+I[2, 2, hello, null, null]", "+I[3, 2, hello world, null, null]" ],
+    "after" : [ "+I[4, 4, foo, null, null]", "+I[5, 2, foo bar, null, null]" ],
+    "materialized" : [ "+I[1, 1, hi, null, null]", "+I[2, 2, hello, null, null]", "+I[3, 2, hello world, null, null]", "+I[4, 4, foo, null, null]", "+I[5, 2, foo bar, null, null]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

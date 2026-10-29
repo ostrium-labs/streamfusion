@@ -1,0 +1,6 @@
+{"symbol":"ACME","tstamp":1,"price":19,"tax":1}
+{"symbol":"BETA","tstamp":2,"price":18,"tax":1}
+{"symbol":"ACME","tstamp":3,"price":17,"tax":2}
+{"symbol":"ACME","tstamp":4,"price":13,"tax":3}
+{"symbol":"BETA","tstamp":5,"price":16,"tax":2}
+{"symbol":"ACME","tstamp":6,"price":20,"tax":4}

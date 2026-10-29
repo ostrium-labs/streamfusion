@@ -1321,6 +1321,7 @@ state_bytes_getter!(
 /// addresses seed the per-side data schemas (so a LEFT join can type the null-padding); the encoded
 /// arrays carry the optional residual non-equi predicate. The JVM owns the handle and must release it
 /// with the matching close.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createTemporalJoiner<'local>(
@@ -1373,6 +1374,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createTemporalJoiner<'local
 }
 
 /// Buffers a probe-side (left) batch (no output until a watermark).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1396,6 +1398,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftTemporalJoiner<'loc
 }
 
 /// Folds a build-side (right) changelog batch into the versioned state (no output until a watermark).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1420,6 +1423,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightTemporalJoiner<'lo
 
 /// Advances the watermark, emitting the joined rows for buffered probe rows it has passed and dropping
 /// obsolete build versions.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_advanceTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1441,6 +1445,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_advanceTemporalJoiner<'loca
 }
 
 /// Releases the temporal joiner and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1452,6 +1457,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeTemporalJoiner<'local>
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotTemporalJoinerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -1471,6 +1477,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotTemporalJoinerParti
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreTemporalJoinerPartitions<'local>(

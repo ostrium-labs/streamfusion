@@ -10,10 +10,10 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 base64.workspace = true
-streamfusion-bridge = { path = "../bridge" }
+streamfusion-bridge = { path = "../bridge", default-features = false }
 arrow = { workspace = true, features = ["json"] }
 arrow-ord.workspace = true
-jni.workspace = true
+jni = { workspace = true, optional = true }
 datafusion.workspace = true
 chrono.workspace = true
 chrono-tz.workspace = true
@@ -44,7 +44,10 @@ optional = true
 streamfusion-native-build = { path = "../native-build" }
 
 [features]
-default = ["rocksdb-state"]
+# `jni` builds the JNI entry points the Maven plugin loads. A standalone build (loams-stream)
+# turns default features off and links no `jni`.
+default = ["jni", "rocksdb-state"]
+jni = ["dep:jni", "streamfusion-bridge/jni"]
 mimalloc = ["dep:libmimalloc-sys", "libmimalloc-sys/v2"]
 rocksdb-state = ["dep:rocksdb", "dep:bytes"]
 rocksdb-io-uring = ["rocksdb-state", "rocksdb/io-uring"]

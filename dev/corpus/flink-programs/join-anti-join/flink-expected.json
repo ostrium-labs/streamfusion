@@ -1,0 +1,10 @@
+{
+  "MySink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[Victor]" ],
+    "after" : [ "+I[Juliet]", "+I[Helena]" ],
+    "materialized" : [ "+I[Victor]", "+I[Juliet]", "+I[Helena]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

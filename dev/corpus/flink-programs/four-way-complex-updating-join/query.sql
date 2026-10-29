@@ -1,0 +1,1 @@
+INSERT INTO sink SELECT u.user_id_0, u.name, o.order_id, p.payment_id, s.location FROM Users u LEFT JOIN Orders o ON u.user_id_0 = o.user_id_1 INNER JOIN Payments p ON u.user_id_0 = p.user_id_2 AND (u.cash >= p.price OR p.price < 0) LEFT JOIN Shipments s ON p.user_id_2 = s.user_id_3;

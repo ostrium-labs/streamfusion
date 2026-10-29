@@ -1,0 +1,7 @@
+description = "Nexmark q6: average selling price per seller, OVER window over a Top-1 (upstream: not supported on Flink)"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = false
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q6"

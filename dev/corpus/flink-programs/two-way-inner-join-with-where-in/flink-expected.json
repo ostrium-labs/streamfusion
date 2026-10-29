@@ -1,0 +1,16 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[record_1, 1, record_1]", "+I[record_2, 2, record_2]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[record_1, 1, record_1]", "+I[record_2, 2, record_2]" ],
+    "primary_key" : [ ],
+    "options" : {
+      "changelog-mode" : "I,UB,UA,D",
+      "connector" : "values",
+      "sink-changelog-mode-enforced" : "I,UB,UA,D",
+      "sink.supports-delete-by-key" : "false",
+      "source.produces-delete-by-key" : "false"
+    }
+  }
+}

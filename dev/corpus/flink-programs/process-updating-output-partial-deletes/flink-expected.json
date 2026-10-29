@@ -1,0 +1,13 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Alice, Alice, 1, upsert-partial-delete]", "+I[Bob, Bob, 2, upsert-partial-delete]", "+U[Alice, Alice, 10, upsert-partial-delete]", "-D[Bob, Bob, null, upsert-partial-delete]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Alice, Alice, 1, upsert-partial-delete]", "+I[Bob, Bob, 2, upsert-partial-delete]", "+U[Alice, Alice, 10, upsert-partial-delete]", "-D[Bob, Bob, null, upsert-partial-delete]" ],
+    "primary_key" : [ "name" ],
+    "options" : {
+      "sink-changelog-mode-enforced" : "I,UA,D",
+      "sink.supports-delete-by-key" : "true"
+    }
+  }
+}

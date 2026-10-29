@@ -1,0 +1,1 @@
+INSERT INTO sink SELECT U.name, O.order_id, P.payment_id, U.k1, U.k2, U.k3 FROM Users3K AS U JOIN Orders3K AS O ON U.k1 = O.k1 AND U.k2 = O.k2 AND U.k3 = O.k3 JOIN Payments3K AS P ON U.k1 = P.k1 AND U.k2 = P.k2 AND U.k3 = P.k3;

@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT * FROM (SELECT a, b, count_c, ROW_NUMBER()    OVER (PARTITION BY b ORDER BY count_c DESC, a ASC) AS row_num   FROM (       SELECT a, b, COUNT(*) AS count_c       FROM MyTable       GROUP BY a, b   )) WHERE row_num <= 10;

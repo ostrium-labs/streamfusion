@@ -4,6 +4,7 @@ use streamfusion_bridge::partition::split_by_partition_columns;
 /// Splits an Arrow batch the JVM exported by its partition-key columns and returns a handle to the
 /// resulting groups, pulled one at a time with `nextPartitionSlice` and released with
 /// `closePartitionSplit`.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_splitByPartitionColumns<'local>(
     env: JNIEnv<'local>,
@@ -29,6 +30,7 @@ pub(crate) struct PartitionSplit {
 
 /// Exports the next partition group into the consumer-allocated C structs, returning false once
 /// every group has been pulled.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_nextPartitionSlice<'local>(
     env: JNIEnv<'local>,
@@ -50,6 +52,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_nextPartitionSlice<'local>(
 }
 
 /// Releases a partition split handle, dropping any groups the JVM did not pull.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closePartitionSplit<'local>(
     env: JNIEnv<'local>,

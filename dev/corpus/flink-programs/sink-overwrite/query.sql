@@ -1,0 +1,1 @@
+INSERT OVERWRITE sink_t SELECT * FROM source_t;

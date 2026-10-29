@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 44.44, null, null, null, null, null, null]", "+I[2, 100.02, 5, Jake, 42, New York City, New York, 10001]", "+I[4, 92.61, 2, Alice, 32, San Francisco, California, 95016]", "+I[3, 23.89, null, null, null, null, null, null]", "+I[6, 7.65, null, null, null, null, null, null]", "+I[5, 12.78, 2, Alice, 32, San Francisco, California, 95016]" ],
+    "after" : [ "+I[7, 17.58, 6, Joana, 54, Atlanta, Georgia, 30033]", "+I[9, 143.21, null, null, null, null, null, null]" ],
+    "materialized" : [ "+I[1, 44.44, null, null, null, null, null, null]", "+I[2, 100.02, 5, Jake, 42, New York City, New York, 10001]", "+I[4, 92.61, 2, Alice, 32, San Francisco, California, 95016]", "+I[3, 23.89, null, null, null, null, null, null]", "+I[6, 7.65, null, null, null, null, null, null]", "+I[5, 12.78, 2, Alice, 32, San Francisco, California, 95016]", "+I[7, 17.58, 6, Joana, 54, Atlanta, Georgia, 30033]", "+I[9, 143.21, null, null, null, null, null, null]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

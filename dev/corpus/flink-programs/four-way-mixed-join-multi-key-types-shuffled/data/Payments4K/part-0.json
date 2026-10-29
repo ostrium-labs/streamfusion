@@ -1,0 +1,3 @@
+{"k1":"K1","payment_id":"payment1","k3":true,"k2":100,"k4":"k4_val1"}
+{"k1":"A1","payment_id":"payment2","k3":false,"k2":200,"k4":"k4_val2"}
+{"k1":"P_NO_MATCH","payment_id":"P_NO_MATCH_ID","k3":true,"k2":3,"k4":"k4_p"}

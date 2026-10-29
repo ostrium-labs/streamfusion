@@ -1,22 +1,7 @@
 name: JVM aggregate release diagnostics
 
+# Loams fork (FC1): manual only; no push, PR or schedule triggers.
 on:
-  push:
-    branches: ['**']
-    paths:
-      - '.github/workflows/jvm-aggregates.yml'
-      - 'bin/bench-jvm-aggregates.py'
-      - 'bin/bench-jvm-previous.py'
-      - 'src/main/java/tech/streamfusion/operator/*Jvm*'
-      - 'src/main/java/tech/streamfusion/operator/ArrowToRowDataOperator.java'
-      - 'src/main/java/tech/streamfusion/arrow/**'
-      - 'src/main/java/tech/streamfusion/planner/*Jvm*'
-      - 'src/main/java-flink*/tech/streamfusion/compat/JvmAggregateCompat.java'
-      - 'src/test/java/tech/streamfusion/*JvmAggregate*'
-      - 'src/test/java/tech/streamfusion/StatefulSqlRescaleTest.java'
-      - 'src/test/java/tech/streamfusion/PortableSqlRecovery.java'
-      - 'src/test/java/tech/streamfusion/operator/JvmStringKeyProbeTest.java'
-      - 'src/test/java/tech/streamfusion/operator/StringExitOwnershipTest.java'
   workflow_dispatch: {}
 
 permissions:
@@ -80,7 +65,7 @@ jobs:
         id: native-payload
         with:
           path: native/target/release/libstreamfusion.so
-          key: jvm-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.94.0-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
+          key: jvm-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.97.1-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
       - name: Build and install release modules before measurements
         run: >-
           mvn -B -ntp -P${{ matrix.profile }} -pl streamfusion-runtime -am
@@ -90,7 +75,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: native/target/release/libstreamfusion.so
-          key: jvm-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.94.0-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
+          key: jvm-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.97.1-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
       - name: Validate aggregate state and recovery before measurements
         run: |
           for capacity in 65536 3; do

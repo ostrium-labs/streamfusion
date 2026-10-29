@@ -1,0 +1,10 @@
+{
+  "MySink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[Adam, null]", "+I[null, Accounting]", "+I[Baker, Research]", "+I[Charlie, Human Resources]", "+I[Charlie, HR]", "+I[Don, Sales]", "+I[Victor, null]" ],
+    "after" : [ "+I[Helena, Engineering]", "+I[Juliet, Engineering]", "+I[Ivana, Research]", "+I[Charlie, People Operations]" ],
+    "materialized" : [ "+I[Adam, null]", "+I[null, Accounting]", "+I[Baker, Research]", "+I[Charlie, Human Resources]", "+I[Charlie, HR]", "+I[Don, Sales]", "+I[Victor, null]", "+I[Helena, Engineering]", "+I[Juliet, Engineering]", "+I[Ivana, Research]", "+I[Charlie, People Operations]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

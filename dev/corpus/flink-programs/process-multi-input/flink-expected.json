@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, Bob, {+I[Bob, 12], null}]", "+I[Bob, Bob, {null, +I[Bob, London]}]", "+I[Alice, Alice, {+I[Alice, 42], null}]", "+I[Alice, Alice, {null, +I[Alice, Berlin]}]", "+I[Bob, Bob, {+I[Bob, 99], null}]", "+I[Charly, Charly, {null, +I[Charly, Paris]}]", "+I[Bob, Bob, {+I[Bob, 100], null}]", "+I[Alice, Alice, {+I[Alice, 400], null}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, Bob, {+I[Bob, 12], null}]", "+I[Bob, Bob, {null, +I[Bob, London]}]", "+I[Alice, Alice, {+I[Alice, 42], null}]", "+I[Alice, Alice, {null, +I[Alice, Berlin]}]", "+I[Bob, Bob, {+I[Bob, 99], null}]", "+I[Charly, Charly, {null, +I[Charly, Paris]}]", "+I[Bob, Bob, {+I[Bob, 100], null}]", "+I[Alice, Alice, {+I[Alice, 400], null}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

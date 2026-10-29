@@ -1,0 +1,1 @@
+INSERT INTO sink SELECT * FROM f(r => TABLE t);

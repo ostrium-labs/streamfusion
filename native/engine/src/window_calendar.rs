@@ -1,16 +1,26 @@
+#[cfg(feature = "jni")]
 use jni::objects::{GlobalRef, JLongArray, JValue};
+use streamfusion_bridge::bridge::HostObject;
+#[cfg(feature = "jni")]
 use streamfusion_bridge::bridge::{JavaException, JVM};
 
 /// Batched released-Flink timer conversion; local bounds remain in the Arrow state codec.
 pub(crate) struct WindowCalendar {
-    callback: GlobalRef,
+    callback: HostObject,
 }
 
 impl WindowCalendar {
+    #[cfg(feature = "jni")]
     pub(crate) fn new(callback: GlobalRef) -> Self {
         Self { callback }
     }
 
+    #[cfg(not(feature = "jni"))]
+    pub(crate) fn reject_expired_merge(&self, _start: i64, _end: i64, _clock: i64) {
+        match self.callback {}
+    }
+
+    #[cfg(feature = "jni")]
     pub(crate) fn reject_expired_merge(&self, start: i64, end: i64, clock: i64) {
         let mut env = JVM
             .get()
@@ -64,6 +74,12 @@ impl WindowCalendar {
         self.convert("exclusiveTimerEnds", ends)
     }
 
+    #[cfg(not(feature = "jni"))]
+    fn convert(&self, _method: &str, _ends: &[i64]) -> Vec<i64> {
+        match self.callback {}
+    }
+
+    #[cfg(feature = "jni")]
     fn convert(&self, method: &str, ends: &[i64]) -> Vec<i64> {
         if ends.is_empty() {
             return Vec::new();

@@ -1,0 +1,1 @@
+INSERT INTO MySink SELECT   c, ts, rowtime, b,  LTCNT(a, CAST('4' AS BIGINT)) OVER w,  COUNT(a) OVER w,  SUM(a) OVER w FROM MyTable WINDOW w as (PARTITION BY c ORDER BY rowtime ROWS BETWEEN 5 preceding AND CURRENT ROW);

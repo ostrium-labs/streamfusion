@@ -1,0 +1,2 @@
+{"before":{"name":"Bob","EXPR$1":1},"after":{"name":"Bob","EXPR$1":2},"op":"u"}
+{"before":{"name":"Alice","EXPR$1":1},"after":null,"op":"d"}

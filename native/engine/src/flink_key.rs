@@ -1045,6 +1045,7 @@ pub(crate) fn flink_key_group(binary_row_hash: i32, max_parallelism: usize) -> u
     flink_murmur_hash(binary_row_hash) as usize % max_parallelism
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flinkBinaryRowHashes<'local>(
     env: JNIEnv<'local>,
@@ -1074,6 +1075,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flinkBinaryRowHashes<'local
 
 /// The `BinaryRowData` bytes of the requested rows projected to the key columns, one byte array per
 /// row, for callers that need a few encoded keys (a file's first and last key) rather than hashes.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flinkBinaryRows<'local>(
     env: JNIEnv<'local>,

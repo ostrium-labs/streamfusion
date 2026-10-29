@@ -1,0 +1,4 @@
+{"before":null,"after":{"id":1,"name":"Alice","value":10},"op":"c"}
+{"before":null,"after":{"id":2,"name":"Bob","value":20},"op":"c"}
+{"before":{"id":1,"name":"Alice","value":10},"after":null,"op":"d"}
+{"before":{"id":2,"name":"Bob","value":20},"after":{"id":2,"name":"Bob","value":30},"op":"u"}

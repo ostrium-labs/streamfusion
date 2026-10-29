@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[{Time null and watermark null}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[{Time null and watermark null}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

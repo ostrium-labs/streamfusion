@@ -288,6 +288,7 @@ pub(crate) enum FirstNHandle {
     Rocks(FirstN<RocksStore<FirstNCodec>>),
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createFirstN<'local>(
     env: JNIEnv<'local>,
@@ -328,6 +329,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createFirstN<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushFirstN<'local>(
     env: JNIEnv<'local>,
@@ -359,6 +361,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushFirstN<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotFirstNPartitions<'local>(
     env: JNIEnv<'local>,
@@ -393,6 +396,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotFirstNPartitions<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_firstNStateBytes<'local>(
     env: JNIEnv<'local>,
@@ -408,6 +412,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_firstNStateBytes<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeFirstN<'local>(
     env: JNIEnv<'local>,

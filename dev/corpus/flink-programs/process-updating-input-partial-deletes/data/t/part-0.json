@@ -1,0 +1,6 @@
+{"before":null,"after":{"name":"Bob","score":5},"op":"c"}
+{"before":null,"after":{"name":"Alice","score":2},"op":"c"}
+{"before":{"name":"Bob","score":5},"after":{"name":"Bob","score":3},"op":"u"}
+{"before":{"name":"Bob","score":3},"after":null,"op":"d"}
+{"before":null,"after":{"name":"Bob","score":2},"op":"c"}
+{"before":{"name":"Alice","score":2},"after":null,"op":"d"}

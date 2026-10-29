@@ -1,0 +1,15 @@
+Loams Stream
+Copyright 2026 Ostrium Labs
+
+This repository, ostrium-labs/streamfusion, is a hard fork of StreamFusion
+(https://github.com/datafusion-contrib/StreamFusion), licensed under the Apache License,
+Version 2.0. Loams Stream starts from the fork's commit
+e9d8e347977cae834d20a3599e7d1be86f610c3f (2026-10-28).
+
+StreamFusion
+Copyright 2026 Jordan Epstein and the StreamFusion contributors
+(https://github.com/datafusion-contrib/StreamFusion/graphs/contributors)
+
+Files ported from other projects (Arroyo, RisingWave) keep their original copyright lines and
+are listed, with their source repository, path, commit and licence, in PORTS.md. Their
+attribution notices are added below as such files arrive.

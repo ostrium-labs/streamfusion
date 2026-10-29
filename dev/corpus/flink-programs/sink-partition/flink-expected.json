@@ -1,0 +1,12 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 2, 1, hi]", "+I[2, 2, 2, hello]", "+I[3, 2, 2, hello world]" ],
+    "after" : [ "+I[4, 2, 4, foo]", "+I[5, 2, 2, foo bar]" ],
+    "materialized" : [ "+I[1, 2, 1, hi]", "+I[2, 2, 2, hello]", "+I[3, 2, 2, hello world]", "+I[4, 2, 4, foo]", "+I[5, 2, 2, foo bar]" ],
+    "primary_key" : [ ],
+    "options" : {
+      "partition-list" : "b:1;b:2;b:3;b:4"
+    }
+  }
+}

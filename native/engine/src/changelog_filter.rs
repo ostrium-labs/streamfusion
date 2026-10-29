@@ -18,6 +18,7 @@ pub(crate) fn drop_update_before(batch: &RecordBatch) -> RecordBatch {
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_dropUpdateBefore<'local>(
     env: JNIEnv<'local>,

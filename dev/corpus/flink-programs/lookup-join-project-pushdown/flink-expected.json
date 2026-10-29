@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 44.44, 3, Claire, Austin, Texas, 73301]", "+I[2, 100.02, 5, Jake, New York City, New York, 10001]", "+I[4, 92.61, 2, Alice, San Francisco, California, 95016]", "+I[3, 23.89, 1, Bob, Mountain View, California, 94043]", "+I[6, 7.65, 4, Shannon, Boise, Idaho, 83701]", "+I[5, 12.78, 2, Alice, San Francisco, California, 95016]" ],
+    "after" : [ "+I[7, 17.58, 6, Joana, Atlanta, Georgia, 30033]", "+I[9, 143.21, 1, Bob, San Jose, California, 94089]" ],
+    "materialized" : [ "+I[1, 44.44, 3, Claire, Austin, Texas, 73301]", "+I[2, 100.02, 5, Jake, New York City, New York, 10001]", "+I[4, 92.61, 2, Alice, San Francisco, California, 95016]", "+I[3, 23.89, 1, Bob, Mountain View, California, 94043]", "+I[6, 7.65, 4, Shannon, Boise, Idaho, 83701]", "+I[5, 12.78, 2, Alice, San Francisco, California, 95016]", "+I[7, 17.58, 6, Joana, Atlanta, Georgia, 30033]", "+I[9, 143.21, 1, Bob, San Jose, California, 94089]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

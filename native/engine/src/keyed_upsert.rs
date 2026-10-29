@@ -337,6 +337,7 @@ impl KeyedUpsertBuffer {
 }
 
 /// Creates a keyed-upsert buffer; released with `closeKeyedUpsertBuffer`.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createKeyedUpsertBuffer<'local>(
     env: JNIEnv<'local>,
@@ -368,6 +369,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createKeyedUpsertBuffer<'lo
 }
 
 /// Installs optional Java field kernels; buffers and ordinary reducers remain columnar in Rust.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferAggregates<'local>(
     env: JNIEnv<'local>,
@@ -396,6 +398,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferAggregates
 
 /// Takes ownership of a batch the JVM exported and assigns its rows the sequence numbers starting
 /// at `first_sequence` in arrival order; returns the number of rows retained.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferPush<'local>(
     env: JNIEnv<'local>,
@@ -414,6 +417,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferPush<'loca
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferDefaults<'local>(
     env: JNIEnv<'local>,
@@ -431,6 +435,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferDefaults<'
 }
 
 /// Arrow memory held by the pending rows.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferBytes<'local>(
     env: JNIEnv<'local>,
@@ -443,6 +448,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferBytes<'loc
 }
 
 /// Pending rows before merging.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferRows<'local>(
     env: JNIEnv<'local>,
@@ -457,6 +463,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferRows<'loca
 /// Merges the pending rows into one sorted key-value batch exported into the consumer-allocated C
 /// structs and empties the buffer. Returns `{rows, deleteRows, minSequence, maxSequence}`; when
 /// `rows` is 0 nothing was exported. Nonzero changelog addresses also receive the sorted input.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferFlush<'local>(
     env: JNIEnv<'local>,
@@ -505,6 +512,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keyedUpsertBufferFlush<'loc
 }
 
 /// Releases a keyed-upsert buffer and its pending rows.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeKeyedUpsertBuffer<'local>(
     env: JNIEnv<'local>,

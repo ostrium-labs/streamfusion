@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 1, hi--1170105035]", "+I[2, 2, hello-234785527]", "+I[3, 2, hello world--1360544799]" ],
+    "after" : [ "+I[4, 4, foo--1170105035]", "+I[5, 2, foo bar-234785527]" ],
+    "materialized" : [ "+I[1, 1, hi--1170105035]", "+I[2, 2, hello-234785527]", "+I[3, 2, hello world--1360544799]", "+I[4, 4, foo--1170105035]", "+I[5, 2, foo bar-234785527]" ],
+    "primary_key" : [ "c" ],
+    "options" : { }
+  }
+}

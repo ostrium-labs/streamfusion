@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, {{}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 12]}]", "+I[Alice, {{}, KeyedStateMapViewWithKeysNotNull, +I[Alice, 42]}]", "+I[Bob, {{Bob=2, nullValue=null, oldBob=1}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 99]}]", "+I[Bob, {{}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 100]}]", "+I[Alice, {{Alice=2, nullValue=null, oldAlice=1}, KeyedStateMapViewWithKeysNotNull, +I[Alice, 400]}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, {{}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 12]}]", "+I[Alice, {{}, KeyedStateMapViewWithKeysNotNull, +I[Alice, 42]}]", "+I[Bob, {{Bob=2, nullValue=null, oldBob=1}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 99]}]", "+I[Bob, {{}, KeyedStateMapViewWithKeysNotNull, +I[Bob, 100]}]", "+I[Alice, {{Alice=2, nullValue=null, oldAlice=1}, KeyedStateMapViewWithKeysNotNull, +I[Alice, 400]}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

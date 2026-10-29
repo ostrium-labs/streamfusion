@@ -1,13 +1,7 @@
 name: Nested scalar release diagnostics
 
+# Loams fork (FC1): manual only; no push, PR or schedule triggers.
 on:
-  push:
-    branches: ['**']
-    paths:
-      - '.github/workflows/nested-scalars.yml'
-      - 'bin/bench-nested-scalars.py'
-      - 'src/test/java/tech/streamfusion/NestedScalarBenchmark.java'
-      - 'src/test/java/tech/streamfusion/FlinkNestedScalarSqlHarnessTest.java'
   workflow_dispatch: {}
 
 permissions:
@@ -71,7 +65,7 @@ jobs:
         id: native-payload
         with:
           path: native/target/release/libstreamfusion.so
-          key: nested-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.94.0-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
+          key: nested-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.97.1-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
       - name: Build the candidate release before measurements
         run: >-
           mvn -B -ntp -P${{ matrix.profile }} -pl streamfusion-runtime -am
@@ -81,7 +75,7 @@ jobs:
         uses: actions/cache/save@v4
         with:
           path: native/target/release/libstreamfusion.so
-          key: nested-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.94.0-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
+          key: nested-native-${{ runner.os }}-${{ runner.arch }}-${{ matrix.line }}-rust1.97.1-mimalloc-${{ steps.native-inputs.outputs.fingerprint }}
       - name: Verify nested callback parity before measurements
         run: >-
           mvn -B -ntp -P${{ matrix.profile }} -pl streamfusion-runtime

@@ -6,10 +6,20 @@ use arrow::buffer::{BooleanBuffer, NullBuffer};
 /// placeholders so the producer's release callbacks fire once when the imported data drops.
 /// The JVM handle, captured on the first JNI entry that may build a UDF-bearing expression, so a native
 /// `JvmUdf` node can attach the (already JVM-owned) task thread and upcall the UDF bridge. Set once.
+#[cfg(feature = "jni")]
 pub static JVM: OnceLock<jni::JavaVM> = OnceLock::new();
 
 /// Keeps a callback's original throwable alive while Arrow release callbacks run during unwind.
+#[cfg(feature = "jni")]
 pub struct JavaException(pub jni::objects::GlobalRef);
+
+/// A JVM object the engine calls back into (a timer calendar, a heap probe, a host evaluator).
+/// Without the `jni` feature no such object can exist: the type is uninhabited, so every upcall
+/// path is statically unreachable instead of silently doing something else.
+#[cfg(feature = "jni")]
+pub type HostObject = jni::objects::GlobalRef;
+#[cfg(not(feature = "jni"))]
+pub type HostObject = std::convert::Infallible;
 
 /// A host SQL exception carried through an engine error without losing its Java type.
 #[derive(Debug, Clone)]
@@ -19,6 +29,12 @@ pub struct FlinkException {
 }
 
 impl FlinkException {
+    /// The Java exception class (slash-separated) this error is raised as on the JVM, and the
+    /// class name a standalone engine reports for it.
+    pub fn class(&self) -> &'static str {
+        self.class
+    }
+
     pub fn illegal_argument(message: String) -> Self {
         Self {
             class: "java/lang/IllegalArgumentException",
@@ -106,6 +122,7 @@ impl<T, E: std::error::Error + 'static> FlinkResultExt<T> for Result<T, E> {
     }
 }
 
+#[cfg(feature = "jni")]
 pub fn capture_jvm_raw(vm: *mut jni::sys::JavaVM) {
     if JVM.get().is_none() {
         if let Ok(vm) = unsafe { jni::JavaVM::from_raw(vm) } {
@@ -114,6 +131,7 @@ pub fn capture_jvm_raw(vm: *mut jni::sys::JavaVM) {
     }
 }
 
+#[cfg(feature = "jni")]
 pub fn capture_jvm(env: &JNIEnv) {
     if JVM.get().is_none() {
         if let Ok(vm) = env.get_java_vm() {
@@ -125,6 +143,7 @@ pub fn capture_jvm(env: &JNIEnv) {
 /// Raises the task-off-heap-limit exception on the calling JVM thread; the native call returns
 /// immediately after, so the task fails with the budget message instead of the container OOM-killing
 /// the process.
+#[cfg(feature = "jni")]
 pub fn throw_memory_limit(env: &mut JNIEnv, message: &str) {
     let _ = env.throw_new("tech/streamfusion/NativeMemoryLimitException", message);
 }
@@ -152,6 +171,7 @@ impl JniDefault for jint {
     }
 }
 
+#[cfg(feature = "jni")]
 impl JniDefault for jni::sys::jboolean {
     fn jni_default() -> Self {
         0 // JNI_FALSE
@@ -173,6 +193,7 @@ impl<T> JniDefault for *mut T {
 /// gives Flink's restart strategy nothing to act on. Catching here downgrades that to an ordinary
 /// task failure, which is what the restart strategy is for. This is the same boundary discipline
 /// Comet applies: no panic may cross a JVM native frame.
+#[cfg(feature = "jni")]
 pub fn jni_guard<'local, T, F>(mut env: JNIEnv<'local>, f: F) -> T
 where
     T: JniDefault,
@@ -218,6 +239,7 @@ pub fn panic_message(payload: Box<dyn std::any::Any + Send>) -> String {
 /// `java.io.IOException` the FLIP-27 split-reader contract expects — an explicit `Err` as-is, a
 /// panic prefixed with the connector's name. Same boundary discipline as `jni_guard`: no Rust
 /// panic may unwind through a JVM native frame.
+#[cfg(feature = "jni")]
 pub fn connector_jni<T, F>(env: &mut JNIEnv, default: T, prefix: &str, f: F) -> T
 where
     F: FnOnce(&mut JNIEnv) -> Result<T, String>,
@@ -242,6 +264,7 @@ where
 /// Frames every raw keyed-state payload with its big-endian Flink key-group id and returns the
 /// partitions as one JNI object array. This keeps checkpoint partitioning to one native pass and
 /// lets Java stream each payload directly into Flink's keyed-state output.
+#[cfg(feature = "jni")]
 pub fn keyed_state_partition_array(
     env: &mut JNIEnv,
     partitions: BTreeMap<i32, Vec<u8>>,
@@ -714,6 +737,7 @@ pub fn short_type_name(full: &str) -> String {
 }
 
 /// Reports handles owned by the calling library's statically linked bridge.
+#[cfg(feature = "jni")]
 pub fn live_handles_probe(env: JNIEnv) -> jstring {
     jni_guard(env, |env| {
         let live = live_handles().lock().unwrap();
@@ -739,6 +763,7 @@ pub fn build_version() -> &'static str {
 /// The build version as a Java string: the core class's probe below and every extension class's
 /// own probe, since a native method binds to whichever loaded library exports its symbol and only a
 /// probe named after the owning class is guaranteed to read that class's library.
+#[cfg(feature = "jni")]
 pub fn version_probe<'local>(env: JNIEnv<'local>) -> jstring {
     jni_guard(env, move |env| {
         env.new_string(build_version())
@@ -748,6 +773,7 @@ pub fn version_probe<'local>(env: JNIEnv<'local>) -> jstring {
 }
 
 /// Reads a JVM int[] into a Vec.
+#[cfg(feature = "jni")]
 pub fn read_i32_array(env: &JNIEnv, array: &JIntArray) -> Vec<i32> {
     let length = env
         .get_array_length(array)
@@ -759,6 +785,7 @@ pub fn read_i32_array(env: &JNIEnv, array: &JIntArray) -> Vec<i32> {
 }
 
 /// Reads a JVM int[] (aggregate kinds or per-aggregate value-type codes) widened into a Vec<i64>.
+#[cfg(feature = "jni")]
 pub fn read_int_array(env: &JNIEnv, array: &JIntArray) -> Vec<i64> {
     read_i32_array(env, array)
         .into_iter()
@@ -767,6 +794,7 @@ pub fn read_int_array(env: &JNIEnv, array: &JIntArray) -> Vec<i64> {
 }
 
 /// Reads a JVM double[] into a Vec.
+#[cfg(feature = "jni")]
 pub fn read_doubles(env: &JNIEnv, values: &JDoubleArray) -> Vec<f64> {
     let length = env
         .get_array_length(values)
@@ -778,6 +806,7 @@ pub fn read_doubles(env: &JNIEnv, values: &JDoubleArray) -> Vec<f64> {
 }
 
 /// Reads a JVM float[] into a Vec.
+#[cfg(feature = "jni")]
 #[allow(dead_code)]
 pub fn read_floats(env: &JNIEnv, values: &JFloatArray) -> Vec<f32> {
     let length = env
@@ -790,6 +819,7 @@ pub fn read_floats(env: &JNIEnv, values: &JFloatArray) -> Vec<f32> {
 }
 
 /// Reads a JVM long[] into a Vec.
+#[cfg(feature = "jni")]
 pub fn read_longs(env: &JNIEnv, values: &JLongArray) -> Vec<i64> {
     let length = env
         .get_array_length(values)
@@ -801,6 +831,7 @@ pub fn read_longs(env: &JNIEnv, values: &JLongArray) -> Vec<i64> {
 }
 
 /// Reads a JVM String[] into a Vec, mapping a Java null element to None (a numeric comparison).
+#[cfg(feature = "jni")]
 pub fn read_strings(env: &mut JNIEnv, values: &JObjectArray) -> Vec<Option<String>> {
     let length = env
         .get_array_length(values)
@@ -824,6 +855,7 @@ pub fn read_strings(env: &mut JNIEnv, values: &JObjectArray) -> Vec<Option<Strin
 }
 
 /// Reads a JVM int[] of column indices into a Vec.
+#[cfg(feature = "jni")]
 pub fn read_columns(env: &JNIEnv, columns: &JIntArray) -> Vec<usize> {
     read_i32_array(env, columns)
         .into_iter()
@@ -832,6 +864,7 @@ pub fn read_columns(env: &JNIEnv, columns: &JIntArray) -> Vec<usize> {
 }
 
 /// Reads a JVM String[] into a Vec<String>.
+#[cfg(feature = "jni")]
 pub fn read_string_array(env: &mut JNIEnv, array: &JObjectArray) -> Vec<String> {
     let length = env
         .get_array_length(array)

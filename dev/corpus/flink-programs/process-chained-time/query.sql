@@ -1,0 +1,1 @@
+INSERT INTO sink WITH ptf1 AS (SELECT * FROM f1(r => TABLE t PARTITION BY name, on_time => DESCRIPTOR(ts))), ptf2 AS (SELECT * FROM f2(r => TABLE ptf1 PARTITION BY name, on_time => DESCRIPTOR(rowtime))) SELECT * FROM ptf2;

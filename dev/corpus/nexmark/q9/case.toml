@@ -1,0 +1,8 @@
+description = "Nexmark q9: winning bid per auction, Top-1 over an auction-bid join"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = false
+upsert_key = ["id"]
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q9"

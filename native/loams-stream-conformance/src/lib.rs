@@ -16,6 +16,8 @@
 //! - [`harness`]: record and run over a corpus.
 //! - [`triage`]: verdicts, `triage.jsonl` and the summary table.
 //! - [`compose`]: starting and stopping the oracle with Podman.
+//! - [`nexmark`]: a deterministic port of Nexmark's event generator, for
+//!   the `dev/corpus/nexmark` cases.
 //!
 //! The harness depends on no engine crate: no DataFusion, no Arrow, no JNI.
 
@@ -25,6 +27,7 @@ pub mod compose;
 pub mod conversation;
 pub mod error;
 pub mod harness;
+pub mod nexmark;
 pub mod normalise;
 pub mod result;
 pub mod runner;

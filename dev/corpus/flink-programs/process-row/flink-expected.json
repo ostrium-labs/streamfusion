@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[{+I[Bob, 12], 1}]", "+I[{+I[Alice, 42], 1}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[{+I[Bob, 12], 1}]", "+I[{+I[Alice, 42], 1}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

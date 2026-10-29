@@ -1,0 +1,4 @@
+{"user_id":"1","payment_id":"payment1","price":10}
+{"user_id":"2","payment_id":"payment2","price":20}
+{"user_id":"1","payment_id":"payment3","price":30}
+{"user_id":"5","payment_id":"payment5","price":50}

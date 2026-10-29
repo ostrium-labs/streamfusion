@@ -1,0 +1,4 @@
+{"user_id":"1","order_id":"order1","product":"Product A"}
+{"user_id":"2","order_id":"order2","product":"Product B"}
+{"user_id":"2","order_id":"order3","product":"Product C"}
+{"user_id":"4","order_id":"order4","product":"Product D"}

@@ -418,6 +418,7 @@ impl TumblingAggregator {
         }
     }
 
+    #[cfg(feature = "jni")]
     pub(crate) fn set_calendar(&mut self, callback: jni::objects::GlobalRef) {
         assert_eq!(
             self.assignment_offset_millis, 0,
@@ -2188,6 +2189,7 @@ state_bytes_getter!(
     TumblingAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_tumblingAggregatorLateDrops<'local>(
     env: JNIEnv<'local>,
@@ -2202,6 +2204,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_tumblingAggregatorLateDrops
 
 /// Runs a batch through the stateless windowing table function, exporting the fanned-out batch with
 /// window_start/window_end/window_time appended. Stateless, so there is no handle to create or close.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_assignWindows<'local>(
     env: JNIEnv<'local>,
@@ -2243,6 +2246,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_assignWindows<'local>(
 }
 
 /// Regional TVF assignment preserves payload instants while appending local bounds.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_assignCalendarWindows<'local>(
     env: JNIEnv<'local>,
@@ -2294,6 +2298,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_assignCalendarWindows<'loca
 /// The window assignment and grouped aggregation run as a DataFusion plan on the shared runtime,
 /// and the per-window result batch is exported back. Aggregation across batch boundaries, where the
 /// operator must hold partial windows until a watermark closes them, is a later step.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_tumblingSum<'local>(
     env: JNIEnv<'local>,
@@ -2359,6 +2364,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_tumblingSum<'local>(
 
 /// Creates a stateful tumbling-window aggregator and returns an opaque handle to it. The handle
 /// owns native state that lives across calls; the JVM must release it with the matching close.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2382,6 +2388,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createTumblingAggregator<'l
 /// Creates a stateful cumulative-window aggregator (nested windows of `step` up to `max_size`) and
 /// returns an opaque handle. It shares the aligned-window engine and every other call (update,
 /// flush, snapshot, close) with the tumbling handle; only the window assignment differs.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createCumulativeAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2404,6 +2411,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createCumulativeAggregator<
 
 /// Folds a batch from the JVM into the aggregator's open windows. Produces no output; results are
 /// emitted later when a watermark closes windows.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2427,6 +2435,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateTumblingAggregator<'l
 }
 
 /// Local slice accumulation defers late-data admission to the final window merge.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateLocalTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2450,6 +2459,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateLocalTumblingAggregat
 
 /// Window-attached local half: folds a batch whose rows carry explicit `window_start`/`window_end`
 /// columns (an upstream window aggregate's output being re-aggregated per window — Nexmark q5).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateAttachedTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2472,6 +2482,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateAttachedTumblingAggre
 }
 
 /// Final attached-bound aggregation preserves the owning operator's late-data cutoff.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateAttachedFinalWindowAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2493,6 +2504,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateAttachedFinalWindowAg
 }
 
 /// Emits the windows the given watermark has closed as a batch and drops them from state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_setFixedWindowCalendar<'local>(
     env: JNIEnv<'local>,
@@ -2509,6 +2521,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_setFixedWindowCalendar<'loc
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_fixedWindowNextTimerDeadline<'local>(
     env: JNIEnv<'local>,
@@ -2520,6 +2533,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_fixedWindowNextTimerDeadlin
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2540,6 +2554,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushTumblingAggregator<'lo
 }
 
 /// Local two-phase half: merges a batch of partials `[key, partial, slice_end]` into the windows.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updatePartialTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2561,6 +2576,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updatePartialTumblingAggreg
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_localWindowBufferReady<'local>(
     env: JNIEnv<'local>,
@@ -2575,6 +2591,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_localWindowBufferReady<'loc
 }
 
 /// Local two-phase half: emits the partial state of the windows the watermark has closed.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushPartialTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2592,6 +2609,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushPartialTumblingAggrega
 }
 
 /// Local two-phase half: emits every open window's partial state at a barrier, watermark untouched.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_drainPartialTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2608,6 +2626,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_drainPartialTumblingAggrega
 }
 
 /// Releases the aggregator and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2620,6 +2639,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeTumblingAggregator<'lo
 }
 
 /// Serializes the aggregator's open windows so the JVM can store them in a checkpoint.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2635,6 +2655,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotTumblingAggregator<
 }
 
 /// Rebuilds an aggregator from a snapshot taken by a prior run and returns a fresh handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreTumblingAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2666,6 +2687,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreTumblingAggregator<'
 }
 
 /// Rebuilds a cumulative-window aggregator from a snapshot taken by a prior run.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreCumulativeAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2696,6 +2718,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreCumulativeAggregator
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotTumblingAggregatorPartitions<
     'local,
@@ -2717,6 +2740,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotTumblingAggregatorP
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreTumblingAggregatorPartitions<'local>(
     env: JNIEnv<'local>,
@@ -2759,6 +2783,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreTumblingAggregatorPa
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_setFixedWindowAssignmentOffset<'local>(
     env: JNIEnv<'local>,

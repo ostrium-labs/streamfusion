@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[Gus, order1, 2024-01-01T12:00:00.123, 100]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Gus, order1, 2024-01-01T12:00:00.123, 100]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

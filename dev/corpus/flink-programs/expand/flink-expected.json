@@ -1,0 +1,10 @@
+{
+  "MySink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, 1, null]", "+U[1, 1, Hi]", "+I[2, 1, null]", "+U[2, 1, Hello]", "+U[2, 2, Hello]" ],
+    "after" : [ "+I[5, 1, null]", "+U[5, 1, Hello there]" ],
+    "materialized" : [ "+I[1, 1, Hi]", "+I[2, 2, Hello]", "+I[5, 1, Hello there]" ],
+    "primary_key" : [ "b" ],
+    "options" : { }
+  }
+}

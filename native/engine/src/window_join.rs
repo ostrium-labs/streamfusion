@@ -85,6 +85,7 @@ impl WindowJoiner {
         }
     }
 
+    #[cfg(feature = "jni")]
     pub(crate) fn set_calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.calendar = Some(WindowCalendar::new(callback));
     }
@@ -736,6 +737,7 @@ state_bytes_getter!(
     WindowJoiner
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_windowJoinerLateDrops<'local>(
     env: JNIEnv<'local>,
@@ -756,6 +758,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_windowJoinerLateDrops<'loca
 /// Creates an event-time INNER window joiner and returns an opaque handle. The key/window column
 /// indices locate the equi-join key and the `window_start`/`window_end` columns within each side's
 /// input batch. The JVM owns the handle across calls and must release it with the matching close.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createWindowJoiner<'local>(
@@ -810,6 +813,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createWindowJoiner<'local>(
 }
 
 /// Buffers a left batch (no output); its rows are joined later when the watermark closes their window.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -830,6 +834,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftWindowJoiner<'local
 }
 
 /// Buffers a right batch (no output).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -850,6 +855,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightWindowJoiner<'loca
 }
 
 /// Exports the INNER matches of every window the watermark has closed (then evicts those windows).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -869,6 +875,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushWindowJoiner<'local>(
 }
 
 /// Releases the window joiner and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -880,6 +887,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeWindowJoiner<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotWindowJoinerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -899,6 +907,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotWindowJoinerPartiti
     })
 }
 
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreWindowJoinerPartitions<'local>(
@@ -968,6 +977,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreWindowJoinerPartitio
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_setWindowJoinerCalendar<'local>(
     env: JNIEnv<'local>,
@@ -984,6 +994,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_setWindowJoinerCalendar<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_nextWindowJoinerTimerDeadline<'local>(
     env: JNIEnv<'local>,

@@ -1,8 +1,7 @@
 name: Upstream Flink suite
 
+# Loams fork (FC1): manual only; no push, PR or schedule triggers.
 on:
-  push:
-    branches: ['**']
   workflow_dispatch:
     inputs:
       sql_inventory:
@@ -14,8 +13,6 @@ on:
         type: choice
         options: [runtime, connectors, all]
         default: runtime
-  schedule:
-    - cron: "17 7 * * 1"
 
 permissions:
   contents: read
