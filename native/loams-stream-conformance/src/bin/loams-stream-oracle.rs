@@ -6,6 +6,7 @@
 //! loams-stream-oracle record <corpus>            run every case on the oracle, write expected.jsonl
 //! loams-stream-oracle run <corpus>               run every case, compare with expected.jsonl
 //! loams-stream-oracle fixtures <dir>             record the gateway fixtures for v1..v4
+//! loams-stream-oracle profile [repo]                write conformance/profile.toml and docs/compat/flink.md
 //! loams-stream-oracle tag <corpus>                 write each case's operators.txt from EXPLAIN on the oracle
 //! loams-stream-oracle nexmark-gen --events N     write person.json, auction.json, bid.json
 //!                                                (Nexmark events, JSON lines) into --out [.]
@@ -62,7 +63,7 @@ struct Args {
 }
 
 fn usage() -> &'static str {
-    "usage: loams-stream-oracle <up|down|record|run|tag|fixtures> [path] [--compose F] [--target N=URL]... \
+    "usage: loams-stream-oracle <up|down|record|run|tag|profile|fixtures> [path] [--compose F] [--target N=URL]... \
      [--api vN] [--shared LOCAL=REMOTE] [--only S] [--out DIR] [--keep] [--jar NAME=PATH]...\n       \
      loams-stream-oracle nexmark-gen --events N [--seed S] [--out DIR] [--base-time-ms T] [--rate R] \
      [--side-input ROWS]"
@@ -215,6 +216,39 @@ async fn main_inner(a: Args) -> Result<bool> {
                     message: e.to_string(),
                 })?;
                 eprintln!("wrote {}", file.display());
+            }
+            Ok(true)
+        }
+        "profile" => {
+            let root = a.path.clone().unwrap_or_else(|| PathBuf::from("."));
+            let list = root.join("conformance/vendor/flink-2.2.1/functions.txt");
+            let text = std::fs::read_to_string(&list).map_err(|e| Error::Io {
+                path: list.display().to_string(),
+                message: e.to_string(),
+            })?;
+            let functions = loams_stream_conformance::profile::read_functions(&text);
+            for (rel, body) in [
+                (
+                    "conformance/profile.toml",
+                    loams_stream_conformance::profile::render_profile(&functions),
+                ),
+                (
+                    "docs/compat/flink.md",
+                    loams_stream_conformance::profile::render_page(&functions),
+                ),
+            ] {
+                let path = root.join(rel);
+                if let Some(dir) = path.parent() {
+                    std::fs::create_dir_all(dir).map_err(|e| Error::Io {
+                        path: dir.display().to_string(),
+                        message: e.to_string(),
+                    })?;
+                }
+                std::fs::write(&path, body).map_err(|e| Error::Io {
+                    path: path.display().to_string(),
+                    message: e.to_string(),
+                })?;
+                eprintln!("wrote {}", path.display());
             }
             Ok(true)
         }

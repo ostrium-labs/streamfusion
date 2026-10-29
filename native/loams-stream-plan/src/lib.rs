@@ -7,6 +7,6 @@
 pub mod opspec;
 
 pub use opspec::{
-    CalcSpec, EncodedExpr, GroupAggSpec, IntervalJoinSpec, KeepFirstSpec, KeepLastSpec, OpSpec,
-    SortKey, TopNSpec, WindowAggSpec, WindowShape, OPSPEC_VERSION,
+    CalcSpec, EncodedExpr, GroupAggSpec, IntervalJoinSpec, KeepFirstSpec, KeepLastSpec,
+    OPSPEC_VERSION, OpSpec, SortKey, TopNSpec, WindowAggSpec, WindowShape,
 };

@@ -77,7 +77,9 @@ pub fn engine_params(spec: &OpSpec) -> OperatorParams {
         OpSpec::WindowAgg(s) => OperatorParams::WindowAgg(ops::WindowAggParams {
             shape: match s.shape {
                 WindowShape::Tumble { size_ms } => ops::WindowShape::Tumble { size_ms },
-                WindowShape::Hop { size_ms, slide_ms } => ops::WindowShape::Hop { size_ms, slide_ms },
+                WindowShape::Hop { size_ms, slide_ms } => {
+                    ops::WindowShape::Hop { size_ms, slide_ms }
+                }
                 WindowShape::Cumulate {
                     max_size_ms,
                     step_ms,
@@ -194,7 +196,11 @@ impl Driver {
     }
 
     /// Feeds `batch` on `input`; returns the rows it produced.
-    pub fn push(&mut self, input: usize, batch: RecordBatch) -> Result<Vec<RecordBatch>, DriverError> {
+    pub fn push(
+        &mut self,
+        input: usize,
+        batch: RecordBatch,
+    ) -> Result<Vec<RecordBatch>, DriverError> {
         if input >= self.inputs {
             return Err(DriverError::Operator(format!(
                 "the operator has {} input(s), got a batch on input {input}",

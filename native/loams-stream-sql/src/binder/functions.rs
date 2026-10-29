@@ -71,6 +71,16 @@ pub fn builtin(
             }
         };
     }
+    if args.is_empty()
+        && matches!(
+            name,
+            "COALESCE" | "GREATEST" | "LEAST" | "ARRAY" | "MAP" | "IFNULL" | "NULLIF" | "IF"
+        )
+    {
+        return Some(Err(format!(
+            "Invalid number of arguments to function '{name}'. Was expecting at least 1 argument"
+        )));
+    }
     match name {
         // Aggregates.
         "COUNT" => ok(LogicalType::bigint().not_null()),

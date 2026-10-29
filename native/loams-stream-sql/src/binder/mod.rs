@@ -26,6 +26,38 @@ pub use catalog::{
 };
 pub use expr::Scope;
 
+/// Whether the binder types `name` (upper case) as a built-in function: the binder's part of the
+/// function matrix (FC1 Task 7).
+pub fn is_builtin_function(name: &str) -> bool {
+    use crate::types::LogicalType;
+    let candidates: [&[LogicalType]; 4] = [
+        &[],
+        &[LogicalType::int()],
+        &[LogicalType::int(), LogicalType::int()],
+        &[LogicalType::int(), LogicalType::int(), LogicalType::int()],
+    ];
+    candidates
+        .iter()
+        .any(|args| functions::builtin(&name.to_uppercase(), args, true, true).is_some())
+        || matches!(
+            name.to_uppercase().as_str(),
+            "TUMBLE"
+                | "HOP"
+                | "CUMULATE"
+                | "SESSION"
+                | "DESCRIPTOR"
+                | "EXTRACT"
+                | "POSITION"
+                | "SUBSTRING"
+                | "TRIM"
+                | "OVERLAY"
+                | "FLOOR"
+                | "CEIL"
+                | "CAST"
+                | "TRY_CAST"
+        )
+}
+
 use crate::ast::*;
 use crate::error::Feature;
 use crate::types::LogicalType;

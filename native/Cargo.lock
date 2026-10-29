@@ -566,6 +566,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "21ca356ad6425cecb6eb7b28e4f659f1ee7880fbb1a16127de7dd62901efee9e"
 dependencies = [
  "bitflags 2.13.0",
+ "serde",
  "serde_core",
  "serde_json",
 ]
@@ -3313,6 +3314,7 @@ dependencies = [
 name = "loams-stream-conformance"
 version = "0.1.0-rc4"
 dependencies = [
+ "loams-stream-sql",
  "proptest",
  "reqwest",
  "serde",
@@ -3332,6 +3334,11 @@ version = "0.1.0-preview.1"
 [[package]]
 name = "loams-stream-plan"
 version = "0.1.0-preview.1"
+dependencies = [
+ "arrow-schema 58.4.0",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "loams-stream-rest"
@@ -3340,6 +3347,14 @@ version = "0.1.0-preview.1"
 [[package]]
 name = "loams-stream-runtime"
 version = "0.1.0-preview.1"
+dependencies = [
+ "arrow 58.4.0",
+ "arrow-schema 58.4.0",
+ "datafusion",
+ "loams-stream-plan",
+ "serde_json",
+ "streamfusion",
+]
 
 [[package]]
 name = "loams-stream-sql"
