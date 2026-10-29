@@ -165,6 +165,16 @@ pub struct IntervalJoinParams {
     pub memory_budget_bytes: i64,
 }
 
+/// The key timestamp precisions to apply: empty means the operator's default (`-1`, not a
+/// timestamp, per key column), as when the JNI path passes none.
+fn precisions(given: &[i32], keys: usize) -> Vec<i32> {
+    if given.is_empty() {
+        vec![-1; keys]
+    } else {
+        given.to_vec()
+    }
+}
+
 pub(crate) fn calc(p: &CalcParams) -> CalcExpression {
     CalcExpression {
         kinds: p.expr.kinds.clone(),
@@ -209,7 +219,7 @@ pub(crate) fn group_aggregator(p: &GroupAggParams) -> Result<GroupAggregator, Da
         p.key_columns.clone(),
         p.generate_update_before,
     )
-    .with_key_timestamp_precisions(p.key_timestamp_precisions.clone())
+    .with_key_timestamp_precisions(precisions(&p.key_timestamp_precisions, p.key_columns.len()))
     .with_filter_columns(p.filter_columns.clone())
     .with_count_columns(p.count_columns.clone())
     .with_distinct_view_columns(p.distinct_view_columns.clone())
@@ -224,7 +234,10 @@ pub(crate) fn group_aggregator(p: &GroupAggParams) -> Result<GroupAggregator, Da
 
 pub(crate) fn keep_first(p: &KeepFirstParams) -> Result<KeepFirstDeduplicator, DataFusionError> {
     KeepFirstDeduplicator::new(p.partition_columns.clone(), p.rowtime_column)
-        .with_key_timestamp_precisions(p.key_timestamp_precisions.clone())
+        .with_key_timestamp_precisions(precisions(
+            &p.key_timestamp_precisions,
+            p.partition_columns.len(),
+        ))
         .with_state_ttl(p.state_ttl_ms)
         .with_memory_budget(p.memory_budget_bytes)
 }
@@ -240,7 +253,10 @@ pub(crate) fn keep_last(p: &KeepLastParams) -> Result<KeepLastDeduplicator, Data
     .with_generate_insert(p.generate_insert)
     .with_mini_batch(p.mini_batch)
     .with_compact_changes(p.compact_changes)
-    .with_key_timestamp_precisions(p.key_timestamp_precisions.clone())
+    .with_key_timestamp_precisions(precisions(
+        &p.key_timestamp_precisions,
+        p.partition_columns.len(),
+    ))
     .with_state_ttl(p.state_ttl_ms)
     .with_memory_budget(p.memory_budget_bytes)
 }
@@ -264,7 +280,10 @@ pub(crate) fn top_n(p: &TopNParams) -> Result<TopNHandle, DataFusionError> {
                 p.limit,
                 p.output_rank_number,
             )
-            .with_key_timestamp_precisions(p.key_timestamp_precisions.clone())
+            .with_key_timestamp_precisions(precisions(
+                &p.key_timestamp_precisions,
+                p.partition_columns.len(),
+            ))
             .with_rank_end_column(p.rank_end_column)
             .with_generate_update_before(p.generate_update_before)
             .with_net_diff(p.net_diff)
@@ -280,7 +299,10 @@ pub(crate) fn top_n(p: &TopNParams) -> Result<TopNHandle, DataFusionError> {
                 p.output_rank_number,
                 p.net_diff,
             )
-            .with_key_timestamp_precisions(p.key_timestamp_precisions.clone())
+            .with_key_timestamp_precisions(precisions(
+                &p.key_timestamp_precisions,
+                p.partition_columns.len(),
+            ))
             .with_rank_end_column(p.rank_end_column)
             .with_state_ttl(p.state_ttl_ms),
         )
