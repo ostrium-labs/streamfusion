@@ -1,0 +1,23 @@
+source\target	CHAR(1)	VARCHAR(10)	STRING	BOOLEAN	BINARY(1)	BYTES	DECIMAL(10, 2)	TINYINT	SMALLINT	INT	BIGINT	FLOAT	DOUBLE	DATE	TIME(0)	TIMESTAMP(3)	TIMESTAMP_LTZ(3)	INTERVAL YEAR TO MONTH	INTERVAL DAY TO SECOND(3)	ARRAY<INT>	MAP<STRING, INT>	ROW<a INT>
+CHAR(1)	I	I	I	E	E	E	E	E	E	E	E	E	E	E	E	E	E	-	-	-	-	-
+VARCHAR(10)	E	I	I	E	E	E	E	E	E	E	E	E	E	E	E	E	E	-	-	-	-	-
+STRING	E	I	I	E	E	E	E	E	E	E	E	E	E	E	E	E	E	-	-	-	-	-
+BOOLEAN	E	E	E	I	-	-	E	E	E	E	E	E	E	-	-	-	-	-	-	-	-	-
+BINARY(1)	E	E	E	-	I	I	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+BYTES	E	E	E	-	E	I	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-
+DECIMAL(10, 2)	E	E	E	E	-	-	I	E	E	E	E	I	I	-	-	E	E	-	-	-	-	-
+TINYINT	E	E	E	E	-	-	I	I	I	I	I	I	I	-	-	E	E	-	-	-	-	-
+SMALLINT	E	E	E	E	-	-	I	E	I	I	I	I	I	-	-	E	E	-	-	-	-	-
+INT	E	E	E	E	-	-	I	E	E	I	I	I	I	-	-	E	E	-	-	-	-	-
+BIGINT	E	E	E	E	-	-	I	E	E	E	I	I	I	-	-	E	E	-	-	-	-	-
+FLOAT	E	E	E	E	-	-	I	E	E	E	E	I	I	-	-	E	E	-	-	-	-	-
+DOUBLE	E	E	E	E	-	-	I	E	E	E	E	E	I	-	-	E	E	-	-	-	-	-
+DATE	E	E	E	-	-	-	-	-	-	-	-	-	-	I	-	E	E	-	-	-	-	-
+TIME(0)	E	E	E	-	-	-	-	-	-	-	-	-	-	-	I	E	E	-	-	-	-	-
+TIMESTAMP(3)	E	E	E	-	-	-	E	E	E	E	E	E	E	I	I	I	I	-	-	-	-	-
+TIMESTAMP_LTZ(3)	E	E	E	-	-	-	E	E	E	E	E	E	E	E	E	I	I	-	-	-	-	-
+INTERVAL YEAR TO MONTH	E	E	E	-	-	-	-	-	-	-	-	-	-	-	-	-	-	I	-	-	-	-
+INTERVAL DAY TO SECOND(3)	E	E	E	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	I	-	-	-
+ARRAY<INT>	E	E	E	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	I	-	-
+MAP<STRING, INT>	E	E	E	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	I	-
+ROW<a INT>	E	E	E	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	-	I

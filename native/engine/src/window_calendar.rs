@@ -1,6 +1,6 @@
+use crate::HostObject;
 #[cfg(feature = "jni")]
 use jni::objects::{GlobalRef, JLongArray, JValue};
-use crate::HostObject;
 #[cfg(feature = "jni")]
 use streamfusion_bridge::bridge::{JavaException, JVM};
 
