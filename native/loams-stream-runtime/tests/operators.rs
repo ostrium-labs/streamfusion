@@ -69,8 +69,16 @@ fn window_spec(shape: WindowShape) -> OpSpec {
 #[test]
 fn tumbling_window_closes_on_watermark() {
     let mut d = Driver::new(&window_spec(WindowShape::Tumble { size_ms: 1000 })).unwrap();
-    assert!(d.push(0, keyed_window_batch(0, vec![1, 2])).unwrap().is_empty());
-    assert!(d.push(0, keyed_window_batch(1500, vec![1])).unwrap().is_empty());
+    assert!(
+        d.push(0, keyed_window_batch(0, vec![1, 2]))
+            .unwrap()
+            .is_empty()
+    );
+    assert!(
+        d.push(0, keyed_window_batch(1500, vec![1]))
+            .unwrap()
+            .is_empty()
+    );
     let first = concat(d.watermark(1000).unwrap());
     let mut keys = values(&first, 0);
     keys.sort();
@@ -156,8 +164,11 @@ fn group_spec(kinds: Vec<i64>, value_columns: Vec<i64>) -> OpSpec {
 fn group_by_emits_insert_then_update_changelog() {
     let mut d = Driver::new(&group_spec(vec![0], vec![1])).unwrap();
     let out = concat(
-        d.push(0, group_changelog(vec![1, 1, 2, 1], vec![1, 2, 5, 0], vec![0; 4]))
-            .unwrap(),
+        d.push(
+            0,
+            group_changelog(vec![1, 1, 2, 1], vec![1, 2, 5, 0], vec![0; 4]),
+        )
+        .unwrap(),
     );
     assert_eq!(row_kinds(&out), vec![0, 1, 2, 0]);
     assert_eq!(values(&out, 0), vec![1, 1, 1, 2]);
@@ -198,8 +209,11 @@ fn keep_first_by_event_time_releases_on_watermark() {
         memory_budget_bytes: -1,
     }))
     .unwrap();
-    d.push(0, dedup_batch(vec![1, 2, 3], vec![30, 40, 50], vec![10, 20, 30]))
-        .unwrap();
+    d.push(
+        0,
+        dedup_batch(vec![1, 2, 3], vec![30, 40, 50], vec![10, 20, 30]),
+    )
+    .unwrap();
     d.push(
         0,
         dedup_batch(
@@ -267,9 +281,15 @@ fn nexmark_q0_and_q5_like_run_in_the_driver() {
     let price: Vec<i64> = (0..n).map(|i| 100 + i).collect();
     let time: Vec<i64> = (0..n).map(|i| i * 10).collect();
     let bids = RecordBatch::try_from_iter(vec![
-        ("auction", Arc::new(Int64Array::from(auction.clone())) as ArrayRef),
+        (
+            "auction",
+            Arc::new(Int64Array::from(auction.clone())) as ArrayRef,
+        ),
         ("price", Arc::new(Int64Array::from(price)) as ArrayRef),
-        ("dateTime", Arc::new(Int64Array::from(time.clone())) as ArrayRef),
+        (
+            "dateTime",
+            Arc::new(Int64Array::from(time.clone())) as ArrayRef,
+        ),
     ])
     .unwrap();
     // q0: SELECT auction, price, dateTime FROM bid.
@@ -315,5 +335,9 @@ fn nexmark_q0_and_q5_like_run_in_the_driver() {
     let out = concat(d.finish().unwrap());
     // 10 seconds of bids: 5 windows x 10 auctions, 20 bids each.
     assert_eq!(out.num_rows(), 50);
-    assert!(values(&out, 3).iter().all(|c| *c == 20), "{:?}", values(&out, 3));
+    assert!(
+        values(&out, 3).iter().all(|c| *c == 20),
+        "{:?}",
+        values(&out, 3)
+    );
 }
