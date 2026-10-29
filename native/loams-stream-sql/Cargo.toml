@@ -1,6 +1,6 @@
 [package]
 name = "loams-stream-sql"
-description = "Flink SQL parser for Loams Stream (preview): FlinkDialect on sqlparser plus Flink's statement forms"
+description = "Flink SQL parser, binder and type system for Loams Stream (preview)"
 version.workspace = true
 edition = "2024"
 license = "Apache-2.0"
@@ -8,3 +8,11 @@ publish = false
 
 [dependencies]
 sqlparser = { workspace = true }
+arrow-schema = { workspace = true }
+
+[dev-dependencies]
+# Flink's value kernels (decimal arithmetic) for `decimal_arithmetic_matches_flink`: the binder
+# derives the types, the engine computes the values (FC1 Task 4).
+streamfusion = { path = "../engine", default-features = false, features = ["semantics"] }
+arrow = { workspace = true }
+datafusion = { workspace = true }

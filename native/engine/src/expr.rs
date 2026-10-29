@@ -1294,7 +1294,7 @@ pub(crate) struct DecimalDivide {
 }
 
 impl DecimalDivide {
-    fn new(precision: u8, scale: i8, modulo: bool) -> Self {
+    pub(crate) fn new(precision: u8, scale: i8, modulo: bool) -> Self {
         Self {
             precision,
             scale,

@@ -3318,7 +3318,11 @@ dependencies = [
 name = "loams-stream-sql"
 version = "0.1.0-rc4"
 dependencies = [
+ "arrow 58.3.0",
+ "arrow-schema 58.3.0",
+ "datafusion",
  "sqlparser",
+ "streamfusion",
 ]
 
 [[package]]

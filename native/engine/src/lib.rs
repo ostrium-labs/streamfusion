@@ -77,5 +77,7 @@ pub(crate) use {
 };
 
 pub mod bench;
+#[cfg(feature = "semantics")]
+pub mod semantics;
 #[cfg(test)]
 mod tests;
