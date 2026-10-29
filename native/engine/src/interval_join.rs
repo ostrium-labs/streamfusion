@@ -2285,10 +2285,6 @@ pub extern "system" fn Java_tech_streamfusion_Native_createIntervalJoiner<'local
     memory_budget_bytes: jlong,
 ) -> jlong {
     crate::bridge::jni_guard(env, move |mut env| {
-        let left = read_columns(&env, &left_keys);
-        let right = read_columns(&env, &right_keys);
-        let left_schema = import_schema(left_schema_address);
-        let right_schema = import_schema(right_schema_address);
         let predicate = read_join_predicate(
             &mut env,
             &pred_kinds,
@@ -2298,20 +2294,27 @@ pub extern "system" fn Java_tech_streamfusion_Native_createIntervalJoiner<'local
             &pred_doubles,
             &pred_strings,
         );
-        let joiner = IntervalJoiner::new(
-            left,
-            right,
-            left_time as usize,
-            right_time as usize,
-            lower,
-            upper,
-            predicate,
-            JoinKind::from_code(join_type),
-            left_schema,
-            right_schema,
-        )
-        .with_memory_budget(memory_budget_bytes);
-        boxed_or_throw(&mut env, joiner)
+        let params = crate::ops::IntervalJoinParams {
+            left_keys: read_columns(&env, &left_keys),
+            right_keys: read_columns(&env, &right_keys),
+            left_time: left_time as usize,
+            right_time: right_time as usize,
+            lower_ms: lower,
+            upper_ms: upper,
+            join_type,
+            left_schema: import_schema(left_schema_address),
+            right_schema: import_schema(right_schema_address),
+            predicate: predicate.map(|p| crate::ops::EncodedExpr {
+                kinds: p.kinds,
+                payload: p.payload,
+                child_counts: p.child_counts,
+                longs: p.longs,
+                doubles: p.doubles,
+                strings: p.strings,
+            }),
+            memory_budget_bytes,
+        };
+        boxed_or_throw(&mut env, crate::ops::interval_joiner(&params))
     })
 }
 

@@ -7,3 +7,12 @@ description = "Loams Stream task manager runtime (preview)"
 publish = false
 
 [dependencies]
+loams-stream-plan = { path = "../loams-stream-plan" }
+# The engine's operators, without JNI: the standalone binary links no JVM (design 82 D2276).
+streamfusion = { path = "../engine", default-features = false }
+arrow = { workspace = true }
+arrow-schema = { workspace = true }
+datafusion = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

@@ -7,3 +7,10 @@ description = "Loams Stream streaming planner (preview)"
 publish = false
 
 [dependencies]
+# Schemas travel in the operator spec (an interval join's input schemas); arrow-schema's serde
+# feature gives Field and DataType a stable serde form.
+arrow-schema = { workspace = true, features = ["serde"] }
+serde = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

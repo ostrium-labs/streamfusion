@@ -5391,33 +5391,23 @@ pub extern "system" fn Java_tech_streamfusion_Native_createGroupAggregatorWithTt
     emit_unchanged_with_ttl: jboolean,
 ) -> jlong {
     crate::bridge::jni_guard(env, move |mut env| {
-        let kinds = read_int_array(&env, &aggregate_kinds);
-        let value_types = read_int_array(&env, &value_types);
-        let value_columns = read_int_array(&env, &value_columns);
-        let filter_columns = read_int_array(&env, &filter_columns);
-        let count_columns = read_int_array(&env, &count_columns);
-        let distinct_view_columns = read_int_array(&env, &distinct_view_columns);
-        let key_columns = read_columns(&env, &key_columns);
-        let key_timestamp_precisions = read_i32_array(&env, &key_timestamp_precisions);
-        let mut aggregator = GroupAggregator::new(
-            kinds,
-            value_types,
-            value_columns,
-            key_columns,
-            generate_update_before != 0,
-        )
-        .with_key_timestamp_precisions(key_timestamp_precisions)
-        .with_filter_columns(filter_columns)
-        .with_count_columns(count_columns)
-        .with_distinct_view_columns(distinct_view_columns)
-        .with_record_count_column(record_count_column as i64)
-        .with_state_ttl(state_ttl_millis)
-        .with_ttl_emission(emit_unchanged_with_ttl != 0);
-        if mini_batch != 0 {
-            aggregator = aggregator.with_mini_batch();
-        }
-        let aggregator = aggregator.with_memory_budget(memory_budget_bytes);
-        boxed_or_throw(&mut env, aggregator)
+        let params = crate::ops::GroupAggParams {
+            aggregate_kinds: read_int_array(&env, &aggregate_kinds),
+            value_types: read_int_array(&env, &value_types),
+            value_columns: read_int_array(&env, &value_columns),
+            key_columns: read_columns(&env, &key_columns),
+            key_timestamp_precisions: read_i32_array(&env, &key_timestamp_precisions),
+            filter_columns: read_int_array(&env, &filter_columns),
+            count_columns: read_int_array(&env, &count_columns),
+            distinct_view_columns: read_int_array(&env, &distinct_view_columns),
+            record_count_column: record_count_column as i64,
+            generate_update_before: generate_update_before != 0,
+            mini_batch: mini_batch != 0,
+            state_ttl_ms: state_ttl_millis,
+            memory_budget_bytes,
+            emit_unchanged_with_ttl: emit_unchanged_with_ttl != 0,
+        };
+        boxed_or_throw(&mut env, crate::ops::group_aggregator(&params))
     })
 }
 

@@ -3908,7 +3908,11 @@ impl TopNHandle {
         }
     }
 
-    fn push(&mut self, batch: &RecordBatch, now_ms: i64) -> Result<RecordBatch, DataFusionError> {
+    pub(crate) fn push(
+        &mut self,
+        batch: &RecordBatch,
+        now_ms: i64,
+    ) -> Result<RecordBatch, DataFusionError> {
         match self {
             TopNHandle::Append(r) => r.push(batch, now_ms),
             TopNHandle::Retract(r) => r.push(batch, now_ms),
@@ -3916,7 +3920,7 @@ impl TopNHandle {
         }
     }
 
-    fn flush(&mut self) -> RecordBatch {
+    pub(crate) fn flush(&mut self) -> RecordBatch {
         match self {
             TopNHandle::Append(r) => r.flush_net_diff(),
             TopNHandle::Retract(r) => r.flush_net_diff(),
@@ -3926,7 +3930,7 @@ impl TopNHandle {
     }
 
     /// Bounds the ranker's buffers by the operator's task off-heap budget (negative = unaccounted).
-    fn with_memory_budget(self, budget_bytes: i64) -> Result<Self, DataFusionError> {
+    pub(crate) fn with_memory_budget(self, budget_bytes: i64) -> Result<Self, DataFusionError> {
         Ok(match self {
             TopNHandle::Append(r) => TopNHandle::Append(r.with_memory_budget(budget_bytes)?),
             TopNHandle::Retract(r) => TopNHandle::Retract(r.with_memory_budget(budget_bytes)?),
@@ -5129,40 +5133,28 @@ pub extern "system" fn Java_tech_streamfusion_Native_createTopNRanker<'local>(
     memory_budget_bytes: jlong,
 ) -> jlong {
     crate::bridge::jni_guard(env, move |mut env| {
-        let partitions = read_columns(&env, &partition_columns);
-        let timestamp_precisions = read_i32_array(&env, &key_timestamp_precisions);
-        let sort = read_sort_columns(&env, &sort_indices, &sort_ascending, &sort_nulls_first);
-        let handle = if retracting != 0 {
-            TopNHandle::Retract(
-                RetractableTopNRanker::new(
-                    partitions,
-                    sort,
-                    offset,
-                    limit,
-                    output_rank_number != 0,
-                )
-                .with_key_timestamp_precisions(timestamp_precisions)
-                .with_rank_end_column(rank_end_column)
-                .with_generate_update_before(generate_update_before != 0)
-                .with_net_diff(net_diff != 0)
-                .with_state_ttl(state_ttl_millis),
-            )
-        } else {
-            // The append-only ranker is the no-OFFSET path (offset always 0).
-            TopNHandle::Append(
-                TopNRanker::new(
-                    partitions,
-                    sort,
-                    limit,
-                    output_rank_number != 0,
-                    net_diff != 0,
-                )
-                .with_key_timestamp_precisions(timestamp_precisions)
-                .with_rank_end_column(rank_end_column)
-                .with_state_ttl(state_ttl_millis),
-            )
+        let params = crate::ops::TopNParams {
+            partition_columns: read_columns(&env, &partition_columns),
+            key_timestamp_precisions: read_i32_array(&env, &key_timestamp_precisions),
+            sort: read_sort_columns(&env, &sort_indices, &sort_ascending, &sort_nulls_first)
+                .into_iter()
+                .map(|c| crate::ops::SortKey {
+                    index: c.index,
+                    ascending: c.ascending,
+                    nulls_first: c.nulls_first,
+                })
+                .collect(),
+            offset,
+            limit,
+            rank_end_column,
+            output_rank_number: output_rank_number != 0,
+            retracting: retracting != 0,
+            generate_update_before: generate_update_before != 0,
+            net_diff: net_diff != 0,
+            state_ttl_ms: state_ttl_millis,
+            memory_budget_bytes,
         };
-        boxed_or_throw(&mut env, handle.with_memory_budget(memory_budget_bytes))
+        boxed_or_throw(&mut env, crate::ops::top_n(&params))
     })
 }
 
