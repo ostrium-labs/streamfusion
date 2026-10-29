@@ -79,7 +79,7 @@ impl KeepFirstDeduplicator {
 
     /// Bounds this deduplicator's state (the pending batch plus the emitted-key set) by the
     /// operator's task off-heap budget (negative = unaccounted).
-    fn with_memory_budget(mut self, budget_bytes: i64) -> Result<Self, DataFusionError> {
+    pub(crate) fn with_memory_budget(mut self, budget_bytes: i64) -> Result<Self, DataFusionError> {
         let state = self
             .pending
             .as_ref()
@@ -1952,13 +1952,14 @@ pub extern "system" fn Java_tech_streamfusion_Native_createKeepFirstDeduplicator
     memory_budget_bytes: jlong,
 ) -> jlong {
     crate::bridge::jni_guard(env, move |mut env| {
-        let partitions = read_columns(&env, &partition_columns);
-        let timestamp_precisions = read_i32_array(&env, &key_timestamp_precisions);
-        let dedup = KeepFirstDeduplicator::new(partitions, rt_column as usize)
-            .with_key_timestamp_precisions(timestamp_precisions)
-            .with_state_ttl(state_ttl_millis)
-            .with_memory_budget(memory_budget_bytes);
-        boxed_or_throw(&mut env, dedup)
+        let params = crate::ops::KeepFirstParams {
+            partition_columns: read_columns(&env, &partition_columns),
+            key_timestamp_precisions: read_i32_array(&env, &key_timestamp_precisions),
+            rowtime_column: rt_column as usize,
+            state_ttl_ms: state_ttl_millis,
+            memory_budget_bytes,
+        };
+        boxed_or_throw(&mut env, crate::ops::keep_first(&params))
     })
 }
 
@@ -2109,22 +2110,20 @@ pub extern "system" fn Java_tech_streamfusion_Native_createKeepLastDeduplicator<
     memory_budget_bytes: jlong,
 ) -> jlong {
     crate::bridge::jni_guard(env, move |mut env| {
-        let partitions = read_columns(&env, &partition_columns);
-        let timestamp_precisions = read_i32_array(&env, &key_timestamp_precisions);
-        let dedup = KeepLastDeduplicator::new(
-            partitions,
-            rt_column as usize,
-            generate_update_before != 0,
-            rowtime_ordered != 0,
-            keep_first != 0,
-        )
-        .with_generate_insert(generate_insert != 0)
-        .with_mini_batch(mini_batch != 0)
-        .with_compact_changes(compact_changes != 0)
-        .with_key_timestamp_precisions(timestamp_precisions)
-        .with_state_ttl(state_ttl_millis)
-        .with_memory_budget(memory_budget_bytes);
-        boxed_or_throw(&mut env, dedup)
+        let params = crate::ops::KeepLastParams {
+            partition_columns: read_columns(&env, &partition_columns),
+            key_timestamp_precisions: read_i32_array(&env, &key_timestamp_precisions),
+            rowtime_column: rt_column as usize,
+            generate_update_before: generate_update_before != 0,
+            generate_insert: generate_insert != 0,
+            rowtime_ordered: rowtime_ordered != 0,
+            keep_first: keep_first != 0,
+            mini_batch: mini_batch != 0,
+            compact_changes: compact_changes != 0,
+            state_ttl_ms: state_ttl_millis,
+            memory_budget_bytes,
+        };
+        boxed_or_throw(&mut env, crate::ops::keep_last(&params))
     })
 }
 

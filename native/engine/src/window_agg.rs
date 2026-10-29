@@ -2376,12 +2376,22 @@ pub extern "system" fn Java_tech_streamfusion_Native_createTumblingAggregator<'l
     memory_budget_bytes: jlong,
 ) -> jlong {
     crate::bridge::jni_guard(env, move |mut env| {
-        let kinds = read_int_array(&env, &aggregate_kinds);
-        let value_types = read_int_array(&env, &value_types);
-        let aggregator =
-            TumblingAggregator::new(window_millis, slide_millis, false, value_types, kinds)
-                .with_memory_budget(memory_budget_bytes);
-        boxed_or_throw(&mut env, aggregator)
+        let params = crate::ops::WindowAggParams {
+            shape: if slide_millis == window_millis {
+                crate::ops::WindowShape::Tumble {
+                    size_ms: window_millis,
+                }
+            } else {
+                crate::ops::WindowShape::Hop {
+                    size_ms: window_millis,
+                    slide_ms: slide_millis,
+                }
+            },
+            value_types: read_int_array(&env, &value_types),
+            aggregate_kinds: read_int_array(&env, &aggregate_kinds),
+            memory_budget_bytes,
+        };
+        boxed_or_throw(&mut env, crate::ops::window_aggregator(&params))
     })
 }
 
@@ -2400,12 +2410,16 @@ pub extern "system" fn Java_tech_streamfusion_Native_createCumulativeAggregator<
     memory_budget_bytes: jlong,
 ) -> jlong {
     crate::bridge::jni_guard(env, move |mut env| {
-        let kinds = read_int_array(&env, &aggregate_kinds);
-        let value_types = read_int_array(&env, &value_types);
-        let aggregator =
-            TumblingAggregator::new(max_size_millis, step_millis, true, value_types, kinds)
-                .with_memory_budget(memory_budget_bytes);
-        boxed_or_throw(&mut env, aggregator)
+        let params = crate::ops::WindowAggParams {
+            shape: crate::ops::WindowShape::Cumulate {
+                max_size_ms: max_size_millis,
+                step_ms: step_millis,
+            },
+            value_types: read_int_array(&env, &value_types),
+            aggregate_kinds: read_int_array(&env, &aggregate_kinds),
+            memory_budget_bytes,
+        };
+        boxed_or_throw(&mut env, crate::ops::window_aggregator(&params))
     })
 }
 

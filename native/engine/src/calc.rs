@@ -638,21 +638,22 @@ fn read_calc_expression<'local>(
     condition_root: jint,
     output_names: Vec<String>,
 ) -> CalcExpression {
-    CalcExpression {
-        kinds: read_int_array(env, kinds),
-        payload: read_int_array(env, payload),
-        child_counts: read_int_array(env, child_counts),
-        longs: read_longs(env, longs),
-        doubles: read_doubles(env, doubles),
-        strings: read_strings(env, strings),
+    crate::ops::calc(&crate::ops::CalcParams {
+        expr: crate::ops::EncodedExpr {
+            kinds: read_int_array(env, kinds),
+            payload: read_int_array(env, payload),
+            child_counts: read_int_array(env, child_counts),
+            longs: read_longs(env, longs),
+            doubles: read_doubles(env, doubles),
+            strings: read_strings(env, strings),
+        },
         projection_roots: read_int_array(env, projection_roots)
             .into_iter()
             .map(|r| r as usize)
             .collect(),
         condition_root: condition_root as i64,
         output_names,
-        compiled: None,
-    }
+    })
 }
 
 /// The Arrow schema an encoded Calc would produce over `input`, without evaluating it: one field per
