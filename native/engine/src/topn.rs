@@ -4768,7 +4768,11 @@ impl WindowRanker {
         // Rebuild durable buffers before applying the saved watermark: regional bounds are local,
         // and their calendar callback is reapplied by the operator after restoration.
         for batch in read_ipc_if_present(&bytes[8..]) {
-            ranker.push(&batch);
+            // A buffer that cannot be re-pushed is corrupt state: fail the restore loudly, as the
+            // watermark read above does, rather than dropping buffered rows.
+            ranker
+                .push(&batch)
+                .expect("restore window-rank buffered rows");
         }
         ranker.current_watermark = watermark;
         ranker

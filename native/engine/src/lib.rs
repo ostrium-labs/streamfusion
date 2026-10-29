@@ -70,6 +70,14 @@ mod topn;
 mod updating_join;
 mod window_agg;
 mod window_calendar;
+
+/// A host (JVM) object the engine calls back into. Keyed on the engine's own `jni` feature, not
+/// the bridge's: when another crate in the same build turns the bridge's `jni` on, the engine
+/// without `jni` must still see an uninhabited type, so its upcall paths stay unreachable.
+#[cfg(feature = "jni")]
+pub(crate) type HostObject = streamfusion_bridge::bridge::HostObject;
+#[cfg(not(feature = "jni"))]
+pub(crate) type HostObject = std::convert::Infallible;
 mod window_join;
 
 pub(crate) use bridge::*;

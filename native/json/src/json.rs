@@ -1410,7 +1410,6 @@ fn append_rewritten(
     env: JsonEnv,
     scan_binary: bool,
 ) {
-    use simd_json::prelude::*;
     for row in crate::json_retry::rewrite_message(bytes, fields, env) {
         let mut buf = row.into_bytes();
         let tape = simd_json::to_tape(&mut buf).expect("sanitized row reparses");

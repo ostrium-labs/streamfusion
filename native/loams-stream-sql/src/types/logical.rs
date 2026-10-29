@@ -517,9 +517,10 @@ impl LogicalType {
     pub fn scale(&self) -> Option<u8> {
         match self.kind {
             LogicalKind::Decimal { scale, .. } => Some(scale),
-            LogicalKind::TinyInt | LogicalKind::SmallInt | LogicalKind::Int | LogicalKind::BigInt => {
-                Some(0)
-            }
+            LogicalKind::TinyInt
+            | LogicalKind::SmallInt
+            | LogicalKind::Int
+            | LogicalKind::BigInt => Some(0),
             _ => None,
         }
     }
@@ -693,9 +694,7 @@ fn write_type(out: &mut String, ty: &LogicalType, form: Form) {
             }
             DayTimeResolution::Hour => out.push_str("INTERVAL HOUR"),
             DayTimeResolution::HourToMinute => out.push_str("INTERVAL HOUR TO MINUTE"),
-            DayTimeResolution::HourToSecond => {
-                write!(out, "INTERVAL HOUR TO SECOND({f})").unwrap()
-            }
+            DayTimeResolution::HourToSecond => write!(out, "INTERVAL HOUR TO SECOND({f})").unwrap(),
             DayTimeResolution::Minute => out.push_str("INTERVAL MINUTE"),
             DayTimeResolution::MinuteToSecond => {
                 write!(out, "INTERVAL MINUTE TO SECOND({f})").unwrap()
@@ -886,9 +885,7 @@ impl LogicalType {
             )?),
             TypeKind::Interval(qualifier) => parse_interval_qualifier(qualifier)?,
             TypeKind::Array(e) => LogicalKind::Array(Box::new(LogicalType::from_syntax(e)?)),
-            TypeKind::Multiset(e) => {
-                LogicalKind::Multiset(Box::new(LogicalType::from_syntax(e)?))
-            }
+            TypeKind::Multiset(e) => LogicalKind::Multiset(Box::new(LogicalType::from_syntax(e)?)),
             TypeKind::Map(k, v) => LogicalKind::Map(
                 Box::new(LogicalType::from_syntax(k)?),
                 Box::new(LogicalType::from_syntax(v)?),
@@ -915,12 +912,12 @@ impl LogicalType {
                 snapshot: snapshot.clone(),
             },
             TypeKind::Structured { .. } => {
-                return Err(TypeError::Unsupported(
-                    "structured types (STRUCTURED<...>)",
-                ));
+                return Err(TypeError::Unsupported("structured types (STRUCTURED<...>)"));
             }
             TypeKind::UserDefined(name) => {
-                return Err(TypeError::Invalid(format!("Unknown datatype name '{name}'")));
+                return Err(TypeError::Invalid(format!(
+                    "Unknown datatype name '{name}'"
+                )));
             }
         };
         Ok(LogicalType {
@@ -1040,7 +1037,10 @@ mod tests {
         for (sql, expected) in cases {
             assert_eq!(resolve(sql).to_string(), expected, "{sql}");
         }
-        assert_eq!(LogicalType::rowtime(3).to_string(), "TIMESTAMP(3) *ROWTIME*");
+        assert_eq!(
+            LogicalType::rowtime(3).to_string(),
+            "TIMESTAMP(3) *ROWTIME*"
+        );
         assert_eq!(
             LogicalType::proctime().to_string(),
             "TIMESTAMP_LTZ(3) NOT NULL *PROCTIME*"

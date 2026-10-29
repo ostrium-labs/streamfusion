@@ -310,7 +310,6 @@ impl CdcJsonDecoder {
     /// `root.get` reads. A message without a usable `old` contributes an empty mask (only updates
     /// read it, and a null `old` on an update already failed in `cdc_emit`).
     fn old_key_presence(&self, bodies: &RecordBatch) -> Vec<u128> {
-        use simd_json::prelude::*;
         let spec = self.dialect.spec();
         let column = bodies.column(0);
         let mut masks = Vec::with_capacity(bodies.num_rows());
@@ -387,7 +386,7 @@ impl CdcJsonDecoder {
         }
 
         let spec = self.dialect.spec();
-        let ops = envelope
+        let _ops = envelope
             .column(2)
             .as_any()
             .downcast_ref::<StringArray>()

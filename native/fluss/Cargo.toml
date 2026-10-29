@@ -33,3 +33,9 @@ streamfusion-benchmark-support.workspace = true
 [[bench]]
 name = "fluss_write"
 harness = false
+
+# Inherited from StreamFusion: these findings predate the Loams fork. They are allowed here so
+# `clippy -D warnings` is clean workspace-wide while new crates stay strict; fix incrementally
+# (FC1 ruling R4.5).
+[lints.clippy]
+needless_borrow = "allow"
