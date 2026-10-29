@@ -1,0 +1,8 @@
+description = "Nexmark q17: auction statistics per day"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = false
+upsert_key = ["auction", "day"]
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q17"

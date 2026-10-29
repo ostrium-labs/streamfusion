@@ -1,0 +1,10 @@
+[package]
+name = "loams-stream-sql"
+description = "Flink SQL parser for Loams Stream (preview): FlinkDialect on sqlparser plus Flink's statement forms"
+version.workspace = true
+edition = "2024"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+sqlparser = { workspace = true }

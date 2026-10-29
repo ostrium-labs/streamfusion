@@ -1,0 +1,8 @@
+description = "Nexmark q4: average closing price per category, GROUP BY over a join"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = false
+upsert_key = ["id"]
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q4"

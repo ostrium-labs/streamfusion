@@ -1,0 +1,7 @@
+description = "Nexmark q2: selection, MOD(auction, 123) = 0"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q2"
