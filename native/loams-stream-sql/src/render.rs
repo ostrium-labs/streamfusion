@@ -322,6 +322,33 @@ impl VisitorMut for QueryChecker<'_> {
     type Break = ParseError;
 
     fn pre_visit_table_factor(&mut self, factor: &mut TableFactor) -> ControlFlow<ParseError> {
+        // `UNNEST(arr)` comes through the generic table-function path; give it its own node.
+        if let TableFactor::Table {
+            name,
+            args: Some(args),
+            alias,
+            ..
+        } = factor
+            && name.0.len() == 1
+            && matches!(&name.0[0], ObjectNamePart::Identifier(i) if i.value.eq_ignore_ascii_case("UNNEST"))
+        {
+            let array_exprs = args
+                .args
+                .iter()
+                .filter_map(|a| match a {
+                    FunctionArg::Unnamed(FunctionArgExpr::Expr(e)) => Some(e.clone()),
+                    _ => None,
+                })
+                .collect();
+            *factor = TableFactor::UNNEST {
+                alias: alias.take(),
+                array_exprs,
+                with_offset: false,
+                with_offset_alias: None,
+                with_ordinality: false,
+            };
+            return ControlFlow::Continue(());
+        }
         if let TableFactor::Table {
             name,
             args,
@@ -348,7 +375,12 @@ impl VisitorMut for QueryChecker<'_> {
                 );
             }
             if args.is_some() {
-                return reject("a table function call outside TABLE(...)", span);
+                // Flink 2.x calls process table functions (FLIP-440) without TABLE(...):
+                // `FROM f(r => TABLE t PARTITION BY k)`. Parsed here; the binder names the
+                // feature.
+                let hints = self.take_hints(name);
+                *with_hints = encode_hints(&hints);
+                return ControlFlow::Continue(());
             }
             if !partitions.is_empty() || *with_ordinality || json_path.is_some() {
                 return reject(
