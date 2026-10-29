@@ -1,0 +1,2083 @@
+{
+  "flink" : "2.2.1",
+  "source" : "org.apache.flink:flink-table-planner_2.12:2.2.1:tests",
+  "package" : "org.apache.flink.table.planner.plan.nodes.exec.stream",
+  "classes" : [ "org.apache.flink.table.planner.plan.nodes.exec.stream.AsyncCalcRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.AsyncCalcTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.AsyncCorrelateRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.AsyncCorrelateTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.CalcRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.ChangelogNormalizeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.ChangelogNormalizeSemanticTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.ChangelogNormalizeSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.ChangelogNormalizeTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.ConstraintEnforcerSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.ConstraintEnforcerTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.CorrelateRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.DeduplicationRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.DeduplicationTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.DeletesByKeySemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.ExpandRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.GroupAggregateRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.GroupAggregateTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.GroupWindowAggregateEventTimeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.GroupWindowAggregateProcTimeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.GroupWindowAggregateTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.IncrementalGroupAggregateRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.IncrementalGroupAggregateTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.IntervalJoinRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.IntervalJoinTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.JoinRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.JoinSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.LimitRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.LookupJoinRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.MLPredictRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.MLPredictSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.MLPredictTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.MatchRecognizeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.MiniBatchAssignerRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.MiniBatchAssignerTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.MiscSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.MultiJoinRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.MultiJoinSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.MultiJoinTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.OverAggregateRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.OverWindowRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.OverWindowTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.ProcessTableFunctionSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.ProcessTableFunctionTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.RankRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.SinkSemanticTests", "org.apache.flink.table.planner.plan.nodes.exec.stream.SinkTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.SortLimitRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.SortRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.TableSinkRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.TableSourceScanRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.TemporalJoinRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.TemporalJoinTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.TemporalSortRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.TemporalSortTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.UnionRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.ValuesRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.VectorSearchRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.WatermarkAssignerRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.WatermarkAssignerTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowAggregateEventTimeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowAggregateTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowDeduplicateEventTimeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowDeduplicateTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowJoinEventTimeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowJoinTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowRankRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowRankTestPrograms", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowTableFunctionEventTimeRestoreTest", "org.apache.flink.table.planner.plan.nodes.exec.stream.WindowTableFunctionProcTimeRestoreTest" ],
+  "references" : 575,
+  "programs_found" : 345,
+  "cases_written" : 330,
+  "programs_exported" : 319,
+  "not_exported" : 26,
+  "unloadable" : [ ],
+  "programs" : [ {
+    "id" : "async-calc-simple",
+    "restore" : true,
+    "origins" : [ "AsyncCalcRestoreTest.programs()", "AsyncCalcTestPrograms.ASYNC_CALC_UDF_SIMPLE" ],
+    "cases" : [ "async-calc-simple" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-calc-complex",
+    "restore" : true,
+    "origins" : [ "AsyncCalcRestoreTest.programs()", "AsyncCalcTestPrograms.ASYNC_CALC_UDF_COMPLEX" ],
+    "cases" : [ "async-calc-complex" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-calc-nested",
+    "restore" : true,
+    "origins" : [ "AsyncCalcRestoreTest.programs()", "AsyncCalcTestPrograms.ASYNC_CALC_UDF_NESTED" ],
+    "cases" : [ "async-calc-nested" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-calc-condition",
+    "restore" : true,
+    "origins" : [ "AsyncCalcRestoreTest.programs()", "AsyncCalcTestPrograms.ASYNC_CALC_UDF_CONDITION" ],
+    "cases" : [ "async-calc-condition" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-calc-failure-exception",
+    "restore" : true,
+    "origins" : [ "AsyncCalcRestoreTest.programs()", "AsyncCalcTestPrograms.ASYNC_CALC_UDF_FAILURE_EXCEPTION" ],
+    "cases" : [ "async-calc-failure-exception" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-correlate-catalog-func",
+    "restore" : true,
+    "origins" : [ "AsyncCorrelateRestoreTest.programs()", "AsyncCorrelateTestPrograms.CORRELATE_CATALOG_FUNC" ],
+    "cases" : [ "async-correlate-catalog-func" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-correlate-system-func",
+    "restore" : true,
+    "origins" : [ "AsyncCorrelateRestoreTest.programs()", "AsyncCorrelateTestPrograms.CORRELATE_SYSTEM_FUNC" ],
+    "cases" : [ "async-correlate-system-func" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-correlate-join-filter",
+    "restore" : true,
+    "origins" : [ "AsyncCorrelateRestoreTest.programs()", "AsyncCorrelateTestPrograms.CORRELATE_JOIN_FILTER" ],
+    "cases" : [ "async-correlate-join-filter" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-correlate-left-join",
+    "restore" : true,
+    "origins" : [ "AsyncCorrelateRestoreTest.programs()", "AsyncCorrelateTestPrograms.CORRELATE_LEFT_JOIN" ],
+    "cases" : [ "async-correlate-left-join" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "async-correlate-exception",
+    "restore" : true,
+    "origins" : [ "AsyncCorrelateRestoreTest.programs()", "AsyncCorrelateTestPrograms.CORRELATE_UDF_EXCEPTION" ],
+    "cases" : [ "async-correlate-exception" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "calc-simple",
+    "restore" : true,
+    "origins" : [ "CalcRestoreTest.programs()" ],
+    "cases" : [ "calc-simple" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "calc-filter",
+    "restore" : true,
+    "origins" : [ "CalcRestoreTest.programs()" ],
+    "cases" : [ "calc-filter" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "calc-filter-pushdown",
+    "restore" : true,
+    "origins" : [ "CalcRestoreTest.programs()" ],
+    "cases" : [ "calc-filter-pushdown" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'filterable-fields'='a'" ]
+  }, {
+    "id" : "calc-project-pushdown",
+    "restore" : true,
+    "origins" : [ "CalcRestoreTest.programs()" ],
+    "cases" : [ "calc-project-pushdown" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'filterable-fields'='a'" ]
+  }, {
+    "id" : "calc-sarg",
+    "restore" : true,
+    "origins" : [ "CalcRestoreTest.programs()" ],
+    "cases" : [ "calc-sarg" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'filterable-fields'='a'" ]
+  }, {
+    "id" : "calc-udf-simple",
+    "restore" : true,
+    "origins" : [ "CalcRestoreTest.programs()" ],
+    "cases" : [ "calc-udf-simple" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "calc-udf-complex",
+    "restore" : true,
+    "origins" : [ "CalcRestoreTest.programs()" ],
+    "cases" : [ "calc-udf-complex" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "changelog-normalize-source",
+    "restore" : true,
+    "origins" : [ "ChangelogNormalizeRestoreTest.programs()", "ChangelogNormalizeTestPrograms.CHANGELOG_SOURCE" ],
+    "cases" : [ "changelog-normalize-source" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "changelog-normalize-source-mini-batch",
+    "restore" : true,
+    "origins" : [ "ChangelogNormalizeRestoreTest.programs()", "ChangelogNormalizeTestPrograms.CHANGELOG_SOURCE_MINI_BATCH" ],
+    "cases" : [ "changelog-normalize-source-mini-batch" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "changelog-normalize-upsert",
+    "restore" : true,
+    "origins" : [ "ChangelogNormalizeRestoreTest.programs()", "ChangelogNormalizeTestPrograms.UPSERT_SOURCE" ],
+    "cases" : [ "changelog-normalize-upsert" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "changelog-normalize-upsert-filter",
+    "restore" : true,
+    "origins" : [ "ChangelogNormalizeRestoreTest.programs()", "ChangelogNormalizeTestPrograms.UPSERT_SOURCE_WITH_FILTER" ],
+    "cases" : [ "changelog-normalize-upsert-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "changelog-normalize-upsert-filter-watermark",
+    "restore" : true,
+    "origins" : [ "ChangelogNormalizeRestoreTest.programs()", "ChangelogNormalizeTestPrograms.UPSERT_SOURCE_WITH_FILTER_ON_WATERMARK" ],
+    "cases" : [ "changelog-normalize-upsert-filter-watermark" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "upsert-with-non-key-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.UPSERT_SOURCE_WITH_NON_KEY_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "upsert-with-non-key-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "upsert-with-key-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.UPSERT_SOURCE_WITH_KEY_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "upsert-with-key-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "upsert-with-no-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.UPSERT_SOURCE_WITH_NO_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "upsert-with-no-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "kafka-with-non-key-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.KAFKA_SOURCE_WITH_NON_KEY_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "kafka-with-non-key-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='UA,D', 'sink-changelog-mode-enforced'='UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "kafka-with-key-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.KAFKA_SOURCE_WITH_KEY_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "kafka-with-key-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='UA,D', 'sink-changelog-mode-enforced'='UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "kafka-with-no-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.KAFKA_SOURCE_WITH_NO_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "kafka-with-no-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='UA,D', 'sink-changelog-mode-enforced'='UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "retract-source-with-non-key-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.RETRACT_SOURCE_WITH_NON_KEY_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "retract-source-with-non-key-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "retract-source-with-key-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.RETRACT_SOURCE_WITH_KEY_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "retract-source-with-key-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "retract-source-with-no-filter",
+    "restore" : false,
+    "origins" : [ "ChangelogNormalizeSemanticTestPrograms.RETRACT_SOURCE_NO_FILTER", "ChangelogNormalizeSemanticTests.programs()" ],
+    "cases" : [ "retract-source-with-no-filter" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "constraint-enforcer-drop-not-null-nested-rows",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.NOT_NULL_DROP_NESTED_ROWS" ],
+    "cases" : [ "constraint-enforcer-drop-not-null-nested-rows" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-error-not-null-nested-rows",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.NOT_NULL_ERROR_NESTED_ROWS" ],
+    "cases" : [ "constraint-enforcer-error-not-null-nested-rows.1", "constraint-enforcer-error-not-null-nested-rows.2" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-trim-pad-length-nested-rows",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.LENGTH_TRIM_PAD_NESTED_ROWS" ],
+    "cases" : [ "constraint-enforcer-trim-pad-length-nested-rows" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-error-length-nested-rows",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.LENGTH_ERROR_NESTED_ROWS" ],
+    "cases" : [ "constraint-enforcer-error-length-nested-rows.1", "constraint-enforcer-error-length-nested-rows.2", "constraint-enforcer-error-length-nested-rows.3", "constraint-enforcer-error-length-nested-rows.4", "constraint-enforcer-error-length-nested-rows.5", "constraint-enforcer-error-length-nested-rows.6" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-drop-not-null-nested-arrays",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.NOT_NULL_DROP_NESTED_ARRAYS" ],
+    "cases" : [ "constraint-enforcer-drop-not-null-nested-arrays" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-error-not-null-nested-arrays",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.NOT_NULL_ERROR_NESTED_ARRAYS" ],
+    "cases" : [ "constraint-enforcer-error-not-null-nested-arrays.1", "constraint-enforcer-error-not-null-nested-arrays.2" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-drop-not-null-nested-maps",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.NOT_NULL_DROP_NESTED_MAPS" ],
+    "cases" : [ ],
+    "not_exported" : "extractor error: java.lang.UnsupportedOperationException: JSON format doesn't support non-string as key type of map. The type is: MAP<BIGINT NOT NULL, BIGINT NOT NULL> NOT NULL"
+  }, {
+    "id" : "constraint-enforcer-error-not-null-nested-maps",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.NOT_NULL_ERROR_NESTED_MAPS" ],
+    "cases" : [ ],
+    "not_exported" : "extractor error: java.lang.UnsupportedOperationException: JSON format doesn't support non-string as key type of map. The type is: MAP<BIGINT NOT NULL, BIGINT NOT NULL> NOT NULL"
+  }, {
+    "id" : "constraint-enforcer-trim-pad-nested-collections",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.LENGTH_TRIM_PAD_WITH_NESTED_COLLECTIONS" ],
+    "cases" : [ "constraint-enforcer-trim-pad-nested-collections" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-error-nested-arrays",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.LENGTH_ERROR_WITH_NESTED_ARRAYS" ],
+    "cases" : [ "constraint-enforcer-error-nested-arrays.1", "constraint-enforcer-error-nested-arrays.2", "constraint-enforcer-error-nested-arrays.3", "constraint-enforcer-error-nested-arrays.4" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "constraint-enforcer-error-nested-maps",
+    "restore" : false,
+    "origins" : [ "ConstraintEnforcerSemanticTests.programs()", "ConstraintEnforcerTestPrograms.LENGTH_ERROR_WITH_NESTED_MAPS" ],
+    "cases" : [ ],
+    "not_exported" : "extractor error: java.lang.UnsupportedOperationException: JSON format doesn't support non-string as key type of map. The type is: MAP<BINARY(2) NOT NULL, VARBINARY(2) NOT NULL> NOT NULL"
+  }, {
+    "id" : "correlate-catalog-func",
+    "restore" : true,
+    "origins" : [ "CorrelateRestoreTest.programs()" ],
+    "cases" : [ "correlate-catalog-func" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "correlate-system-func",
+    "restore" : true,
+    "origins" : [ "CorrelateRestoreTest.programs()" ],
+    "cases" : [ "correlate-system-func" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "correlate-join-filter",
+    "restore" : true,
+    "origins" : [ "CorrelateRestoreTest.programs()" ],
+    "cases" : [ "correlate-join-filter" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "correlate-left-join",
+    "restore" : true,
+    "origins" : [ "CorrelateRestoreTest.programs()" ],
+    "cases" : [ "correlate-left-join" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "correlate-cross-join-unnest",
+    "restore" : true,
+    "origins" : [ "CorrelateRestoreTest.programs()" ],
+    "cases" : [ "correlate-cross-join-unnest" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "correlate-with-literal-agg",
+    "restore" : true,
+    "origins" : [ "CorrelateRestoreTest.programs()" ],
+    "cases" : [ "correlate-with-literal-agg" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "deduplicate-asc",
+    "restore" : true,
+    "origins" : [ "DeduplicationRestoreTest.programs()", "DeduplicationTestPrograms.DEDUPLICATE" ],
+    "cases" : [ "deduplicate-asc" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "deduplicate-asc-proctime",
+    "restore" : true,
+    "origins" : [ "DeduplicationRestoreTest.programs()", "DeduplicationTestPrograms.DEDUPLICATE_PROCTIME" ],
+    "cases" : [ "deduplicate-asc-proctime" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "deduplicate-desc",
+    "restore" : true,
+    "origins" : [ "DeduplicationRestoreTest.programs()", "DeduplicationTestPrograms.DEDUPLICATE_DESC" ],
+    "cases" : [ "deduplicate-desc" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "select-delete-on-key-to-delete-on-key",
+    "restore" : false,
+    "origins" : [ "DeletesByKeySemanticTests.programs()" ],
+    "cases" : [ "select-delete-on-key-to-delete-on-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink.supports-delete-by-key'='true'" ]
+  }, {
+    "id" : "select-delete-on-key-to-full-delete",
+    "restore" : false,
+    "origins" : [ "DeletesByKeySemanticTests.programs()" ],
+    "cases" : [ "select-delete-on-key-to-full-delete" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink.supports-delete-by-key'='false'" ]
+  }, {
+    "id" : "select-full-delete-to-full-delete",
+    "restore" : false,
+    "origins" : [ "DeletesByKeySemanticTests.programs()" ],
+    "cases" : [ "select-full-delete-to-full-delete" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='false'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink.supports-delete-by-key'='false'" ]
+  }, {
+    "id" : "select-delete-on-key-to-delete-on-key-with-projection",
+    "restore" : false,
+    "origins" : [ "DeletesByKeySemanticTests.programs()" ],
+    "cases" : [ "select-delete-on-key-to-delete-on-key-with-projection" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink.supports-delete-by-key'='true'" ]
+  }, {
+    "id" : "join-to-full-delete",
+    "restore" : false,
+    "origins" : [ "DeletesByKeySemanticTests.programs()" ],
+    "cases" : [ "join-to-full-delete" ],
+    "deviations" : [ "source left_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source left_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source right_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source right_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink.supports-delete-by-key'='false'" ]
+  }, {
+    "id" : "join-to-delete-on-key",
+    "restore" : false,
+    "origins" : [ "DeletesByKeySemanticTests.programs()" ],
+    "cases" : [ "join-to-delete-on-key" ],
+    "deviations" : [ "source left_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source left_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source right_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source right_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink_t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink.supports-delete-by-key'='true'" ]
+  }, {
+    "id" : "expand",
+    "restore" : true,
+    "origins" : [ "ExpandRestoreTest.programs()" ],
+    "cases" : [ "expand" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-simple",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_SIMPLE" ],
+    "cases" : [ "group-aggregate-simple" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-simple-mini-batch",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_SIMPLE_MINI_BATCH" ],
+    "cases" : [ "group-aggregate-simple-mini-batch" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-distinct",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_DISTINCT" ],
+    "cases" : [ "group-aggregate-distinct" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-distinct-mini-batch",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_DISTINCT_MINI_BATCH" ],
+    "cases" : [ "group-aggregate-distinct-mini-batch" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-udf-with-merge",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_UDF_WITH_MERGE" ],
+    "cases" : [ "group-aggregate-udf-with-merge" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-udf-with-merge-mini-batch",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_UDF_WITH_MERGE_MINI_BATCH" ],
+    "cases" : [ "group-aggregate-udf-with-merge-mini-batch" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-udf-without-merge",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_UDF_WITHOUT_MERGE" ],
+    "cases" : [ "group-aggregate-udf-without-merge" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-aggregate-udf-without-merge-mini-batch",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.GROUP_BY_UDF_WITHOUT_MERGE_MINI_BATCH" ],
+    "cases" : [ "group-aggregate-udf-without-merge-mini-batch" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "agg-with-state-ttl-hint",
+    "restore" : true,
+    "origins" : [ "GroupAggregateRestoreTest.programs()", "GroupAggregateTestPrograms.AGG_WITH_STATE_TTL_HINT" ],
+    "cases" : [ "agg-with-state-ttl-hint" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-window-aggregate-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "GroupWindowAggregateEventTimeRestoreTest.programs()", "GroupWindowAggregateTestPrograms.GROUP_TUMBLE_WINDOW_EVENT_TIME" ],
+    "cases" : [ "group-window-aggregate-tumble-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-window-aggregate-hop-event-time",
+    "restore" : true,
+    "origins" : [ "GroupWindowAggregateEventTimeRestoreTest.programs()", "GroupWindowAggregateTestPrograms.GROUP_HOP_WINDOW_EVENT_TIME" ],
+    "cases" : [ "group-window-aggregate-hop-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-window-aggregate-session-event-time",
+    "restore" : true,
+    "origins" : [ "GroupWindowAggregateEventTimeRestoreTest.programs()", "GroupWindowAggregateTestPrograms.GROUP_SESSION_WINDOW_EVENT_TIME" ],
+    "cases" : [ "group-window-aggregate-session-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-window-aggregate-tumble-proc-time",
+    "restore" : true,
+    "origins" : [ "GroupWindowAggregateProcTimeRestoreTest.programs()", "GroupWindowAggregateTestPrograms.GROUP_TUMBLE_WINDOW_PROC_TIME" ],
+    "cases" : [ "group-window-aggregate-tumble-proc-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-window-aggregate-hop-proc-time",
+    "restore" : true,
+    "origins" : [ "GroupWindowAggregateProcTimeRestoreTest.programs()", "GroupWindowAggregateTestPrograms.GROUP_HOP_WINDOW_PROC_TIME" ],
+    "cases" : [ "group-window-aggregate-hop-proc-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "group-window-aggregate-session-proc-time",
+    "restore" : true,
+    "origins" : [ "GroupWindowAggregateProcTimeRestoreTest.programs()", "GroupWindowAggregateTestPrograms.GROUP_SESSION_WINDOW_PROC_TIME" ],
+    "cases" : [ "group-window-aggregate-session-proc-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "incremental-group-aggregate-simple",
+    "restore" : true,
+    "origins" : [ "IncrementalGroupAggregateRestoreTest.programs()", "IncrementalGroupAggregateTestPrograms.INCREMENTAL_GROUP_AGGREGATE_SIMPLE" ],
+    "cases" : [ "incremental-group-aggregate-simple" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "incremental-group-aggregate-complex",
+    "restore" : true,
+    "origins" : [ "IncrementalGroupAggregateRestoreTest.programs()", "IncrementalGroupAggregateTestPrograms.INCREMENTAL_GROUP_AGGREGATE_COMPLEX" ],
+    "cases" : [ "incremental-group-aggregate-complex" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "interval-join-event-time",
+    "restore" : true,
+    "origins" : [ "IntervalJoinRestoreTest.programs()", "IntervalJoinTestPrograms.INTERVAL_JOIN_EVENT_TIME" ],
+    "cases" : [ "interval-join-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "interval-join-proc-time",
+    "restore" : true,
+    "origins" : [ "IntervalJoinRestoreTest.programs()", "IntervalJoinTestPrograms.INTERVAL_JOIN_PROC_TIME" ],
+    "cases" : [ "interval-join-proc-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "interval-join-negative-interval",
+    "restore" : true,
+    "origins" : [ "IntervalJoinRestoreTest.programs()", "IntervalJoinTestPrograms.INTERVAL_JOIN_NEGATIVE_INTERVAL" ],
+    "cases" : [ "interval-join-negative-interval" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "join-non-window-inner-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-non-window-inner-join" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "join-non-window-inner-join-with-null-cond",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-non-window-inner-join-with-null-cond" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "join-cross-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-cross-join" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-with-filter",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-with-filter" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-inner-join-with-duplicate-key",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-inner-join-with-duplicate-key" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-inner-join-with-non-equi-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-inner-join-with-non-equi-join" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-inner-join-with-equal-pk",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-inner-join-with-equal-pk" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-inner-join-with-pk",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-inner-join-with-pk" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-outer-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-outer-join" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-left-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-left-join" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-right-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-right-join" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-semi-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-semi-join" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-anti-join",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-anti-join" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "join-with-state-ttl-hint",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "join-with-state-ttl-hint" ],
+    "deviations" : [ "source EMPLOYEE: values-connector options dropped: 'filterable-fields'='salary'" ]
+  }, {
+    "id" : "semi-anti-join-with-literal-agg",
+    "restore" : true,
+    "origins" : [ "JoinRestoreTest.programs()" ],
+    "cases" : [ "semi-anti-join-with-literal-agg" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "join-duplicate-emission-bug",
+    "restore" : false,
+    "origins" : [ "JoinSemanticTests.programs()" ],
+    "cases" : [ "join-duplicate-emission-bug" ],
+    "deviations" : [ "source upsert_table_with_duplicates: values-connector options dropped: 'changelog-mode'='I, UA,D'", "source upsert_table_with_duplicates: an upsert source (changelog-mode I, UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "anti-join-on-nested",
+    "restore" : false,
+    "origins" : [ "JoinSemanticTests.programs()" ],
+    "cases" : [ "anti-join-on-nested" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "limit",
+    "restore" : true,
+    "origins" : [ "LimitRestoreTest.programs()" ],
+    "cases" : [ "limit" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "lookup-join-project-pushdown",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-project-pushdown" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-filter-pushdown",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-filter-pushdown" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-left-join",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-left-join" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-pre-filter",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-pre-filter" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-post-filter",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-post-filter" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-pre-post-filter",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-pre-post-filter" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-async-hint",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-async-hint" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'async'='true', 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-retry-hint",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-retry-hint" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_t: values-connector options dropped: 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "lookup-join-with-try-resolve",
+    "restore" : true,
+    "origins" : [ "LookupJoinRestoreTest.programs()" ],
+    "cases" : [ "lookup-join-with-try-resolve" ],
+    "deviations" : [ "source customers_t: values-connector options dropped: 'disable-lookup'='false', 'filterable-fields'='age'", "source orders_cdc_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D', 'filterable-fields'='customer_id'" ]
+  }, {
+    "id" : "sync-ml-predict",
+    "restore" : true,
+    "origins" : [ "MLPredictRestoreTest.programs()", "MLPredictTestPrograms.SYNC_ML_PREDICT" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "async-unordered-ml-predict",
+    "restore" : true,
+    "origins" : [ "MLPredictRestoreTest.programs()", "MLPredictTestPrograms.ASYNC_UNORDERED_ML_PREDICT" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "sync-ml-predict-with-runtime-options",
+    "restore" : true,
+    "origins" : [ "MLPredictRestoreTest.programs()", "MLPredictTestPrograms.SYNC_ML_PREDICT_WITH_RUNTIME_CONFIG" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "sync-ml-predict-table-api",
+    "restore" : false,
+    "origins" : [ "MLPredictSemanticTests.programs()", "MLPredictTestPrograms.SYNC_ML_PREDICT_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "async-ml-predict-table-api",
+    "restore" : false,
+    "origins" : [ "MLPredictSemanticTests.programs()", "MLPredictTestPrograms.ASYNC_ML_PREDICT_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "async-ml-predict-table-api-map-expression-config",
+    "restore" : false,
+    "origins" : [ "MLPredictSemanticTests.programs()", "MLPredictTestPrograms.ASYNC_ML_PREDICT_TABLE_API_MAP_EXPRESSION_CONFIG" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "ml-predict-model-api",
+    "restore" : false,
+    "origins" : [ "MLPredictSemanticTests.programs()", "MLPredictTestPrograms.ML_PREDICT_MODEL_API" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "async-ml-predict-model-api",
+    "restore" : false,
+    "origins" : [ "MLPredictSemanticTests.programs()", "MLPredictTestPrograms.ASYNC_ML_PREDICT_MODEL_API" ],
+    "cases" : [ ],
+    "not_exported" : "needs a model on Flink's test-only 'values' model provider (ML_PREDICT); the distribution ships no model provider"
+  }, {
+    "id" : "ml-predict-anonymous-model-api",
+    "restore" : false,
+    "origins" : [ "MLPredictSemanticTests.programs()", "MLPredictTestPrograms.ML_PREDICT_ANON_MODEL_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Anonymous models cannot be serialized."
+  }, {
+    "id" : "match-simple",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-simple" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "match-complex",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-complex" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "match-order-by-event-time-with-out-of-order-data",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-order-by-event-time-with-out-of-order-data" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "match-order-by-int-column-with-out-of-order-data",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-order-by-int-column-with-out-of-order-data" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "match-skip-to-first",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-skip-to-first" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "match-skip-to-last",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-skip-to-last" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "match-skip-to-next-row",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-skip-to-next-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "match-skip-past-last-row",
+    "restore" : true,
+    "origins" : [ "MatchRecognizeRestoreTest.programs()" ],
+    "cases" : [ "match-skip-past-last-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "mini-batch-assigner-row-time",
+    "restore" : true,
+    "origins" : [ "MiniBatchAssignerRestoreTest.programs()", "MiniBatchAssignerTestPrograms.MINI_BATCH_ASSIGNER_ROW_TIME" ],
+    "cases" : [ "mini-batch-assigner-row-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "mini-batch-assigner-proc-time",
+    "restore" : true,
+    "origins" : [ "MiniBatchAssignerRestoreTest.programs()", "MiniBatchAssignerTestPrograms.MINI_BATCH_ASSIGNER_PROC_TIME" ],
+    "cases" : [ "mini-batch-assigner-proc-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-rank-hop-tvf-named-min-top-n",
+    "restore" : false,
+    "origins" : [ "MiscSemanticTests.programs()", "WindowRankTestPrograms.WINDOW_RANK_HOP_TVF_NAMED_MIN_TOP_1" ],
+    "cases" : [ "window-rank-hop-tvf-named-min-top-n" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "calc-current-watermark",
+    "restore" : false,
+    "origins" : [ "MiscSemanticTests.programs()" ],
+    "cases" : [ "calc-current-watermark" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "three-way-inner-join-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_INNER_JOIN_WITH_RESTORE" ],
+    "cases" : [ "three-way-inner-join-with-restore" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "three-way-left-outer-join-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_LEFT_OUTER_JOIN_WITH_RESTORE" ],
+    "cases" : [ "three-way-left-outer-join-with-restore" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "four-way-complex-updating-join-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_FOUR_WAY_COMPLEX_WITH_RESTORE" ],
+    "cases" : [ "four-way-complex-updating-join-with-restore" ],
+    "deviations" : [ "source Users: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Users: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Orders: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Payments: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Shipments: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "four-way-join-no-common-join-key-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_FOUR_WAY_NO_COMMON_JOIN_KEY_RESTORE" ],
+    "cases" : [ "four-way-join-no-common-join-key-with-restore" ],
+    "deviations" : [ "source Users: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Users: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Orders: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Payments: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Shipments: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "three-way-join-with-time-attributes-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_WITH_TIME_ATTRIBUTES_MATERIALIZATION_WITH_RESTORE" ],
+    "cases" : [ "three-way-join-with-time-attributes-with-restore" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "three-way-inner-join-with-ttl-hints-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_INNER_JOIN_WITH_TTL_HINTS_WITH_RESTORE" ],
+    "cases" : [ "three-way-inner-join-with-ttl-hints-with-restore" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "four-way-complex-preserves-upsert-key-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_FOUR_WAY_COMPLEX_PRESERVES_UPSERT_KEY_WITH_RESTORE" ],
+    "cases" : [ "four-way-complex-preserves-upsert-key-with-restore" ],
+    "deviations" : [ "source Orders: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Payments: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Address: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'" ]
+  }, {
+    "id" : "two-way-left-join-preserves-upsert-key-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_TWO_WAY_LEFT_JOIN_PRESERVES_UPSERT_KEY_WITH_RESTORE" ],
+    "cases" : [ "two-way-left-join-preserves-upsert-key-with-restore" ],
+    "deviations" : [ "source Users: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Users: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Orders: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Orders: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'" ]
+  }, {
+    "id" : "three-way-upsert-preserves-key-with-restore",
+    "restore" : true,
+    "origins" : [ "MultiJoinRestoreTest.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_JOIN_PRESERVES_UPSERT_KEY_WITH_RESTORE" ],
+    "cases" : [ "three-way-upsert-preserves-key-with-restore" ],
+    "deviations" : [ "source Users: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Users: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Orders: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Orders: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Payments: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Payments: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'" ]
+  }, {
+    "id" : "three-way-inner-join",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_INNER_JOIN" ],
+    "cases" : [ "three-way-inner-join" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "three-way-left-outer-join",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_LEFT_OUTER_JOIN" ],
+    "cases" : [ "three-way-left-outer-join" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "three-way-left-outer-join-updating",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_LEFT_OUTER_JOIN_UPDATING" ],
+    "cases" : [ "three-way-left-outer-join-updating" ],
+    "deviations" : [ "source Users: declared insert-only but its rows carry other kinds; read as a debezium-json changelog" ]
+  }, {
+    "id" : "three-way-inner-join-with-where",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_LEFT_OUTER_JOIN_WITH_WHERE" ],
+    "cases" : [ "three-way-inner-join-with-where" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "four-way-complex-updating-join",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_FOUR_WAY_COMPLEX" ],
+    "cases" : [ "four-way-complex-updating-join" ],
+    "deviations" : [ "source Users: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Users: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Orders: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Payments: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Shipments: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "three-way-join-with-time-attributes",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_WITH_TIME_ATTRIBUTES_MATERIALIZATION" ],
+    "cases" : [ "three-way-join-with-time-attributes" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "three-way-inner-join-no-join-key",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_INNER_JOIN_NO_JOIN_KEY" ],
+    "cases" : [ "three-way-inner-join-no-join-key" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "four-way-no-common-join-key-updating-join",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_FOUR_WAY_NO_COMMON_JOIN_KEY" ],
+    "cases" : [ "four-way-no-common-join-key-updating-join" ],
+    "deviations" : [ "source Users: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Users: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Orders: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Payments: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source Shipments: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "sink sink: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "left-outer-join-with-cte",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_LEFT_OUTER_JOIN_WITH_CTE" ],
+    "cases" : [ "left-outer-join-with-cte" ],
+    "deviations" : [ "source Orders: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Orders: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "three-way-mixed-changelog-modes",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_MIXED_CHANGELOG_MODES" ],
+    "cases" : [ "three-way-mixed-changelog-modes" ],
+    "deviations" : [ "source AppendTable: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source RetractTable: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source UpsertTable: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source UpsertTable: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "three-way-left-outer-with-null-keys",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_LEFT_OUTER_WITH_NULL_KEYS" ],
+    "cases" : [ "three-way-left-outer-with-null-keys" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "null-safe-join-with-null-keys",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_NULL_SAFE_JOIN_WITH_NULL_KEYS" ],
+    "cases" : [ "null-safe-join-with-null-keys" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "three-way-join-with-time-attributes-in-join-conditions",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_WITH_TIME_ATTRIBUTES_IN_CONDITIONS_MATERIALIZATION" ],
+    "cases" : [ "three-way-join-with-time-attributes-in-join-conditions" ],
+    "deviations" : [ "source auctions: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'", "source bids: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "two-way-inner-join-with-where-in",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_TWO_WAY_INNER_JOIN_WITH_WHERE_IN" ],
+    "cases" : [ "two-way-inner-join-with-where-in" ],
+    "deviations" : [ "source Records: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Records: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source Users: values-connector options dropped: 'changelog-mode'='I,UA,D', 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true', 'source.produces-delete-by-key'='true'", "source Users: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "three-way-inner-join-three-keys-shuffled",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_THREE_WAY_INNER_JOIN_MULTI_KEY_TYPES" ],
+    "cases" : [ "three-way-inner-join-three-keys-shuffled" ],
+    "deviations" : [ "sink sink: values-connector options dropped: 'changelog-mode'='I', 'sink-changelog-mode-enforced'='I', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "four-way-mixed-join-multi-key-types-shuffled",
+    "restore" : false,
+    "origins" : [ "MultiJoinSemanticTests.programs()", "MultiJoinTestPrograms.MULTI_JOIN_FOUR_WAY_MIXED_JOIN_MULTI_KEY_TYPES_SHUFFLED" ],
+    "cases" : [ "four-way-mixed-join-multi-key-types-shuffled" ],
+    "deviations" : [ "source Users4K: declared insert-only but its rows carry other kinds; read as a debezium-json changelog", "sink sink: values-connector options dropped: 'changelog-mode'='I,UB,UA,D', 'sink-changelog-mode-enforced'='I,UB,UA,D', 'sink.supports-delete-by-key'='false', 'source.produces-delete-by-key'='false'" ]
+  }, {
+    "id" : "over-aggregate-bounded-partitioned-rows-with-out-of-order-records",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-bounded-partitioned-rows-with-out-of-order-records" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-bounded-non-partitioned-rows-with-out-of-order-records",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-bounded-non-partitioned-rows-with-out-of-order-records" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-unbounded-partitioned-rows-with-out-of-order-records",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-unbounded-partitioned-rows-with-out-of-order-records" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-bounded-partitioned-preceding-rows-with-out-of-order-records",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-bounded-partitioned-preceding-rows-with-out-of-order-records" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-bounded-partitioned-rows",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-bounded-partitioned-rows" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-bounded-non-partitioned-rows",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-bounded-non-partitioned-rows" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-unbounded-partitioned-rows",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-unbounded-partitioned-rows" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-bounded-partitioned-preceding-rows",
+    "restore" : true,
+    "origins" : [ "OverAggregateRestoreTest.programs()" ],
+    "cases" : [ "over-aggregate-bounded-partitioned-preceding-rows" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "over-aggregate-lag",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.LAG_OVER_FUNCTION" ],
+    "cases" : [ ],
+    "not_exported" : "extractor error: java.lang.UnsupportedOperationException: JSON format doesn't support non-string as key type of map. The type is: MAP<DOUBLE, DOUBLE>"
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-retract-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_RETRACT_MODE" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-retract-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-retract-mode-sort-by-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_RETRACT_MODE_SORT_BY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-retract-mode-sort-by-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-append-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_APPEND_MODE" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-append-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-avg-append-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_AVG_APPEND_MODE" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-avg-append-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-multiple-aggs-append-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_MULTIPLE_AGGS_APPEND_MODE" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-multiple-aggs-append-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-no-partition-by",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_NO_PARTITION_BY" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-no-partition-by" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-retract-mode-source-primary-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_RETRACT_MODE_SOURCE_PRIMARY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-retract-mode-source-primary-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-retract-mode-sink-primary-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_RETRACT_MODE_SINK_PRIMARY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-retract-mode-sink-primary-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-retract-mode-source-sink-primary-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_RETRACT_MODE_SOURCE_SINK_PRIMARY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-retract-mode-source-sink-primary-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-range-unbounded-sum-retract-mode-source-sink-primary-key-partition-by-non-pk",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_RANGE_UNBOUNDED_SUM_RETRACT_MODE_SOURCE_SINK_PRIMARY_KEY_PARTITION_BY_NON_PK" ],
+    "cases" : [ "over-aggregate-non-time-range-unbounded-sum-retract-mode-source-sink-primary-key-partition-by-non-pk" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-retract-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_RETRACT_MODE" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-retract-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-retract-mode-sort-by-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_RETRACT_MODE_SORT_BY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-retract-mode-sort-by-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-primary-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_RETRACT_MODE_SOURCE_PRIMARY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-primary-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-retract-mode-sink-primary-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_RETRACT_MODE_SINK_PRIMARY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-retract-mode-sink-primary-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-sink-primary-key",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_RETRACT_MODE_SOURCE_SINK_PRIMARY_KEY" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-sink-primary-key" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-sink-primary-key-partition-by-non-pk",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_RETRACT_MODE_SOURCE_SINK_PRIMARY_KEY_PARTITION_BY_NON_PK" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-sink-primary-key-partition-by-non-pk" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UB,UA'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-append-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_APPEND_MODE" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-append-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-avg-append-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_AVG_APPEND_MODE" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-avg-append-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-multiple-aggs-append-mode",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_MULTIPLE_AGGS_APPEND_MODE" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-multiple-aggs-append-mode" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "over-aggregate-non-time-rows-unbounded-sum-no-partition-by",
+    "restore" : true,
+    "origins" : [ "OverWindowRestoreTest.programs()", "OverWindowTestPrograms.OVER_AGGREGATE_NON_TIME_ROWS_UNBOUNDED_SUM_NO_PARTITION_BY" ],
+    "cases" : [ "over-aggregate-non-time-rows-unbounded-sum-no-partition-by" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "process-scalar-args",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SCALAR_ARGS" ],
+    "cases" : [ "process-scalar-args" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-scalar-args-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SCALAR_ARGS_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-row",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_ROW_SEMANTIC_TABLE" ],
+    "cases" : [ "process-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-row-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_ROW_SEMANTIC_TABLE_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-row-table-api-inline",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_ROW_SEMANTIC_TABLE_TABLE_API_INLINE" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-row-table-api-inline-named",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_ROW_SEMANTIC_TABLE_TABLE_API_INLINE_NAMED" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-typed-row",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_TYPED_ROW_SEMANTIC_TABLE" ],
+    "cases" : [ "process-typed-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-typed-row-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_TYPED_ROW_SEMANTIC_TABLE_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-set",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SET_SEMANTIC_TABLE" ],
+    "cases" : [ "process-set" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-set-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SET_SEMANTIC_TABLE_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-set-table-api-inline",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SET_SEMANTIC_TABLE_TABLE_API_INLINE" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-set-table-api-inline-named",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SET_SEMANTIC_TABLE_TABLE_API_INLINE_NAMED" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-typed-set",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_TYPED_SET_SEMANTIC_TABLE" ],
+    "cases" : [ "process-typed-set" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-typed-set-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_TYPED_SET_SEMANTIC_TABLE_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-pojo-args",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_POJO_ARGS" ],
+    "cases" : [ "process-pojo-args" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-empty-args",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_EMPTY_ARGS" ],
+    "cases" : [ "process-empty-args" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-row-pass-through",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_ROW_SEMANTIC_TABLE_PASS_THROUGH" ],
+    "cases" : [ "process-row-pass-through" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-set-pass-through",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SET_SEMANTIC_TABLE_PASS_THROUGH" ],
+    "cases" : [ "process-set-pass-through" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-updating-input-retract",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_INPUT_RETRACT" ],
+    "cases" : [ "process-updating-input-retract" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-updating-input-upsert",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_INPUT_UPSERT" ],
+    "cases" : [ "process-updating-input-upsert" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-updating-input-enforced-retract",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_INPUT_ENFORCED_RETRACT" ],
+    "cases" : [ "process-updating-input-enforced-retract" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-updating-input-partial-deletes",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_INPUT_PARTIAL_DELETES" ],
+    "cases" : [ "process-updating-input-partial-deletes" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "process-updating-input-enforced-full-deletes",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_INPUT_ENFORCED_FULL_DELETES" ],
+    "cases" : [ "process-updating-input-enforced-full-deletes" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "process-updating-output-retract",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_OUTPUT_RETRACT" ],
+    "cases" : [ "process-updating-output-retract" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-updating-output-upsert",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_OUTPUT_UPSERT" ],
+    "cases" : [ "process-updating-output-upsert" ],
+    "deviations" : [ "sink sink: values-connector options dropped: 'sink-changelog-mode-enforced'='I,UA,D'" ]
+  }, {
+    "id" : "process-updating-output-partial-deletes",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_OUTPUT_PARTIAL_DELETES" ],
+    "cases" : [ "process-updating-output-partial-deletes" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true'" ]
+  }, {
+    "id" : "process-updating-output-full-deletes",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_OUTPUT_FULL_DELETES" ],
+    "cases" : [ "process-updating-output-full-deletes" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='false'", "source t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='false'" ]
+  }, {
+    "id" : "process-invalid-row-kind",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_INVALID_ROW_KIND" ],
+    "cases" : [ "process-invalid-row-kind" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-optional-partition-by",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_OPTIONAL_PARTITION_BY" ],
+    "cases" : [ "process-optional-partition-by" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-optional-partition-by-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_OPTIONAL_PARTITION_BY_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-set-atomic-wrapping",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_ATOMIC_WRAPPING" ],
+    "cases" : [ "process-set-atomic-wrapping" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-context",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_CONTEXT" ],
+    "cases" : [ "process-context" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-pojo-state",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_POJO_STATE" ],
+    "cases" : [ "process-pojo-state" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-default-pojo-state",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_DEFAULT_POJO_STATE" ],
+    "cases" : [ "process-default-pojo-state" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-multi-state",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_MULTI_STATE" ],
+    "cases" : [ "process-multi-state" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-clearing-state",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_CLEARING_STATE" ],
+    "cases" : [ "process-clearing-state" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-state-ttl",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_STATE_TTL" ],
+    "cases" : [ "process-state-ttl" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-descriptor",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_DESCRIPTOR" ],
+    "cases" : [ "process-descriptor" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-time-conversions",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_TIME_CONVERSIONS" ],
+    "cases" : [ "process-time-conversions" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-time-conversions-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_TIME_CONVERSIONS_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-regular-timestamp",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_REGULAR_TIMESTAMP" ],
+    "cases" : [ "process-regular-timestamp" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-partitioned-named-timers",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_NAMED_TIMERS" ],
+    "cases" : [ "process-partitioned-named-timers" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-partitioned-unnamed-timers",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UNNAMED_TIMERS" ],
+    "cases" : [ "process-partitioned-unnamed-timers" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-late-events",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_LATE_EVENTS" ],
+    "cases" : [ "process-late-events" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-scalar-args-time",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_SCALAR_ARGS_TIME" ],
+    "cases" : [ "process-scalar-args-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-optional-partition-by-time",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_OPTIONAL_PARTITION_BY_TIME" ],
+    "cases" : [ "process-optional-partition-by-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-optional-on-time",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_OPTIONAL_ON_TIME" ],
+    "cases" : [ "process-optional-on-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-pojo-state-time",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_POJO_STATE_TIME" ],
+    "cases" : [ "process-pojo-state-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-chained-time",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_CHAINED_TIME" ],
+    "cases" : [ "process-chained-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-chained-time-table-api",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_CHAINED_TIME_TABLE_API" ],
+    "cases" : [ ],
+    "not_exported" : "a Table API step that QueryOperation.asSerializableString cannot write as SQL (an inline, unregistered function or model): org.apache.flink.table.api.ValidationException: Only functions that have been registered before are serializable."
+  }, {
+    "id" : "process-invalid-row-semantic-table-timers",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_INVALID_ROW_SEMANTIC_TABLE_TIMERS" ],
+    "cases" : [ "process-invalid-row-semantic-table-timers" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-invalid-pass-through-timers",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_INVALID_PASS_THROUGH_TIMERS" ],
+    "cases" : [ "process-invalid-pass-through-timers" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-list-state",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_LIST_STATE" ],
+    "cases" : [ "process-list-state" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-map-state",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_MAP_STATE" ],
+    "cases" : [ "process-map-state" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-multi-input",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_MULTI_INPUT" ],
+    "cases" : [ "process-multi-input" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-stateful-multi-input-with-timeout",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_STATEFUL_MULTI_INPUT_WITH_TIMEOUT" ],
+    "cases" : [ "process-stateful-multi-input-with-timeout" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-updating-multi-input",
+    "restore" : false,
+    "origins" : [ "ProcessTableFunctionSemanticTests.programs()", "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_MULTI_INPUT" ],
+    "cases" : [ "process-updating-multi-input" ],
+    "deviations" : [ "source scores: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source scores: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "source city: values-connector options dropped: 'changelog-mode'='I,UA,D', 'source.produces-delete-by-key'='true'", "source city: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'sink-changelog-mode-enforced'='I,UA,D', 'sink.supports-delete-by-key'='true'" ]
+  }, {
+    "id" : "process-row-semantic-table-restore",
+    "restore" : true,
+    "origins" : [ "ProcessTableFunctionTestPrograms.PROCESS_ROW_SEMANTIC_TABLE_RESTORE" ],
+    "cases" : [ "process-row-semantic-table-restore" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "process-updating-output-upsert-restore",
+    "restore" : true,
+    "origins" : [ "ProcessTableFunctionTestPrograms.PROCESS_UPDATING_OUTPUT_UPSERT_RESTORE" ],
+    "cases" : [ "process-updating-output-upsert-restore" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I,UA,D'", "source t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned", "sink sink: values-connector options dropped: 'sink-changelog-mode-enforced'='I,UA,D'" ]
+  }, {
+    "id" : "process-multi-state-restore",
+    "restore" : true,
+    "origins" : [ "ProcessTableFunctionTestPrograms.PROCESS_MULTI_STATE_RESTORE" ],
+    "cases" : [ "process-multi-state-restore" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "process-partitioned-named-timers-restore",
+    "restore" : true,
+    "origins" : [ "ProcessTableFunctionTestPrograms.PROCESS_NAMED_TIMERS_RESTORE" ],
+    "cases" : [ "process-partitioned-named-timers-restore" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "process-map-state-restore",
+    "restore" : true,
+    "origins" : [ "ProcessTableFunctionTestPrograms.PROCESS_MAP_STATE_RESTORE" ],
+    "cases" : [ "process-map-state-restore" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "process-multi-input-restore",
+    "restore" : true,
+    "origins" : [ "ProcessTableFunctionTestPrograms.PROCESS_MULTI_INPUT_RESTORE" ],
+    "cases" : [ "process-multi-input-restore" ],
+    "deviations" : [ "source t: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "rank-test-append-fast-strategy",
+    "restore" : true,
+    "origins" : [ "RankRestoreTest.programs()" ],
+    "cases" : [ "rank-test-append-fast-strategy" ],
+    "deviations" : [ "source MyTable: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "rank-test-retract-strategy",
+    "restore" : true,
+    "origins" : [ "RankRestoreTest.programs()" ],
+    "cases" : [ "rank-test-retract-strategy" ],
+    "deviations" : [ "source MyTable: values-connector options dropped: 'changelog-mode'='I,UA,UB'" ]
+  }, {
+    "id" : "rank-test-update-fast-strategy",
+    "restore" : true,
+    "origins" : [ "RankRestoreTest.programs()" ],
+    "cases" : [ "rank-test-update-fast-strategy" ],
+    "deviations" : [ "source MyTable: values-connector options dropped: 'changelog-mode'='I'" ]
+  }, {
+    "id" : "rank-n-test",
+    "restore" : true,
+    "origins" : [ "RankRestoreTest.programs()" ],
+    "cases" : [ "rank-n-test" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "insert-retract-without-pk",
+    "restore" : false,
+    "origins" : [ "SinkSemanticTests.programs()", "SinkTestPrograms.INSERT_RETRACT_WITHOUT_PK" ],
+    "cases" : [ "insert-retract-without-pk" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'", "sink sink_t: values-connector options dropped: 'sink-changelog-mode-enforced'='I,UB,UA,D'" ]
+  }, {
+    "id" : "insert-retract-with-pk",
+    "restore" : false,
+    "origins" : [ "SinkSemanticTests.programs()", "SinkTestPrograms.INSERT_RETRACT_WITH_PK" ],
+    "cases" : [ "insert-retract-with-pk" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I'", "sink sink_t: values-connector options dropped: 'sink-changelog-mode-enforced'='I,UB,UA,D'" ]
+  }, {
+    "id" : "sort-limit-asc",
+    "restore" : true,
+    "origins" : [ "SortLimitRestoreTest.programs()" ],
+    "cases" : [ "sort-limit-asc" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sort-limit-desc",
+    "restore" : true,
+    "origins" : [ "SortLimitRestoreTest.programs()" ],
+    "cases" : [ "sort-limit-desc" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sort-asc",
+    "restore" : false,
+    "origins" : [ "SortRestoreTest.programs()" ],
+    "cases" : [ "sort-asc" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sort-desc",
+    "restore" : false,
+    "origins" : [ "SortRestoreTest.programs()" ],
+    "cases" : [ "sort-desc" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sink-bucketing_with-count",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-bucketing_with-count" ],
+    "deviations" : [ "sink sink_t: PARTITIONED BY dropped", "sink sink_t: DISTRIBUTED BY dropped" ]
+  }, {
+    "id" : "sink-bucketing_with-keys-and-count",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-bucketing_with-keys-and-count" ],
+    "deviations" : [ "sink sink_t: PARTITIONED BY dropped", "sink sink_t: DISTRIBUTED BY dropped" ]
+  }, {
+    "id" : "sink-bucketing_hash-with-keys-with-count",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-bucketing_hash-with-keys-with-count" ],
+    "deviations" : [ "sink sink_t: PARTITIONED BY dropped", "sink sink_t: DISTRIBUTED BY dropped" ]
+  }, {
+    "id" : "sink-bucketing_range_with_keys_without_count",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-bucketing_range_with_keys_without_count" ],
+    "deviations" : [ "sink sink_t: PARTITIONED BY dropped", "sink sink_t: DISTRIBUTED BY dropped" ]
+  }, {
+    "id" : "sink-partition",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-partition" ],
+    "deviations" : [ "sink sink_t: PARTITIONED BY dropped", "sink sink_t: values-connector options dropped: 'partition-list'='b:1;b:2;b:3;b:4'" ]
+  }, {
+    "id" : "sink-overwrite",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-overwrite" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sink-writing-metadata",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-writing-metadata" ],
+    "deviations" : [ "sink sink_t: values-connector options dropped: 'writable-metadata'='c:STRING'" ]
+  }, {
+    "id" : "sink-ndf-primary-key",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-ndf-primary-key" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sink-partial-insert",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-partial-insert" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sink-upsert",
+    "restore" : true,
+    "origins" : [ "TableSinkRestoreTest.programs()" ],
+    "cases" : [ "sink-upsert" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'changelog-mode'='I,UA,D'", "source source_t: an upsert source (changelog-mode I,UA,D) becomes a full debezium-json changelog (update-before images from the last row per key), so no ChangelogNormalize is planned" ]
+  }, {
+    "id" : "table-source-scan-project-pushdown",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-project-pushdown" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "table-source-scan-project-push-down-disabled",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-project-push-down-disabled" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'enable-projection-push-down'='false', 'readable-metadata'='ts:TIMESTAMP(3)'" ]
+  }, {
+    "id" : "table-source-scan-filter-pushdown",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-filter-pushdown" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'filterable-fields'='a'" ]
+  }, {
+    "id" : "table-source-scan-limit-pushdown",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-limit-pushdown" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "table-source-scan-partition-pushdown",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-partition-pushdown" ],
+    "deviations" : [ "source source_t: PARTITIONED BY dropped", "source source_t: values-connector options dropped: 'partition-list'='b:1,b:2'" ]
+  }, {
+    "id" : "table-source-scan-reading-metadata",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-reading-metadata" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'readable-metadata'='d:TIMESTAMP(3)'" ]
+  }, {
+    "id" : "table-source-scan-multiple-pushdowns",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-multiple-pushdowns" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'disable-lookup'='true', 'enable-watermark-push-down'='true', 'filterable-fields'='a', 'partition-list'='b:1;b:2;b:3;b:4;b:5;b:6', 'readable-metadata'='ts:TIMESTAMP(3)'" ]
+  }, {
+    "id" : "table-source-scan-source-watermark",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-source-watermark" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'disable-lookup'='true', 'enable-watermark-push-down'='true', 'readable-metadata'='ts:TIMESTAMP(3)'" ]
+  }, {
+    "id" : "table-source-scan-reuse-source",
+    "restore" : true,
+    "origins" : [ "TableSourceScanRestoreTest.programs()" ],
+    "cases" : [ "table-source-scan-reuse-source.sink_one_t", "table-source-scan-reuse-source.sink_two_t" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'enable-projection-push-down'='false'" ]
+  }, {
+    "id" : "temporal-join-table-join",
+    "restore" : true,
+    "origins" : [ "TemporalJoinRestoreTest.programs()", "TemporalJoinTestPrograms.TEMPORAL_JOIN_TABLE_JOIN" ],
+    "cases" : [ "temporal-join-table-join" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "temporal-join-table-join-nested-key",
+    "restore" : true,
+    "origins" : [ "TemporalJoinRestoreTest.programs()", "TemporalJoinTestPrograms.TEMPORAL_JOIN_TABLE_JOIN_NESTED_KEY" ],
+    "cases" : [ "temporal-join-table-join-nested-key" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "temporal-join-table-join-key-from-map",
+    "restore" : true,
+    "origins" : [ "TemporalJoinRestoreTest.programs()", "TemporalJoinTestPrograms.TEMPORAL_JOIN_TABLE_JOIN_KEY_FROM_MAP" ],
+    "cases" : [ "temporal-join-table-join-key-from-map" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "temporal-join-temporal-function",
+    "restore" : true,
+    "origins" : [ "TemporalJoinRestoreTest.programs()", "TemporalJoinTestPrograms.TEMPORAL_JOIN_TEMPORAL_FUNCTION" ],
+    "cases" : [ ],
+    "not_exported" : "registers a Table API temporal table function, which has no SQL DDL"
+  }, {
+    "id" : "temporal-sort-proctime",
+    "restore" : true,
+    "origins" : [ "TemporalSortRestoreTest.programs()", "TemporalSortTestPrograms.TEMPORAL_SORT_PROCTIME" ],
+    "cases" : [ "temporal-sort-proctime" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "temporal-sort-rowtime",
+    "restore" : true,
+    "origins" : [ "TemporalSortRestoreTest.programs()", "TemporalSortTestPrograms.TEMPORAL_SORT_ROWTIME" ],
+    "cases" : [ "temporal-sort-rowtime" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "union-two-sources",
+    "restore" : true,
+    "origins" : [ "UnionRestoreTest.programs()" ],
+    "cases" : [ "union-two-sources" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "union-all-two-sources",
+    "restore" : true,
+    "origins" : [ "UnionRestoreTest.programs()" ],
+    "cases" : [ "union-all-two-sources" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "union-all-with-filter",
+    "restore" : true,
+    "origins" : [ "UnionRestoreTest.programs()" ],
+    "cases" : [ "union-all-with-filter" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "values-test",
+    "restore" : false,
+    "origins" : [ "ValuesRestoreTest.programs()" ],
+    "cases" : [ "values-test" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "sync-vector-search",
+    "restore" : true,
+    "origins" : [ "VectorSearchRestoreTest.programs()" ],
+    "cases" : [ "sync-vector-search" ],
+    "deviations" : [ "source sync_vector_table: values-connector options dropped: 'enable-vector-search'='true'" ]
+  }, {
+    "id" : "async-vector-search",
+    "restore" : true,
+    "origins" : [ "VectorSearchRestoreTest.programs()" ],
+    "cases" : [ "async-vector-search" ],
+    "deviations" : [ "source async_vector_table: values-connector options dropped: 'async'='true', 'enable-vector-search'='true'" ]
+  }, {
+    "id" : "vector-search-with-runtime-config",
+    "restore" : true,
+    "origins" : [ "VectorSearchRestoreTest.programs()" ],
+    "cases" : [ "vector-search-with-runtime-config" ],
+    "deviations" : [ "source async_vector_table: values-connector options dropped: 'async'='true', 'enable-vector-search'='true'" ]
+  }, {
+    "id" : "watermark-assigner-basic-filter",
+    "restore" : true,
+    "origins" : [ "WatermarkAssignerRestoreTest.programs()", "WatermarkAssignerTestPrograms.WATERMARK_ASSIGNER_BASIC_FILTER" ],
+    "cases" : [ "watermark-assigner-basic-filter" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "watermark-assigner-pushdown-metadata",
+    "restore" : true,
+    "origins" : [ "WatermarkAssignerRestoreTest.programs()", "WatermarkAssignerTestPrograms.WATERMARK_ASSIGNER_PUSHDOWN_METADATA" ],
+    "cases" : [ "watermark-assigner-pushdown-metadata" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'disable-lookup'='true', 'enable-watermark-push-down'='true', 'readable-metadata'='ts:timestamp(3)'" ]
+  }, {
+    "id" : "watermark-assigner-pushdown-computed",
+    "restore" : true,
+    "origins" : [ "WatermarkAssignerRestoreTest.programs()", "WatermarkAssignerTestPrograms.WATERMARK_ASSIGNER_PUSHDOWN_COMPUTED" ],
+    "cases" : [ "watermark-assigner-pushdown-computed" ],
+    "deviations" : [ "source source_t: values-connector options dropped: 'disable-lookup'='true', 'enable-watermark-push-down'='true', 'scan.watermark.emit.strategy'='on-event'" ]
+  }, {
+    "id" : "window-aggregate-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.TUMBLE_WINDOW_EVENT_TIME" ],
+    "cases" : [ "window-aggregate-tumble-event-time" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-tumble-event-time-two-phase",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.TUMBLE_WINDOW_EVENT_TIME_TWO_PHASE" ],
+    "cases" : [ "window-aggregate-tumble-event-time-two-phase" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-tumble-event-time-two-phase-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.TUMBLE_WINDOW_EVENT_TIME_TWO_PHASE_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-tumble-event-time-two-phase-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-tumble-event-time-with-offset",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.TUMBLE_WINDOW_EVENT_TIME_WITH_OFFSET" ],
+    "cases" : [ "window-aggregate-tumble-event-time-with-offset" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-tumble-event-time-two-phase-with-offset",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.TUMBLE_WINDOW_EVENT_TIME_TWO_PHASE_WITH_OFFSET" ],
+    "cases" : [ "window-aggregate-tumble-event-time-two-phase-with-offset" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-tumble-event-time-two-phase-with-offset-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.TUMBLE_WINDOW_EVENT_TIME_TWO_PHASE_WITH_OFFSET_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-tumble-event-time-two-phase-with-offset-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-hop-event-time",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.HOP_WINDOW_EVENT_TIME" ],
+    "cases" : [ "window-aggregate-hop-event-time" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-hop-event-time-two-phase",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.HOP_WINDOW_EVENT_TIME_TWO_PHASE" ],
+    "cases" : [ "window-aggregate-hop-event-time-two-phase" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-hop-event-time-two-phase-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.HOP_WINDOW_EVENT_TIME_TWO_PHASE_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-hop-event-time-two-phase-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-hop-event-time-with-offset",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.HOP_WINDOW_EVENT_TIME_WITH_OFFSET" ],
+    "cases" : [ "window-aggregate-hop-event-time-with-offset" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-hop-event-time-two-phase-with-offset",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.HOP_WINDOW_EVENT_TIME_TWO_PHASE_WITH_OFFSET" ],
+    "cases" : [ "window-aggregate-hop-event-time-two-phase-with-offset" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-hop-event-time-two-phase-with-offset-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.HOP_WINDOW_EVENT_TIME_TWO_PHASE_WITH_OFFSET_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-hop-event-time-two-phase-with-offset-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-cumulate-event-time",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.CUMULATE_WINDOW_EVENT_TIME" ],
+    "cases" : [ "window-aggregate-cumulate-event-time" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-cumulate-event-time-two-phase",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.CUMULATE_WINDOW_EVENT_TIME_TWO_PHASE" ],
+    "cases" : [ "window-aggregate-cumulate-event-time-two-phase" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-cumulate-event-time-two-phase-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.CUMULATE_WINDOW_EVENT_TIME_TWO_PHASE_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-cumulate-event-time-two-phase-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-cumulate-event-time-with-offset",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.CUMULATE_WINDOW_EVENT_TIME_WITH_OFFSET" ],
+    "cases" : [ "window-aggregate-cumulate-event-time-with-offset" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-cumulate-event-time-two-phase-with-offset",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.CUMULATE_WINDOW_EVENT_TIME_TWO_PHASE_WITH_OFFSET" ],
+    "cases" : [ "window-aggregate-cumulate-event-time-two-phase-with-offset" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-cumulate-event-time-with-offset-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.CUMULATE_WINDOW_EVENT_TIME_WITH_OFFSET_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-cumulate-event-time-with-offset-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-session-event-time",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.SESSION_WINDOW_EVENT_TIME" ],
+    "cases" : [ "window-aggregate-session-event-time" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-session-event-time-two-phase",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.SESSION_WINDOW_EVENT_TIME_TWO_PHASE" ],
+    "cases" : [ "window-aggregate-session-event-time-two-phase" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-session-event-time-two-phase-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.SESSION_WINDOW_EVENT_TIME_TWO_PHASE_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-session-event-time-two-phase-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-session-partition-event-time",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.SESSION_WINDOW_PARTITION_EVENT_TIME" ],
+    "cases" : [ "window-aggregate-session-partition-event-time" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-session-partition-event-time-two-phase",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.SESSION_WINDOW_PARTITION_EVENT_TIME_TWO_PHASE" ],
+    "cases" : [ "window-aggregate-session-partition-event-time-two-phase" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-aggregate-session-partition-event-time-two-phase-distinct-split",
+    "restore" : true,
+    "origins" : [ "WindowAggregateEventTimeRestoreTest.programs()", "WindowAggregateTestPrograms.SESSION_WINDOW_PARTITION_EVENT_TIME_TWO_PHASE_DISTINCT_SPLIT" ],
+    "cases" : [ "window-aggregate-session-partition-event-time-two-phase-distinct-split" ],
+    "deviations" : [ "source cdc_window_source_t: values-connector options dropped: 'changelog-mode'='I,UA,UB,D'" ]
+  }, {
+    "id" : "window-deduplicate-asc-tumble-first-row",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_ASC_TUMBLE_FIRST_ROW" ],
+    "cases" : [ "window-deduplicate-asc-tumble-first-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-deduplicate-asc-tumble-first-row-condition-1",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_ASC_TUMBLE_FIRST_ROW_CONDITION_ONE" ],
+    "cases" : [ "window-deduplicate-asc-tumble-first-row-condition-1" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-deduplicate-asc-tumble-first-row-condition-3",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_ASC_TUMBLE_FIRST_ROW_CONDITION_THREE" ],
+    "cases" : [ "window-deduplicate-asc-tumble-first-row-condition-3" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-deduplicate-asc-partition-by-item-tumble-first-row",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_ASC_PARTITION_BY_ITEM_TUMBLE_FIRST_ROW" ],
+    "cases" : [ "window-deduplicate-asc-partition-by-item-tumble-first-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-deduplicate-desc-tumble-last-row",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_DESC_TUMBLE_LAST_ROW" ],
+    "cases" : [ "window-deduplicate-desc-tumble-last-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-deduplicate-desc-partition-by-item-tumble-first-row",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_DESC_PARTITION_BY_ITEM_TUMBLE_FIRST_ROW" ],
+    "cases" : [ "window-deduplicate-desc-partition-by-item-tumble-first-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-deduplicate-asc-hop-first-row",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_ASC_HOP_FIRST_ROW" ],
+    "cases" : [ "window-deduplicate-asc-hop-first-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-deduplicate-asc-cumulate-first-row",
+    "restore" : true,
+    "origins" : [ "WindowDeduplicateEventTimeRestoreTest.programs()", "WindowDeduplicateTestPrograms.WINDOW_DEDUPLICATE_ASC_CUMULATE_FIRST_ROW" ],
+    "cases" : [ "window-deduplicate-asc-cumulate-first-row" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-inner-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_INNER_TUMBLE_EVENT_TIME" ],
+    "cases" : [ "window-join-inner-tumble-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-left-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_LEFT_TUMBLE_EVENT_TIME" ],
+    "cases" : [ "window-join-left-tumble-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-right-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_RIGHT_TUMBLE_EVENT_TIME" ],
+    "cases" : [ "window-join-right-tumble-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-full-outer-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_FULL_OUTER_TUMBLE_EVENT_TIME" ],
+    "cases" : [ "window-join-full-outer-tumble-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-semi-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_SEMI_TUMBLE_EVENT_TIME" ],
+    "cases" : [ "window-join-semi-tumble-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-anti-tumble-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_ANTI_TUMBLE_EVENT_TIME" ],
+    "cases" : [ "window-join-anti-tumble-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-hop-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_HOP_EVENT_TIME" ],
+    "cases" : [ "window-join-hop-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-join-cumulate-event-time",
+    "restore" : true,
+    "origins" : [ "WindowJoinEventTimeRestoreTest.programs()", "WindowJoinTestPrograms.WINDOW_JOIN_CUMULATE_EVENT_TIME" ],
+    "cases" : [ "window-join-cumulate-event-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-rank-tumble-tvf-min-top-n",
+    "restore" : true,
+    "origins" : [ "WindowRankRestoreTest.programs()", "WindowRankTestPrograms.WINDOW_RANK_TUMBLE_TVF_MIN_TOP_N" ],
+    "cases" : [ "window-rank-tumble-tvf-min-top-n" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-rank-tumble-tvf-agg-min-top-n",
+    "restore" : true,
+    "origins" : [ "WindowRankRestoreTest.programs()", "WindowRankTestPrograms.WINDOW_RANK_TUMBLE_TVF_AGG_MIN_TOP_N" ],
+    "cases" : [ "window-rank-tumble-tvf-agg-min-top-n" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-rank-tumble-tvf-max-top-n",
+    "restore" : true,
+    "origins" : [ "WindowRankRestoreTest.programs()", "WindowRankTestPrograms.WINDOW_RANK_TUMBLE_TVF_MAX_TOP_N" ],
+    "cases" : [ "window-rank-tumble-tvf-max-top-n" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-rank-tumble-tvf-agg-max-top-n",
+    "restore" : true,
+    "origins" : [ "WindowRankRestoreTest.programs()", "WindowRankTestPrograms.WINDOW_RANK_TUMBLE_TVF_AGG_MAX_TOP_N" ],
+    "cases" : [ "window-rank-tumble-tvf-agg-max-top-n" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-rank-hop-tvf-min-top-n",
+    "restore" : true,
+    "origins" : [ "WindowRankRestoreTest.programs()", "WindowRankTestPrograms.WINDOW_RANK_HOP_TVF_MIN_TOP_N" ],
+    "cases" : [ "window-rank-hop-tvf-min-top-n" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-rank-cumulate-tvf-min-top-n",
+    "restore" : true,
+    "origins" : [ "WindowRankRestoreTest.programs()", "WindowRankTestPrograms.WINDOW_RANK_CUMULATE_TVF_MIN_TOP_N" ],
+    "cases" : [ "window-rank-cumulate-tvf-min-top-n" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-hop-tvf",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-hop-tvf" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-hop-tvf-agg",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-hop-tvf-agg" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-cumulate-tvf",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-cumulate-tvf" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-cumulate-tvf-agg",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-cumulate-tvf-agg" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-tumble-tvf",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-tumble-tvf" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-tumble-tvf-agg",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-tumble-tvf-agg" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-tumble-tvf-positive-offset",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-tumble-tvf-positive-offset" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-tumble-tvf-negative-offset",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionEventTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-tumble-tvf-negative-offset" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-tumble-tvf-agg-proc-time",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionProcTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-tumble-tvf-agg-proc-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-hop-tvf-agg-proc-time",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionProcTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-hop-tvf-agg-proc-time" ],
+    "deviations" : [ ]
+  }, {
+    "id" : "window-table-function-cumulate-tvf-agg-proc-time",
+    "restore" : true,
+    "origins" : [ "WindowTableFunctionProcTimeRestoreTest.programs()" ],
+    "cases" : [ "window-table-function-cumulate-tvf-agg-proc-time" ],
+    "deviations" : [ ]
+  } ]
+}

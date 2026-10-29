@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[a, 4]", "+I[b, 2]", "+I[a, 6]", "+I[a, 1]", "+I[b, 2]", "+I[b, 1]", "+I[b, 1]" ],
+    "after" : [ "+I[b, 1]", "+I[null, 1]", "+I[b, 1]", "+I[null, 1]", "+I[a, 1]", "+I[d, 2]", "+I[c, 1]", "+I[a, 1]", "+I[c, 1]", "+I[d, 2]" ],
+    "materialized" : [ "+I[a, 4]", "+I[b, 2]", "+I[a, 6]", "+I[a, 1]", "+I[b, 2]", "+I[b, 1]", "+I[b, 1]", "+I[b, 1]", "+I[null, 1]", "+I[b, 1]", "+I[null, 1]", "+I[a, 1]", "+I[d, 2]", "+I[c, 1]", "+I[a, 1]", "+I[c, 1]", "+I[d, 2]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

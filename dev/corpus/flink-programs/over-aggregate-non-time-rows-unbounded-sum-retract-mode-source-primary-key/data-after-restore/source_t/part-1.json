@@ -1,0 +1,3 @@
+{"before":null,"after":{"key":"key3","val":1,"ts":100},"op":"c"}
+{"before":null,"after":{"key":"key1","val":4,"ts":400},"op":"c"}
+{"before":{"key":"key1","val":3,"ts":200},"after":{"key":"key1","val":3,"ts":300},"op":"u"}

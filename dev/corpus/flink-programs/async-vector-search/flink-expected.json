@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, Spark, Batch]", "+I[1, Spark, Big Data]" ],
+    "after" : [ "+I[2, Flink, Streaming]", "+I[2, Flink, Big Data]" ],
+    "materialized" : [ "+I[1, Spark, Batch]", "+I[1, Spark, Big Data]", "+I[2, Flink, Streaming]", "+I[2, Flink, Big Data]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

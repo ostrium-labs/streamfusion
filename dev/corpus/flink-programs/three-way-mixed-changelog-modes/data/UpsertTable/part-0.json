@@ -1,0 +1,5 @@
+{"before":null,"after":{"key_id":"1","status":"active"},"op":"c"}
+{"before":null,"after":{"key_id":"2","status":"pending"},"op":"c"}
+{"before":{"key_id":"2","status":"pending"},"after":{"key_id":"2","status":"active"},"op":"u"}
+{"before":null,"after":{"key_id":"3","status":"inactive"},"op":"c"}
+{"before":{"key_id":"3","status":"inactive"},"after":null,"op":"d"}

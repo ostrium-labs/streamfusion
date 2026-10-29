@@ -1,0 +1,10 @@
+{
+  "MySink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[ACME, 19, 13, null]" ],
+    "after" : [ "+I[BETA, 18, 16, null]" ],
+    "materialized" : [ "+I[ACME, 19, 13, null]", "+I[BETA, 18, 16, null]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

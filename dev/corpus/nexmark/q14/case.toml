@@ -1,0 +1,7 @@
+description = "Nexmark q14: calculation with CASE, HOUR and a char count (adapted: built-ins instead of the count_char UDF)"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q14"

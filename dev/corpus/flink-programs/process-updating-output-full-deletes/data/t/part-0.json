@@ -1,0 +1,4 @@
+{"before":null,"after":{"name":"Alice","score":1},"op":"c"}
+{"before":null,"after":{"name":"Bob","score":2},"op":"c"}
+{"before":{"name":"Alice","score":1},"after":{"name":"Alice","score":10},"op":"u"}
+{"before":{"name":"Bob","score":2},"after":null,"op":"d"}

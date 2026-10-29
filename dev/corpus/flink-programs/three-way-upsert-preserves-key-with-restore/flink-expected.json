@@ -1,0 +1,16 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[1, 1, 1, 2, 1, shard_a]", "+I[1, 1, 1, 1, 1, shard_a]", "+I[1, 2, 1, 1, 1, shard_a]", "+I[1, 2, 1, 2, 1, shard_a]" ],
+    "after" : [ "+I[2, 2, 2, 1, 2, shard_b]", "+I[2, 1, 2, 2, 2, shard_b]", "+I[2, 2, 2, 2, 2, shard_b]", "+I[2, 1, 2, 1, 2, shard_b]" ],
+    "materialized" : [ "+I[1, 1, 1, 2, 1, shard_a]", "+I[1, 1, 1, 1, 1, shard_a]", "+I[1, 2, 1, 1, 1, shard_a]", "+I[1, 2, 1, 2, 1, shard_a]", "+I[2, 2, 2, 1, 2, shard_b]", "+I[2, 1, 2, 2, 2, shard_b]", "+I[2, 2, 2, 2, 2, shard_b]", "+I[2, 1, 2, 1, 2, shard_b]" ],
+    "primary_key" : [ "user_id", "order_id", "user_id2", "payment_id", "user_id3" ],
+    "options" : {
+      "changelog-mode" : "I,UA,D",
+      "connector" : "values",
+      "sink-changelog-mode-enforced" : "I,UA,D",
+      "sink.supports-delete-by-key" : "true",
+      "source.produces-delete-by-key" : "true"
+    }
+  }
+}

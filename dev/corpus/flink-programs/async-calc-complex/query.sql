@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT a, cast(a as VARCHAR) as a1, b, udf2(b, b, d) as b1, udf3(c, b) as c1, udf4(substring(c, 1, 5)) as c2, udf5(d, 1000) as d1 from source_t where (udf1(a) > 0 or (a * b) < 100) and b > 10;

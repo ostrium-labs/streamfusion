@@ -1,0 +1,4 @@
+{"before":null,"after":{"ts":"2020-10-10 00:00:40","a_int":10,"b_double":3.0,"c_float":3.0,"d_bigdec":4.44,"comment":"Comment#4","name":"a"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:42","a_int":11,"b_double":4.0,"c_float":4.0,"d_bigdec":5.44,"comment":"Comment#5","name":"d"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:43","a_int":12,"b_double":5.0,"c_float":5.0,"d_bigdec":6.44,"comment":"Comment#6","name":"c"},"op":"c"}
+{"before":null,"after":{"ts":"2020-10-10 00:00:44","a_int":13,"b_double":6.0,"c_float":6.0,"d_bigdec":7.44,"comment":"Comment#7","name":"d"},"op":"c"}

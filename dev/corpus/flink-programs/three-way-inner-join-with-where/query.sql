@@ -1,0 +1,1 @@
+INSERT INTO sink SELECT u.user_id, u.name, o.order_id, p.payment_id FROM Users u LEFT JOIN Orders o ON u.user_id = o.user_id LEFT JOIN Payments p ON u.user_id = p.user_id WHERE u.name = 'Gus' AND p.price > 10;

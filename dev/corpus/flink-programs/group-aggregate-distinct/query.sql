@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT e, COUNT(DISTINCT a) FILTER (WHERE b > 10) AS cnt_a1, COUNT(DISTINCT a) AS cnt_a2, SUM(DISTINCT a) AS sum_a, SUM(DISTINCT b) AS sum_b, AVG(b) AS avg_b, COUNT(DISTINCT d) AS concat_d FROM source_t GROUP BY e;

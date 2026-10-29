@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[{User(s='Bob', i=12), 1}]", "+I[{User(s='Alice', i=42), 1}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[{User(s='Bob', i=12), 1}]", "+I[{User(s='Alice', i=42), 1}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

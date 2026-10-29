@@ -1,0 +1,8 @@
+description = "Nexmark q15: bidding statistics per day, COUNT DISTINCT with FILTER"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = false
+upsert_key = ["day"]
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q15"

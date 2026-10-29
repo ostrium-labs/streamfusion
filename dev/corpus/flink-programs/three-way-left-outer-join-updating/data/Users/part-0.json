@@ -1,0 +1,6 @@
+{"before":null,"after":{"user_id":"1","name":"Gus","cash":100},"op":"c"}
+{"before":null,"after":{"user_id":"2","name":"Bob","cash":200},"op":"c"}
+{"before":null,"after":{"user_id":"3","name":"Alice","cash":300},"op":"c"}
+{"before":{"user_id":"1","name":"Gus","cash":100},"after":{"user_id":"1","name":"Gus Updated","cash":100},"op":"u"}
+{"before":{"user_id":"1","name":"Gus Updated","cash":100},"after":{"user_id":"1","name":"Gus Updated","cash":0},"op":"u"}
+{"before":{"user_id":"1","name":"Gus Updated","cash":0},"after":null,"op":"d"}

@@ -1,0 +1,9 @@
+{"ts":"2020-04-15 08:00:05","price":4,"item":"A","supplier_id":"supplier1"}
+{"ts":"2020-04-15 08:00:06","price":4,"item":"A","supplier_id":"supplier2"}
+{"ts":"2020-04-15 08:00:07","price":2,"item":"G","supplier_id":"supplier1"}
+{"ts":"2020-04-15 08:00:08","price":2,"item":"A","supplier_id":"supplier3"}
+{"ts":"2020-04-15 08:00:09","price":5,"item":"D","supplier_id":"supplier4"}
+{"ts":"2020-04-15 08:00:11","price":2,"item":"B","supplier_id":"supplier3"}
+{"ts":"2020-04-15 08:00:13","price":1,"item":"E","supplier_id":"supplier1"}
+{"ts":"2020-04-15 08:00:15","price":3,"item":"B","supplier_id":"supplier2"}
+{"ts":"2020-04-15 08:00:17","price":6,"item":"D","supplier_id":"supplier5"}

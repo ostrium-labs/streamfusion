@@ -1,0 +1,10 @@
+{
+  "MySink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[1, terry, pen, 1000]", "+U[2, alice, pen, 2000]", "+U[3, bob, pen, 3000]", "+I[4, bob, apple, 4000]", "+U[5, fish, apple, 5000]" ],
+    "after" : [ "+U[6, jerry, pen, 6000]", "+U[7, larry, apple, 7000]", "+I[8, bill, banana, 8000]", "+U[9, carol, apple, 9000]" ],
+    "materialized" : [ "+I[1, terry, pen, 1000]", "+U[2, alice, pen, 2000]", "+U[3, bob, pen, 3000]", "+I[4, bob, apple, 4000]", "+U[5, fish, apple, 5000]", "+U[6, jerry, pen, 6000]", "+U[7, larry, apple, 7000]", "+I[8, bill, banana, 8000]", "+U[9, carol, apple, 9000]" ],
+    "primary_key" : [ "product" ],
+    "options" : { }
+  }
+}

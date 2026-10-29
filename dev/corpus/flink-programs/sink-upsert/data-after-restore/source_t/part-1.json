@@ -1,0 +1,2 @@
+{"before":{"a":1,"b":1,"c":"hi"},"after":null,"op":"d"}
+{"before":null,"after":{"a":4,"b":4,"c":"foo"},"op":"c"}

@@ -1,0 +1,5 @@
+{"before":null,"after":{"ref_id":"1","data":"retract1"},"op":"c"}
+{"before":null,"after":{"ref_id":"2","data":"retract2"},"op":"c"}
+{"before":null,"after":{"ref_id":"3","data":"retract3"},"op":"c"}
+{"before":{"ref_id":"3","data":"retract3"},"after":null,"op":"d"}
+{"before":null,"after":{"ref_id":"1","data":"retract1_new"},"op":"c"}

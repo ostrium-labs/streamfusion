@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : false,
+    "before" : [ "+I[1, Gus, order1, payment1]", "+I[2, Bob, order2, payment2]" ],
+    "after" : [ "+I[2, Bob, order3, payment2]", "+I[1, Gus, order1, payment3]", "+I[3, Alice, null, null]" ],
+    "materialized" : [ "+I[1, Gus, order1, payment1]", "+I[2, Bob, order2, payment2]", "+I[2, Bob, order3, payment2]", "+I[1, Gus, order1, payment3]", "+I[3, Alice, null, null]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

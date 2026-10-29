@@ -1,0 +1,10 @@
+{
+  "result1" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[book, 1, 1]", "+I[book, 2, 2]", "+I[fruit, 4, 1]" ],
+    "after" : [ "+I[cereal, 6, 1]", "+I[cereal, 7, 2]", "+I[apple, 8, 1]", "+I[fruit, 9, 2]" ],
+    "materialized" : [ "+I[book, 1, 1]", "+I[book, 2, 2]", "+I[fruit, 4, 1]", "+I[cereal, 6, 1]", "+I[cereal, 7, 2]", "+I[apple, 8, 1]", "+I[fruit, 9, 2]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

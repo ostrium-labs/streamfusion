@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, {+I[Bob, 5], upsert-partial-delete}]", "+I[Alice, {+I[Alice, 2], upsert-partial-delete}]", "+I[Bob, {+U[Bob, 3], upsert-partial-delete}]", "+I[Bob, {-D[Bob, null], upsert-partial-delete}]", "+I[Bob, {+I[Bob, 2], upsert-partial-delete}]", "+I[Alice, {-D[Alice, null], upsert-partial-delete}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, {+I[Bob, 5], upsert-partial-delete}]", "+I[Alice, {+I[Alice, 2], upsert-partial-delete}]", "+I[Bob, {+U[Bob, 3], upsert-partial-delete}]", "+I[Bob, {-D[Bob, null], upsert-partial-delete}]", "+I[Bob, {+I[Bob, 2], upsert-partial-delete}]", "+I[Alice, {-D[Alice, null], upsert-partial-delete}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

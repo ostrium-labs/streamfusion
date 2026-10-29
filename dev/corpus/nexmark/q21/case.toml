@@ -1,0 +1,7 @@
+description = "Nexmark q21: channel_id with CASE and REGEXP_EXTRACT"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 180
+collect = "sink"
+sink = "nexmark_q21"

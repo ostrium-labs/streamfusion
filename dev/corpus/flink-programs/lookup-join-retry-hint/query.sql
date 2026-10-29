@@ -1,0 +1,1 @@
+INSERT INTO sink_t SELECT /*+ LOOKUP('table'='C', 'retry-predicate'='lookup_miss', 'retry-strategy'='fixed_delay', 'fixed-delay'='10s', 'max-attempts'='3') */ O.order_id, O.total, C.id, C.name, C.age, C.city, C.state, C.zipcode FROM orders_t as O JOIN customers_t FOR SYSTEM_TIME AS OF O.proc_time AS C ON O.customer_id = C.id;

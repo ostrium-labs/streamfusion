@@ -1,0 +1,10 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[5, 5, 11, 11 and 11 and 1702688461000, hello world11, $hello, 2023-12-16T01:01]" ],
+    "after" : [ "+I[5, 5, 11, 11 and 11 and 1702688461000, hello world11, $hello, 2023-12-16T01:01]" ],
+    "materialized" : [ "+I[5, 5, 11, 11 and 11 and 1702688461000, hello world11, $hello, 2023-12-16T01:01]", "+I[5, 5, 11, 11 and 11 and 1702688461000, hello world11, $hello, 2023-12-16T01:01]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

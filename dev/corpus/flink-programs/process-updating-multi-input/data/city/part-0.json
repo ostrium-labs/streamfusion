@@ -1,0 +1,3 @@
+{"before":null,"after":{"name":"Bob","city":"London"},"op":"c"}
+{"before":null,"after":{"name":"Alice","city":"Zurich"},"op":"c"}
+{"before":{"name":"Bob","city":"London"},"after":{"name":"Bob","city":"Berlin"},"op":"u"}

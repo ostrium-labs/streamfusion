@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, {Score(s='null', i=null), +I[Bob, 12]}]", "+I[Alice, {Score(s='null', i=null), +I[Alice, 42]}]", "+I[Bob, {Score(s='Bob', i=0), +I[Bob, 99]}]", "+I[Bob, {Score(s='Bob', i=1), +I[Bob, 100]}]", "+I[Alice, {Score(s='null', i=0), +I[Alice, 400]}]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, {Score(s='null', i=null), +I[Bob, 12]}]", "+I[Alice, {Score(s='null', i=null), +I[Alice, 42]}]", "+I[Bob, {Score(s='Bob', i=0), +I[Bob, 99]}]", "+I[Bob, {Score(s='Bob', i=1), +I[Bob, 100]}]", "+I[Alice, {Score(s='null', i=0), +I[Alice, 400]}]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

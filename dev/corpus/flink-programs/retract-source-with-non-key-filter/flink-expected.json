@@ -1,0 +1,16 @@
+{
+  "sink_t" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[one, 1, a]", "+U[one, 2, bb]", "+U[three, 3, ccc]", "+U[three, 3, ccc]", "+I[one, 4, aaaa]", "+U[one, 4, aaaa]", "-D[three, 3, ccc]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[one, 1, a]", "+U[one, 2, bb]", "+U[three, 3, ccc]", "+U[three, 3, ccc]", "+I[one, 4, aaaa]", "+U[one, 4, aaaa]", "-D[three, 3, ccc]" ],
+    "primary_key" : [ "a" ],
+    "options" : {
+      "changelog-mode" : "I,UB,UA,D",
+      "connector" : "values",
+      "sink-changelog-mode-enforced" : "I,UB,UA,D",
+      "sink.supports-delete-by-key" : "false",
+      "source.produces-delete-by-key" : "false"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{"before":{"order_id":3,"customer_id":1,"total":23.89,"order_time":"2020-10-10 00:00:03"},"after":null,"op":"d"}
+{"before":null,"after":{"order_id":3,"customer_id":1,"total":33.01,"order_time":"2020-10-10 01:01:06"},"op":"c"}
+{"before":{"order_id":4,"customer_id":2,"total":92.61,"order_time":"2020-10-10 00:00:04"},"after":null,"op":"d"}
+{"before":null,"after":{"order_id":7,"customer_id":6,"total":17.58,"order_time":"2020-10-10 03:20:07"},"op":"c"}

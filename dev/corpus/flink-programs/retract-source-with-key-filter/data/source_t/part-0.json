@@ -1,0 +1,10 @@
+{"before":null,"after":{"a":"one","b":1,"c":"a"},"op":"c"}
+{"before":{"a":"one","b":1,"c":"a"},"after":{"a":"one","b":2,"c":"bb"},"op":"u"}
+{"before":null,"after":{"a":"three","b":3,"c":"ccc"},"op":"c"}
+{"before":{"a":"three","b":3,"c":"ccc"},"after":{"a":"three","b":3,"c":"ccc"},"op":"u"}
+{"before":null,"after":{"a":"one","b":4,"c":"aaaa"},"op":"c"}
+{"before":{"a":"one","b":4,"c":"aaaa"},"after":{"a":"one","b":4,"c":"aaaa"},"op":"u"}
+{"before":null,"after":{"a":"two","b":1,"c":"d"},"op":"c"}
+{"before":{"a":"two","b":1,"c":"d"},"after":{"a":"two","b":1,"c":"d"},"op":"u"}
+{"before":{"a":"three","b":3,"c":"ccc"},"after":null,"op":"d"}
+{"before":{"a":"two","b":1,"c":"d"},"after":null,"op":"d"}

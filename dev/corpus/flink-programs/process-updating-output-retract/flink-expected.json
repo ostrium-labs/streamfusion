@@ -1,0 +1,10 @@
+{
+  "sink" : {
+    "test_changelog_data" : true,
+    "before" : [ "+I[Bob, Bob, 1, retract]", "+I[Alice, Alice, 1, retract]", "-U[Bob, Bob, 1, retract]", "+U[Bob, Bob, 2, retract]" ],
+    "after" : [ ],
+    "materialized" : [ "+I[Bob, Bob, 1, retract]", "+I[Alice, Alice, 1, retract]", "-U[Bob, Bob, 1, retract]", "+U[Bob, Bob, 2, retract]" ],
+    "primary_key" : [ ],
+    "options" : { }
+  }
+}

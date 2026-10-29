@@ -1,0 +1,3 @@
+{"before":{"a":"one","b":13,"c":"b"},"after":{"a":"one","b":15,"c":"aa"},"op":"u"}
+{"before":{"a":"one","b":15,"c":"aa"},"after":null,"op":"d"}
+{"before":{"a":"three","b":3,"c":"cc"},"after":null,"op":"d"}

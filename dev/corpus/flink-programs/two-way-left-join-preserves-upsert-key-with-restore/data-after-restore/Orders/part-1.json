@@ -1,0 +1,4 @@
+{"before":null,"after":{"user_id":1,"order_id":2,"product":"b"},"op":"c"}
+{"before":{"user_id":1,"order_id":2,"product":"b"},"after":null,"op":"d"}
+{"before":null,"after":{"user_id":3,"order_id":1,"product":"b"},"op":"c"}
+{"before":null,"after":{"user_id":9,"order_id":9,"product":"b"},"op":"c"}
