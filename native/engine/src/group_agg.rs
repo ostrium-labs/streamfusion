@@ -5178,6 +5178,7 @@ state_bytes_getter!(
     GroupAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_groupAggregatorStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -5190,6 +5191,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_groupAggregatorStagingBytes
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_groupAggregatorStagedKeys<'local>(
     env: JNIEnv<'local>,
@@ -5207,6 +5209,7 @@ state_bytes_getter!(
     LocalGroupAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_localGroupAggregatorStagedKeys<'local>(
     env: JNIEnv<'local>,
@@ -5225,6 +5228,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_localGroupAggregatorStagedK
 /// Creates a buffering local two-phase GROUP BY pre-aggregate and returns an opaque handle. It
 /// accumulates across batches in memory until flushed; the buffer is transient (drained before each
 /// checkpoint on the JVM side), so there is no snapshot/restore.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createLocalGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -5259,6 +5263,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createLocalGroupAggregator<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_configureLocalGroupAggregateArguments<
     'local,
@@ -5275,6 +5280,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_configureLocalGroupAggregat
     });
 }
 
+#[cfg(feature = "jni")]
 fn throw_group_update_error(env: &mut JNIEnv, error: DataFusionError) {
     if let DataFusionError::External(error) = &error {
         if let Some(error) = error.downcast_ref::<JsonAggregateError>() {
@@ -5305,6 +5311,7 @@ fn throw_group_update_error(env: &mut JNIEnv, error: DataFusionError) {
 }
 
 /// Folds an Arrow batch the JVM exported into the buffered per-key accumulators; emits nothing.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateLocalGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -5328,6 +5335,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateLocalGroupAggregator<
 }
 
 /// Emits the buffered partials (one row per key) and clears the buffer.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushLocalGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -5345,6 +5353,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushLocalGroupAggregator<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeLocalGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -5359,6 +5368,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeLocalGroupAggregator<'
 /// Creates a non-windowed `GROUP BY` aggregator and returns an opaque handle. The aggregate kinds
 /// and per-aggregate value-type codes are positional; `generate_update_before` is the host's
 /// per-node changelog flag. Grouping keys travel as `key0..` columns on each input batch.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createGroupAggregatorWithTtlEmission<
     'local,
@@ -5413,6 +5423,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createGroupAggregatorWithTt
 
 /// Folds an input batch into per-key state and exports the changelog rows it produces (the row kinds
 /// ride the `$row_kind$` column of the result).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -5438,6 +5449,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateGroupAggregator<'loca
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -5457,6 +5469,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushGroupAggregator<'local
 }
 
 /// Lists the non-empty Flink key groups represented by this group aggregator's current state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotGroupAggregatorPartitions<'local>(
     env: JNIEnv<'local>,
@@ -5477,6 +5490,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotGroupAggregatorPart
 }
 
 /// Rebuilds a `GROUP BY` aggregator from all raw keyed-state partitions assigned to this subtask.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreGroupAggregatorPartitionsWithTtlEmission<
     'local,
@@ -5549,6 +5563,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreGroupAggregatorParti
 }
 
 /// Releases the `GROUP BY` aggregator and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeGroupAggregator<'local>(
     env: JNIEnv<'local>,

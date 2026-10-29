@@ -3,6 +3,7 @@ use std::sync::OnceLock;
 
 static INTEGER_CACHE_HIGH: OnceLock<i32> = OnceLock::new();
 
+#[cfg(feature = "jni")]
 pub(super) fn init_java_cache(env: &mut JNIEnv<'_>) {
     INTEGER_CACHE_HIGH.get_or_init(|| {
         let (mut low, mut high) = (127i32, i32::MAX);

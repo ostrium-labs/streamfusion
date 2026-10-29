@@ -20,11 +20,25 @@ pub use arrow::datatypes::ArrowPrimitiveType;
 pub use arrow::datatypes::{DataType, Field, FieldRef, Fields, Schema, SchemaRef};
 pub use arrow::ffi::{from_ffi, from_ffi_and_data_type, FFI_ArrowArray, FFI_ArrowSchema};
 pub use arrow::row::{OwnedRow, Row, RowConverter, Rows, SortField};
+#[cfg(feature = "jni")]
 pub use jni::objects::{
     JByteArray, JClass, JDoubleArray, JFloatArray, JIntArray, JLongArray, JObjectArray, JString,
 };
+#[cfg(feature = "jni")]
 pub use jni::sys::{jboolean, jbyteArray, jint, jlong, jstring};
+#[cfg(feature = "jni")]
 pub use jni::JNIEnv;
+// The JNI primitive aliases (identical to `jni::sys`'s), so handle and flag types keep their names
+// in a build without the `jni` feature.
+#[cfg(not(feature = "jni"))]
+#[allow(non_camel_case_types)]
+pub type jboolean = u8;
+#[cfg(not(feature = "jni"))]
+#[allow(non_camel_case_types)]
+pub type jint = i32;
+#[cfg(not(feature = "jni"))]
+#[allow(non_camel_case_types)]
+pub type jlong = i64;
 // ahash, not std's SipHash: every keyed hot loop in the crate hashes through these aliases, and
 // the CPU profiles showed SipHash as a top cost wherever an operator missed the explicit swap
 // (q18's keep-last dedup spent ~35% of its time in it). DoS-hardness is irrelevant for internal

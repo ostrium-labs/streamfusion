@@ -1,0 +1,9 @@
+[package]
+name = "loams-stream-runtime"
+version = "0.1.0-preview.1"
+edition = "2024"
+license = "Apache-2.0"
+description = "Loams Stream task manager runtime (preview)"
+publish = false
+
+[dependencies]

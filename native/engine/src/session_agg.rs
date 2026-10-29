@@ -119,6 +119,7 @@ impl SessionAggregator {
         }
     }
 
+    #[cfg(feature = "jni")]
     pub(crate) fn set_calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.calendar = Some(WindowCalendar::new(callback));
     }
@@ -995,6 +996,7 @@ state_bytes_getter!(
     SessionAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_sessionAggregatorLateDrops<'local>(
     env: JNIEnv<'local>,
@@ -1009,6 +1011,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_sessionAggregatorLateDrops<
 
 /// Creates a stateful session-window aggregator and returns an opaque handle. As with the tumbling
 /// handle, the JVM owns the native state across calls and must release it with the matching close.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -1028,6 +1031,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createSessionAggregator<'lo
 }
 
 /// Folds a batch from the JVM into the session aggregator, merging sessions as elements bridge them.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -1050,6 +1054,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateSessionAggregator<'lo
 }
 
 /// Attach released-host deadline conversion to a session handle, including direct persistent mode.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_setSessionWindowCalendar<'local>(
     env: JNIEnv<'local>,
@@ -1067,6 +1072,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_setSessionWindowCalendar<'l
 }
 
 /// Cached earliest remaining timer, computed by the production firing pass.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_sessionAggregatorNextTimerDeadline<'local>(
     env: JNIEnv<'local>,
@@ -1079,6 +1085,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_sessionAggregatorNextTimerD
 }
 
 /// Emits the sessions the given watermark has closed as a batch and drops them from state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -1099,6 +1106,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushSessionAggregator<'loc
 }
 
 /// Releases the session aggregator and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -1111,6 +1119,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeSessionAggregator<'loc
 }
 
 /// Serializes the aggregator's open sessions so the JVM can store them in a checkpoint.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -1126,6 +1135,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotSessionAggregator<'
 }
 
 /// Rebuilds a session aggregator from a snapshot taken by a prior run and returns a fresh handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -1148,6 +1158,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreSessionAggregator<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotSessionAggregatorPartitions<'local>(
     env: JNIEnv<'local>,
@@ -1167,6 +1178,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotSessionAggregatorPa
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreSessionAggregatorPartitions<'local>(
     env: JNIEnv<'local>,

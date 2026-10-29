@@ -1,0 +1,16 @@
+[package]
+name = "loams-stream"
+version = "0.1.0-preview.1"
+edition = "2024"
+license = "Apache-2.0"
+description = "Loams Stream, the Apache Flink-compatible engine: job manager and task manager binary (preview)"
+publish = false
+
+[[bin]]
+name = "loams-stream"
+path = "src/main.rs"
+
+[dependencies]
+# The engine without its JNI entry points: the standalone binary links no `jni` and needs no JVM
+# (checked by the `standalone_graph_has_no_jni` test).
+streamfusion = { path = "../engine", default-features = false }

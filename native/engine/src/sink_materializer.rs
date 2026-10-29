@@ -931,6 +931,7 @@ impl SinkMaterializer {
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createSinkMaterializer<'local>(
     env: JNIEnv<'local>,
@@ -962,6 +963,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createSinkMaterializer<'loc
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreSinkMaterializer<'local>(
     env: JNIEnv<'local>,
@@ -1009,6 +1011,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreSinkMaterializer<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushSinkMaterializer<'local>(
     env: JNIEnv<'local>,
@@ -1033,6 +1036,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushSinkMaterializer<'local
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotSinkMaterializer<'local>(
     env: JNIEnv<'local>,
@@ -1050,6 +1054,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotSinkMaterializer<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_sinkMaterializerStateBytes<'local>(
     env: JNIEnv<'local>,
@@ -1063,6 +1068,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_sinkMaterializerStateBytes<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeSinkMaterializer<'local>(
     env: JNIEnv<'local>,
@@ -1074,6 +1080,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeSinkMaterializer<'loca
     })
 }
 
+#[cfg(feature = "jni")]
 #[cfg(feature = "rocksdb-state")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSinkMaterializer<'local>(
@@ -1141,6 +1148,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSinkMaterializ
     })
 }
 
+#[cfg(feature = "jni")]
 #[cfg(feature = "rocksdb-state")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBSinkMaterializer<'local>(

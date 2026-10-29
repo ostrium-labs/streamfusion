@@ -31,7 +31,7 @@ pub(super) struct Options {
     pub remove_on_delete: bool,
     pub remove_on_sequence_group: Vec<usize>,
     #[serde(skip)]
-    pub host_aggregates: Vec<Option<jni::objects::GlobalRef>>,
+    pub host_aggregates: Vec<Option<streamfusion_bridge::bridge::HostObject>>,
 }
 
 impl Default for Options {
@@ -816,6 +816,17 @@ fn host_reference(cell: &Cell) -> i32 {
     }
 }
 
+#[cfg(not(feature = "jni"))]
+fn evaluate_host_column(
+    kernel: &streamfusion_bridge::bridge::HostObject,
+    _column: &ArrayRef,
+    _program: Vec<i32>,
+    _cells: Vec<Cell>,
+) -> ArrayRef {
+    match *kernel {}
+}
+
+#[cfg(feature = "jni")]
 fn evaluate_host_column(
     kernel: &jni::objects::GlobalRef,
     column: &ArrayRef,

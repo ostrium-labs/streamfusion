@@ -13,10 +13,12 @@ type RocksChangelogNormalizer = ChangelogNormalizer<RocksNormalizerStore>;
 type RocksKeepLastDeduplicator = KeepLastDeduplicator<RocksDedupStore>;
 type RocksUpdatingJoiner = UpdatingJoiner<RocksJoinStore>;
 
+#[cfg(feature = "jni")]
 pub(crate) fn read_string(env: &mut JNIEnv, value: &JString) -> String {
     env.get_string(value).expect("jni string").into()
 }
 
+#[cfg(feature = "jni")]
 pub(crate) fn read_strings(env: &mut JNIEnv, values: &JObjectArray) -> Vec<Option<String>> {
     (0..env.get_array_length(values).expect("array length"))
         .map(|i| {
@@ -34,6 +36,7 @@ pub(crate) fn read_strings(env: &mut JNIEnv, values: &JObjectArray) -> Vec<Optio
 
 /// The restored blob key groups a create receives when a canonical savepoint or raw keyed state
 /// (rather than a RocksDB checkpoint) is being restored; empty on a fresh start or native restore.
+#[cfg(feature = "jni")]
 pub(crate) fn read_restored_partitions(env: &mut JNIEnv, values: &JObjectArray) -> Vec<Vec<u8>> {
     (0..env.get_array_length(values).expect("array length"))
         .map(|i| {
@@ -48,6 +51,7 @@ pub(crate) fn read_restored_partitions(env: &mut JNIEnv, values: &JObjectArray) 
 
 /// Opens an operator's typed store: fresh when no restored sources exist, otherwise merged from
 /// the restored checkpoint directories with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_store<C: RocksStateCodec>(
     env: &mut JNIEnv,
@@ -88,6 +92,7 @@ fn open_store<C: RocksStateCodec>(
 
 /// [`open_store`] for two side stores sharing one DB (the updating join's left and right states):
 /// fresh when no restored sources exist, otherwise merged once for both tables.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_store_pair<C: RocksStateCodec>(
     env: &mut JNIEnv,
@@ -128,6 +133,7 @@ fn open_store_pair<C: RocksStateCodec>(
     }
 }
 
+#[cfg(feature = "jni")]
 pub(crate) fn manifest_array<'local>(
     env: &mut JNIEnv<'local>,
     manifest: &RocksCheckpointManifest,
@@ -151,6 +157,7 @@ pub(crate) fn manifest_array<'local>(
     array.into_raw()
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbStateAvailable<'local>(
     env: JNIEnv<'local>,
@@ -159,6 +166,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbStateAvailable<'loca
     crate::bridge::jni_guard(env, move |_env| 1)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSharedResources<'local>(
     env: JNIEnv<'local>,
@@ -173,6 +181,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSharedResource
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_releaseRocksDBSharedResources<'local>(
     env: JNIEnv<'local>,
@@ -186,6 +195,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_releaseRocksDBSharedResourc
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorSupported<'local>(
     env: JNIEnv<'local>,
@@ -209,6 +219,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorSuppo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBGroupAggregatorWithTtlEmission<
     'local,
@@ -302,6 +313,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBGroupAggregato
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updateRocksDBGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -324,6 +336,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updateRocksDBGroupAggregato
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -343,6 +356,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBGroupAggregator
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -368,6 +382,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBGroupAggre
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBGroupAggregatorPartitions<
     'local,
@@ -393,6 +408,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBGroupAggrega
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorStateBytes<'local>(
     env: JNIEnv<'local>,
@@ -401,6 +417,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorState
 ) -> jlong {
     crate::bridge::jni_guard(env, move |_env| unsafe { &*(handle as *const RocksGroupAggregator) }.memory.state_bytes as jlong)
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -411,6 +428,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorStagi
         unsafe { &*(handle as *const RocksGroupAggregator) }.staging_bytes() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorStagedKeys<'local>(
     env: JNIEnv<'local>,
@@ -421,6 +439,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbGroupAggregatorStage
         unsafe { &*(handle as *const RocksGroupAggregator) }.staged_keys() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBGroupAggregator<'local>(
     env: JNIEnv<'local>,
@@ -432,6 +451,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBGroupAggregator
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBChangelogNormalizer<'local>(
     env: JNIEnv<'local>,
@@ -493,6 +513,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBChangelogNorma
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBChangelogNormalizer<'local>(
     env: JNIEnv<'local>,
@@ -519,6 +540,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBChangelogNormali
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBChangelogNormalizer<'local>(
     env: JNIEnv<'local>,
@@ -535,6 +557,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBChangelogNormal
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBChangelogNormalizer<
     'local,
@@ -562,6 +585,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBChangelogN
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBChangelogNormalizerPartitions<
     'local,
@@ -587,6 +611,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBChangelogNor
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbChangelogNormalizerStateBytes<
     'local,
@@ -601,6 +626,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbChangelogNormalizerS
             .state_bytes as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbChangelogNormalizerStagingBytes<
     'local,
@@ -613,6 +639,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbChangelogNormalizerS
         unsafe { &*(handle as *const RocksChangelogNormalizer) }.staging_bytes() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbChangelogNormalizerStagedKeys<
     'local,
@@ -625,6 +652,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbChangelogNormalizerS
         unsafe { &*(handle as *const RocksChangelogNormalizer) }.staged_keys() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBChangelogNormalizer<'local>(
     env: JNIEnv<'local>,
@@ -636,6 +664,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBChangelogNormal
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBFirstN<'local>(
     env: JNIEnv<'local>,
@@ -700,6 +729,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBFirstN<'local>
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBFirstN<'local>(
     env: JNIEnv<'local>,
@@ -725,6 +755,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBFirstN<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -796,6 +827,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBKeepLastDedupl
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -822,6 +854,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBKeepLastDeduplic
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -838,6 +871,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBKeepLastDedupli
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBKeepLastDeduplicator<
     'local,
@@ -865,6 +899,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBKeepLastDe
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBKeepLastDeduplicatorPartitions<
     'local,
@@ -890,6 +925,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBKeepLastDedu
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepLastDeduplicatorStateBytes<
     'local,
@@ -904,6 +940,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepLastDeduplicator
             .state_bytes as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepLastDeduplicatorStagingBytes<
     'local,
@@ -916,6 +953,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepLastDeduplicator
         unsafe { &*(handle as *const RocksKeepLastDeduplicator) }.staging_bytes() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepLastDeduplicatorStagedKeys<
     'local,
@@ -928,6 +966,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepLastDeduplicator
         unsafe { &*(handle as *const RocksKeepLastDeduplicator) }.staged_keys() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -939,6 +978,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBKeepLastDedupli
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepFirstDeduplicatorSupported<
     'local,
@@ -960,6 +1000,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbKeepFirstDeduplicato
 
 /// [`open_store`] for the keep-first deduplicator's two-table store: fresh when no restored
 /// sources exist, otherwise merged once with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_keep_first_dedup_store(
     env: &mut JNIEnv,
@@ -998,6 +1039,7 @@ fn open_keep_first_dedup_store(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBKeepFirstDeduplicator<'local>(
@@ -1056,6 +1098,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBKeepFirstDedup
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBKeepFirstDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -1078,6 +1121,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBKeepFirstDedupli
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBKeepFirstDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -1097,6 +1141,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBKeepFirstDedupl
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBKeepFirstDeduplicator<
     'local,
@@ -1122,6 +1167,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBKeepFirstD
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBKeepFirstDeduplicatorPartitions<
     'local,
@@ -1152,6 +1198,7 @@ state_bytes_getter!(
     KeepFirstDeduplicator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBKeepFirstDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -1163,6 +1210,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBKeepFirstDedupl
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBUpdatingJoiner<'local>(
@@ -1261,6 +1309,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBUpdatingJoiner
     })
 }
 
+#[cfg(feature = "jni")]
 fn push_rocksdb_updating_joiner(
     env: JNIEnv,
     handle: jlong,
@@ -1289,6 +1338,7 @@ fn push_rocksdb_updating_joiner(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1302,6 +1352,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBUpdatingJoin
     push_rocksdb_updating_joiner(env, handle, true, in_array, in_schema, now, receiver)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1315,6 +1366,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBUpdatingJoi
     push_rocksdb_updating_joiner(env, handle, false, in_array, in_schema, now, receiver)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1332,6 +1384,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBUpdatingJoiner<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1356,6 +1409,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBUpdatingJo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBUpdatingJoinerPartitions<
     'local,
@@ -1381,6 +1435,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBUpdatingJoin
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStateBytes<'local>(
     env: JNIEnv<'local>,
@@ -1393,6 +1448,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStateB
             .state_bytes as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -1403,6 +1459,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStagin
         unsafe { &*(handle as *const RocksUpdatingJoiner) }.staging_bytes() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStagedKeys<'local>(
     env: JNIEnv<'local>,
@@ -1413,6 +1470,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStaged
         unsafe { &*(handle as *const RocksUpdatingJoiner) }.staged_keys() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStagedRecords<'local>(
     env: JNIEnv<'local>,
@@ -1424,6 +1482,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbUpdatingJoinerStaged
         unsafe { &*(handle as *const RocksUpdatingJoiner) }.staged_records(left != 0) as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1437,6 +1496,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBUpdatingJoiner<
 
 /// [`open_store_pair`] for the window join's bespoke row buffer: fresh when no restored sources
 /// exist, otherwise merged once for both side tables.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_window_buffer(
     env: &mut JNIEnv,
@@ -1475,6 +1535,7 @@ fn open_window_buffer(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBWindowJoiner<'local>(
@@ -1567,6 +1628,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBWindowJoiner<'
     })
 }
 
+#[cfg(feature = "jni")]
 fn push_rocksdb_window_joiner(
     env: JNIEnv,
     handle: jlong,
@@ -1591,6 +1653,7 @@ fn push_rocksdb_window_joiner(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1602,6 +1665,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBWindowJoiner
     push_rocksdb_window_joiner(env, handle, true, in_array, in_schema)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1613,6 +1677,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBWindowJoine
     push_rocksdb_window_joiner(env, handle, false, in_array, in_schema)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1631,6 +1696,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBWindowJoiner<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1658,6 +1724,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBWindowJoin
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBWindowJoinerPartitions<
     'local,
@@ -1683,6 +1750,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBWindowJoiner
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowJoinerStateBytes<'local>(
     env: JNIEnv<'local>,
@@ -1696,6 +1764,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowJoinerStateByt
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBWindowJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1707,6 +1776,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBWindowJoiner<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbIntervalJoinerSupported<'local>(
     env: JNIEnv<'local>,
@@ -1730,6 +1800,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbIntervalJoinerSuppor
 
 /// [`open_store`] for the interval join's two-table row buffer: fresh when no restored sources
 /// exist, otherwise merged once with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_interval_buffer(
     env: &mut JNIEnv,
@@ -1768,6 +1839,7 @@ fn open_interval_buffer(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBIntervalJoiner<'local>(
@@ -1860,6 +1932,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBIntervalJoiner
     })
 }
 
+#[cfg(feature = "jni")]
 fn push_rocksdb_interval_joiner(
     env: JNIEnv,
     handle: jlong,
@@ -1890,6 +1963,7 @@ fn push_rocksdb_interval_joiner(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBIntervalJoiner<'local>(
@@ -1916,6 +1990,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBIntervalJoin
     )
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBIntervalJoiner<'local>(
@@ -1942,6 +2017,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBIntervalJoi
     )
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_advanceRocksDBIntervalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1960,6 +2036,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_advanceRocksDBIntervalJoine
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBIntervalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -1988,6 +2065,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBIntervalJo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBIntervalJoinerPartitions<
     'local,
@@ -2021,6 +2099,7 @@ state_bytes_getter!(
     IntervalJoiner
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBIntervalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2032,6 +2111,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBIntervalJoiner<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTemporalJoinerSupported<'local>(
     env: JNIEnv<'local>,
@@ -2067,6 +2147,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTemporalJoinerSuppor
 
 /// [`open_store`] for the temporal join's three-table store: fresh when no restored sources
 /// exist, otherwise merged once with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_temporal_join_store(
     env: &mut JNIEnv,
@@ -2107,6 +2188,7 @@ fn open_temporal_join_store(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBTemporalJoiner<'local>(
@@ -2196,6 +2278,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBTemporalJoiner
     })
 }
 
+#[cfg(feature = "jni")]
 fn push_rocksdb_temporal_joiner(
     env: JNIEnv,
     handle: jlong,
@@ -2221,6 +2304,7 @@ fn push_rocksdb_temporal_joiner(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2233,6 +2317,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftRocksDBTemporalJoin
     push_rocksdb_temporal_joiner(env, handle, true, in_array, in_schema, now_millis)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2245,6 +2330,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightRocksDBTemporalJoi
     push_rocksdb_temporal_joiner(env, handle, false, in_array, in_schema, now_millis)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_advanceRocksDBTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2264,6 +2350,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_advanceRocksDBTemporalJoine
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2287,6 +2374,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBTemporalJo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBTemporalJoinerPartitions<
     'local,
@@ -2317,6 +2405,7 @@ state_bytes_getter!(
     TemporalJoiner
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBTemporalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2328,6 +2417,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBTemporalJoiner<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTemporalSorterSupported<'local>(
     env: JNIEnv<'local>,
@@ -2347,6 +2437,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTemporalSorterSuppor
 
 /// [`open_store`] for the temporal sort's unkeyed row buffer: fresh when no restored sources
 /// exist, otherwise merged once with this subtask's key-group range (always group zero).
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_temporal_sort_buffer(
     env: &mut JNIEnv,
@@ -2383,6 +2474,7 @@ fn open_temporal_sort_buffer(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBTemporalSorter<'local>(
@@ -2432,6 +2524,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBTemporalSorter
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -2453,6 +2546,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBTemporalSorter<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -2471,6 +2565,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBTemporalSorter<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -2496,6 +2591,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBTemporalSo
 
 /// The persistent buffer as the memory snapshot's own plain-IPC blob; the host frames it into its
 /// singleton key group exactly as it frames the memory snapshot.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -2525,6 +2621,7 @@ state_bytes_getter!(
     TemporalSorter
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -2559,6 +2656,7 @@ fn window_key_data_type(code: i64) -> DataType {
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowAggregatorSupported<'local>(
     env: JNIEnv<'local>,
@@ -2581,6 +2679,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowAggregatorSupp
 
 /// [`open_store`] for the aligned-window aggregate's composite-key store: fresh when no restored
 /// sources exist, otherwise merged once with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_window_agg_store(
     env: &mut JNIEnv,
@@ -2618,6 +2717,7 @@ fn open_window_agg_store(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBWindowAggregator<'local>(
@@ -2693,6 +2793,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBWindowAggregat
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBWindowAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2714,6 +2815,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBWindowAggregator
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushPartialRocksDBWindowAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2735,6 +2837,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushPartialRocksDBWindowAgg
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBWindowAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2753,6 +2856,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBWindowAggregato
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBWindowAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2777,6 +2881,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBWindowAggr
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBWindowAggregatorPartitions<
     'local,
@@ -2810,6 +2915,7 @@ state_bytes_getter!(
     TumblingAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBWindowAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2821,6 +2927,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBWindowAggregato
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbSessionAggregatorSupported<'local>(
     env: JNIEnv<'local>,
@@ -2843,6 +2950,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbSessionAggregatorSup
 
 /// [`open_store`] for the session aggregate's key-major store: fresh when no restored sources
 /// exist, otherwise merged once with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_session_agg_store(
     env: &mut JNIEnv,
@@ -2880,6 +2988,7 @@ fn open_session_agg_store(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSessionAggregator<'local>(
@@ -2947,6 +3056,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSessionAggrega
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2968,6 +3078,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBSessionAggregato
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -2986,6 +3097,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBSessionAggregat
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -3010,6 +3122,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBSessionAgg
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBSessionAggregatorPartitions<
     'local,
@@ -3043,6 +3156,7 @@ state_bytes_getter!(
     SessionAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBSessionAggregator<'local>(
     env: JNIEnv<'local>,
@@ -3054,6 +3168,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBSessionAggregat
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbOverAggregatorSupported<'local>(
     env: JNIEnv<'local>,
@@ -3097,6 +3212,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbOverAggregatorSuppor
 
 /// [`open_store`] for the OVER aggregate's multi-table store: fresh when no restored sources
 /// exist, otherwise merged once with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_over_agg_store(
     env: &mut JNIEnv,
@@ -3147,6 +3263,7 @@ fn open_over_agg_store(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBOverAggregator<'local>(
@@ -3235,6 +3352,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBOverAggregator
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -3257,6 +3375,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBOverAggregator<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -3276,6 +3395,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBOverAggregator<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -3299,6 +3419,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBOverAggreg
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBOverAggregatorPartitions<
     'local,
@@ -3330,6 +3451,7 @@ state_bytes_getter!(
     OverWindowAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -3341,6 +3463,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBOverAggregator<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBTopNRanker<'local>(
@@ -3437,6 +3560,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBTopNRanker<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBUpdateFastTopNRanker<'local>(
@@ -3524,6 +3648,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBUpdateFastTopN
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -3550,6 +3675,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBTopNRanker<'loca
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -3564,6 +3690,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBTopNRanker<'loc
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -3586,6 +3713,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBTopNRanker
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBTopNRankerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -3607,6 +3735,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBTopNRankerPa
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerStateBytes<'local>(
     env: JNIEnv<'local>,
@@ -3617,6 +3746,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerStateBytes
         unsafe { &*(handle as *const RocksTopNHandle) }.state_bytes() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerCacheStats<'local>(
     env: JNIEnv<'local>,
@@ -3632,6 +3762,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerCacheStats
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -3642,6 +3773,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerStagingByt
         unsafe { &*(handle as *const RocksTopNHandle) }.staging_bytes() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerStagedPartitions<'local>(
     env: JNIEnv<'local>,
@@ -3652,6 +3784,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbTopNRankerStagedPart
         unsafe { &*(handle as *const RocksTopNHandle) }.staged_partitions() as jlong
     })
 }
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -3663,6 +3796,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBTopNRanker<'loc
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowRankerSupported<'local>(
     env: JNIEnv<'local>,
@@ -3682,6 +3816,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowRankerSupporte
 
 /// [`open_store`] for the window ranker's composite-key store: fresh when no restored sources
 /// exist, otherwise merged once with this subtask's key-group range.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn open_window_rank_store(
     env: &mut JNIEnv,
@@ -3719,6 +3854,7 @@ fn open_window_rank_store(
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBWindowRanker<'local>(
@@ -3795,6 +3931,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBWindowRanker<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -3816,6 +3953,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRocksDBWindowRanker<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -3834,6 +3972,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushRocksDBWindowRanker<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -3858,6 +3997,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBWindowRank
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotRocksDBWindowRankerPartitions<
     'local,
@@ -3888,6 +4028,7 @@ state_bytes_getter!(
     WindowRanker
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -3899,6 +4040,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBWindowRanker<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSnapshotStore<'local>(
     env: JNIEnv<'local>,
@@ -3943,6 +4085,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createRocksDBSnapshotStore<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreRocksDBSnapshotStorePartitions<
     'local,
@@ -3978,6 +4121,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreRocksDBSnapshotStore
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbSnapshotStoreTimerDeadline<'local>(
     env: JNIEnv<'local>,
@@ -3989,6 +4133,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbSnapshotStoreTimerDe
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBSnapshotStore<'local>(
     env: JNIEnv<'local>,
@@ -4028,6 +4173,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_checkpointRocksDBSnapshotSt
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBSnapshotStore<'local>(
     env: JNIEnv<'local>,
@@ -4039,6 +4185,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeRocksDBSnapshotStore<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowAggregatorTimerDeadline<
     'local,
@@ -4052,6 +4199,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowAggregatorTime
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbSessionAggregatorTimerDeadline<
     'local,
@@ -4065,6 +4213,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbSessionAggregatorTim
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowRankerTimerDeadline<'local>(
     env: JNIEnv<'local>,
@@ -4076,6 +4225,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowRankerTimerDea
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowJoinerTimerDeadline<'local>(
     env: JNIEnv<'local>,
@@ -4089,6 +4239,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_rocksdbWindowJoinerTimerDea
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_rocksdbIntervalJoinerTimerDeadline<'local>(
     env: JNIEnv<'local>,

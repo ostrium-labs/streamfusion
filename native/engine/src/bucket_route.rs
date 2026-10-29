@@ -90,6 +90,7 @@ fn channel(partition_hash: i32, key_hash: i32, channels: i32, num_assigners: i32
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_routeByPaimonChannel<'local>(
     env: JNIEnv<'local>,
@@ -130,6 +131,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_routeByPaimonChannel<'local
 }
 
 /// Regroups one partition's Arrow rows by the bucket IDs returned by Paimon's assigner.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_routeByAssignedBuckets<'local>(
     env: JNIEnv<'local>,
@@ -156,6 +158,7 @@ pub(crate) struct RouteState {
 
 /// Routes a batch from the JVM to its Paimon write destinations and returns a handle to pull the
 /// sub-batches with `nextBucketRoute`; released with `closeBucketRoute`.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_routeByBucket<'local>(
     env: JNIEnv<'local>,
@@ -190,6 +193,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_routeByBucket<'local>(
 
 /// Exports the next routed sub-batch into the consumer-allocated C structs and returns its bucket,
 /// or -1 once the route is exhausted.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_nextBucketRoute<'local>(
     env: JNIEnv<'local>,
@@ -211,6 +215,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_nextBucketRoute<'local>(
 }
 
 /// The partition `BinaryRow` bytes of the sub-batch returned by the latest `nextBucketRoute`.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_currentBucketRoutePartition<'local>(
     env: JNIEnv<'local>,
@@ -226,6 +231,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_currentBucketRoutePartition
 }
 
 /// Releases a route handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeBucketRoute<'local>(
     env: JNIEnv<'local>,

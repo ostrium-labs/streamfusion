@@ -2,6 +2,7 @@ use crate::*;
 use arrow::ipc::{reader::StreamReader, writer::StreamWriter};
 use datafusion::common::Result;
 use datafusion::execution::disk_manager::{DiskManager, DiskManagerMode, RefCountedTempFile};
+#[cfg(feature = "jni")]
 use jni::objects::JObject;
 use std::collections::VecDeque;
 use std::fs::File;
@@ -188,6 +189,7 @@ fn write_batches<W: Write>(output: W, batches: &VecDeque<RecordBatch>) -> Result
     Ok(writer.into_inner()?)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createAppendBuffer<'local>(
     env: JNIEnv<'local>,
@@ -215,6 +217,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createAppendBuffer<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_appendBufferPush<'local>(
     env: JNIEnv<'local>,
@@ -230,6 +233,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_appendBufferPush<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_appendBufferBytes<'local>(
     env: JNIEnv<'local>,
@@ -241,6 +245,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_appendBufferBytes<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_appendBufferSpillLargest<'local>(
     env: JNIEnv<'local>,
@@ -254,6 +259,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_appendBufferSpillLargest<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_appendBufferNext<'local>(
     env: JNIEnv<'local>,
@@ -277,6 +283,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_appendBufferNext<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeAppendBuffer<'local>(
     env: JNIEnv<'local>,

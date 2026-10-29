@@ -2,6 +2,7 @@ use crate::*;
 pub(crate) use streamfusion_bridge::bridge::*;
 
 /// The receiver imports synchronously; its Arrow buffers may outlive these borrowed C structs.
+#[cfg(feature = "jni")]
 pub(crate) fn emit_record_batch(
     env: &mut JNIEnv,
     receiver: &jni::objects::JObject,
@@ -42,6 +43,7 @@ pub(crate) fn emit_record_batch(
 /// Panics behind the guard so the containment itself is testable from Java. Without an entrypoint
 /// that deliberately fails, the only way to tell a contained panic from a process abort is to crash
 /// a real job.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_panicForTest<'local>(
     env: JNIEnv<'local>,
@@ -64,6 +66,7 @@ pub(crate) fn runtime() -> &'static Runtime {
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_version<'local>(
     env: JNIEnv<'local>,
@@ -75,6 +78,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_version<'local>(
 /// The engine's live-handle breakdown, e.g. `SessionAggregator=1,GroupAggregator=2` — empty once every
 /// engine handle has been closed. The test harness also queries each loaded extension, so a
 /// missing close call fails the test naming the leaking type instead of slowly growing RSS.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_liveNativeHandles<'local>(
     env: JNIEnv<'local>,
@@ -88,6 +92,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_liveNativeHandles<'local>(
 /// thread-safe — so the Java side samples it per batch into an atomic its metrics thread reads.
 macro_rules! state_bytes_getter {
     ($fn_name:ident, $ty:ty) => {
+        #[cfg(feature = "jni")]
         #[no_mangle]
         pub extern "system" fn $fn_name<'local>(
             _env: JNIEnv<'local>,
@@ -103,6 +108,7 @@ pub(crate) use state_bytes_getter;
 
 /// Drives a trivial asynchronous computation to completion on the shared runtime, proving the
 /// blocking pull bridge a JVM thread will use to await native plan execution.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_blockingAnswer<'local>(
     env: JNIEnv<'local>,
@@ -116,6 +122,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_blockingAnswer<'local>(
 ///
 /// Takes ownership of the producer-allocated C structs by swapping in released placeholders, so the
 /// release callbacks fire exactly once when the imported data and schema drop here.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_sumInt<'local>(
     env: JNIEnv<'local>,
@@ -156,6 +163,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_sumInt<'local>(
 /// The rebuilt array owns its buffers, so the inbound import is released when this call returns
 /// while the outbound array stays alive until the JVM imports and releases it. This is the shape a
 /// real operator takes: read an input batch, produce a new one.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_roundTrip<'local>(
     env: JNIEnv<'local>,
@@ -207,6 +215,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_roundTrip<'local>(
 /// The fixed `column * 2` expression stands in until the planner feeds real expressions; the point
 /// is that genuine engine logic now executes over JVM-owned columnar data and produces a batch back
 /// across the same boundary.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_doubleColumn<'local>(
     env: JNIEnv<'local>,
@@ -263,6 +272,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_doubleColumn<'local>(
 /// boundary as a single struct, so importing it yields one struct array that unwraps into a record
 /// batch and re-wraps on the way out. This is the columnar shape operators that read several
 /// columns at once need, beyond the single-column path.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_echoBatch<'local>(
     env: JNIEnv<'local>,
@@ -304,6 +314,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_echoBatch<'local>(
 
 /// Boxes a built operator into an opaque handle, or raises the memory-limit exception and returns
 /// a null handle when its budget was already exceeded (a restore larger than the budget).
+#[cfg(feature = "jni")]
 pub(crate) fn boxed_or_throw<T>(env: &mut JNIEnv, operator: Result<T, DataFusionError>) -> jlong {
     match operator {
         Ok(operator) => into_handle(operator),

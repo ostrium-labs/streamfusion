@@ -1895,6 +1895,7 @@ state_bytes_getter!(
 
 /// Rows dropped as late over the handle's lifetime; the counter lives before the backend split,
 /// so one getter serves the memory and persistent routes alike.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keepFirstDeduplicatorLateDrops<'local>(
     env: JNIEnv<'local>,
@@ -1912,6 +1913,7 @@ state_bytes_getter!(
     KeepLastDeduplicator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keepLastDeduplicatorStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -1924,6 +1926,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keepLastDeduplicatorStaging
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_keepLastDeduplicatorStagedKeys<'local>(
     env: JNIEnv<'local>,
@@ -1937,6 +1940,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_keepLastDeduplicatorStagedK
 }
 
 /// Creates a keep-first deduplicator over the given partition-key columns and rowtime column.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createKeepFirstDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -1960,6 +1964,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createKeepFirstDeduplicator
 
 /// Buffers an input batch (no output); each key's minimum-rowtime row is emitted later, on the
 /// watermark that reaches its rowtime.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushKeepFirstDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -1983,6 +1988,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushKeepFirstDeduplicator<'
 }
 
 /// Exports each key's first (minimum-rowtime) row whose rowtime the watermark has reached.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushKeepFirstDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -2004,6 +2010,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushKeepFirstDeduplicator<
 }
 
 /// Releases the deduplicator and its per-key state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeKeepFirstDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -2015,6 +2022,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeKeepFirstDeduplicator<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotKeepFirstDeduplicatorPartitions<
     'local,
@@ -2036,6 +2044,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotKeepFirstDeduplicat
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreKeepFirstDeduplicatorPartitions<
     'local,
@@ -2082,6 +2091,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreKeepFirstDeduplicato
 
 /// Creates an eager deduplicator (rowtime/proctime keep-last, proctime keep-first, or the
 /// mini-batch rowtime keep-first) and returns an opaque handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -2118,6 +2128,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createKeepLastDeduplicator<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -2136,6 +2147,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushKeepLastDeduplicator<'
 }
 
 /// Folds an input batch and returns the retract changelog it produces (emitted eagerly per row).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -2161,6 +2173,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushKeepLastDeduplicator<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeKeepLastDeduplicator<'local>(
     env: JNIEnv<'local>,
@@ -2172,6 +2185,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeKeepLastDeduplicator<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotKeepLastDeduplicatorPartitions<
     'local,
@@ -2193,6 +2207,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotKeepLastDeduplicato
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreKeepLastDeduplicatorPartitions<
     'local,

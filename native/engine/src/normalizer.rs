@@ -740,6 +740,7 @@ state_bytes_getter!(
     ChangelogNormalizer
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_changelogNormalizerStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -752,6 +753,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_changelogNormalizerStagingB
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_changelogNormalizerStagedKeys<'local>(
     env: JNIEnv<'local>,
@@ -765,6 +767,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_changelogNormalizerStagedKe
 }
 
 /// Creates a changelog normalizer (keep-last per unique key) and returns an opaque handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createChangelogNormalizer<'local>(
     env: JNIEnv<'local>,
@@ -788,6 +791,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createChangelogNormalizer<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushChangelogNormalizer<'local>(
     env: JNIEnv<'local>,
@@ -806,6 +810,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushChangelogNormalizer<'l
 }
 
 /// Folds an input changelog batch into the keep-last state and exports the normalized changelog.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushChangelogNormalizer<'local>(
     env: JNIEnv<'local>,
@@ -831,6 +836,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushChangelogNormalizer<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotChangelogNormalizerPartitions<
     'local,
@@ -852,6 +858,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotChangelogNormalizer
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreChangelogNormalizerPartitions<
     'local,
@@ -899,6 +906,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreChangelogNormalizerP
 }
 
 /// Releases a changelog normalizer handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeChangelogNormalizer<'local>(
     env: JNIEnv<'local>,

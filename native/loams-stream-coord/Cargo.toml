@@ -1,0 +1,9 @@
+[package]
+name = "loams-stream-coord"
+version = "0.1.0-preview.1"
+edition = "2024"
+license = "Apache-2.0"
+description = "Loams Stream job manager and coordinators (preview)"
+publish = false
+
+[dependencies]

@@ -53,6 +53,7 @@ pub(crate) fn copy_compact_timestamps(batch: &RecordBatch, columns: &[usize]) ->
     .expect("compact timestamp exchange batch")
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_copyCompactTimestampFields<'local>(
     env: JNIEnv<'local>,
@@ -198,6 +199,7 @@ pub(crate) struct SplitState {
 
 /// Splits a batch from the JVM by key and returns a handle to pull the resulting destination or
 /// key-group sub-batches with `nextSplit`; released with `closeSplit`.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_splitByKey<'local>(
     env: JNIEnv<'local>,
@@ -257,6 +259,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_splitByKey<'local>(
 
 /// Exports the next sub-batch into the consumer-allocated C structs and returns its key group, or
 /// -1 once the split is exhausted.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_nextSplit<'local>(
     env: JNIEnv<'local>,
@@ -277,6 +280,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_nextSplit<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_currentSplitKeyGroups<'local>(
     env: JNIEnv<'local>,
@@ -294,6 +298,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_currentSplitKeyGroups<'loca
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_currentSplitOrdinals<'local>(
     env: JNIEnv<'local>,
@@ -313,6 +318,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_currentSplitOrdinals<'local
 }
 
 /// Releases a split handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeSplit<'local>(
     env: JNIEnv<'local>,
@@ -326,6 +332,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeSplit<'local>(
 
 /// Coalesces JVM-exported batches, including UNION inputs with optional physical sidecars,
 /// into one batch exported back into the consumer-allocated C structs.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_concatBatches<'local>(
     env: JNIEnv<'local>,

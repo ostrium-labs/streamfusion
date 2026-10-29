@@ -2318,6 +2318,42 @@ impl datafusion::logical_expr::ScalarUDFImpl for JvmUdf {
         let mut out_array = FFI_ArrowArray::empty();
         let mut out_schema = FFI_ArrowSchema::empty();
 
+        self.invoke_host(
+            &mut in_array,
+            &mut in_schema,
+            &mut out_array,
+            &mut out_schema,
+        )?;
+
+        // The JVM exports the result as a one-field root, i.e. a struct{result}; take that one column.
+        let mut data =
+            unsafe { from_ffi(out_array, &out_schema) }.map_err(|e| exec(e.to_string()))?;
+        data.align_buffers();
+        let result = StructArray::from(data);
+        if self.row_result
+            && (result.len() != rows || result.column(0).data_type() != &self.return_type)
+        {
+            return Err(exec(
+                "row UDF returned an unexpected row count or type".into(),
+            ));
+        }
+        Ok(ColumnarValue::Array(result.column(0).clone()))
+    }
+}
+
+impl JvmUdf {
+    /// Runs `NativeUdf.invokeUdf` on the JVM over the exported argument batch, filling the output
+    /// structs.
+    #[cfg(feature = "jni")]
+    fn invoke_host(
+        &self,
+        in_array: &mut FFI_ArrowArray,
+        in_schema: &mut FFI_ArrowSchema,
+        out_array: &mut FFI_ArrowArray,
+        out_schema: &mut FFI_ArrowSchema,
+    ) -> datafusion::common::Result<()> {
+        use datafusion::common::DataFusionError;
+        let exec = |e: String| DataFusionError::Execution(e);
         let vm = JVM
             .get()
             .ok_or_else(|| exec("JVM not captured for UDF upcall".to_string()))?;
@@ -2330,10 +2366,10 @@ impl datafusion::logical_expr::ScalarUDFImpl for JvmUdf {
             "(IJJJJ)V",
             &[
                 jni::objects::JValue::Int(self.id),
-                jni::objects::JValue::Long(&mut in_array as *mut FFI_ArrowArray as jlong),
-                jni::objects::JValue::Long(&mut in_schema as *mut FFI_ArrowSchema as jlong),
-                jni::objects::JValue::Long(&mut out_array as *mut FFI_ArrowArray as jlong),
-                jni::objects::JValue::Long(&mut out_schema as *mut FFI_ArrowSchema as jlong),
+                jni::objects::JValue::Long(in_array as *mut FFI_ArrowArray as jlong),
+                jni::objects::JValue::Long(in_schema as *mut FFI_ArrowSchema as jlong),
+                jni::objects::JValue::Long(out_array as *mut FFI_ArrowArray as jlong),
+                jni::objects::JValue::Long(out_schema as *mut FFI_ArrowSchema as jlong),
             ],
         ) {
             if env.exception_check().unwrap_or(false) {
@@ -2349,20 +2385,25 @@ impl datafusion::logical_expr::ScalarUDFImpl for JvmUdf {
             }
             return Err(exec(format!("UDF upcall failed: {error}")));
         }
+        Ok(())
+    }
 
-        // The JVM exports the result as a one-field root, i.e. a struct{result}; take that one column.
-        let mut data =
-            unsafe { from_ffi(out_array, &out_schema) }.map_err(|e| exec(e.to_string()))?;
-        data.align_buffers();
-        let result = StructArray::from(data);
-        if self.row_result
-            && (result.len() != rows || result.column(0).data_type() != &self.return_type)
-        {
-            return Err(exec(
-                "row UDF returned an unexpected row count or type".into(),
-            ));
-        }
-        Ok(ColumnarValue::Array(result.column(0).clone()))
+    /// Without the `jni` feature there is no JVM to run the UDF: the call fails rather than
+    /// evaluating anything else in its place.
+    #[cfg(not(feature = "jni"))]
+    fn invoke_host(
+        &self,
+        _in_array: &mut FFI_ArrowArray,
+        _in_schema: &mut FFI_ArrowSchema,
+        _out_array: &mut FFI_ArrowArray,
+        _out_schema: &mut FFI_ArrowSchema,
+    ) -> datafusion::common::Result<()> {
+        Err(datafusion::common::DataFusionError::NotImplemented(
+            format!(
+                "JVM UDF {} needs the JVM host; this build has no `jni` feature",
+                self.id
+            ),
+        ))
     }
 }
 

@@ -16,6 +16,15 @@ impl FlinkTaskOffHeapPool {
         }
     }
 
+    /// Without the `jni` feature there is no TaskManager-wide authority to ask.
+    #[cfg(not(feature = "jni"))]
+    fn reserve(&self, _bytes: usize) -> Result<bool, DataFusionError> {
+        Err(DataFusionError::Execution(
+            "JVM memory authority is unavailable".into(),
+        ))
+    }
+
+    #[cfg(feature = "jni")]
     fn reserve(&self, bytes: usize) -> Result<bool, DataFusionError> {
         let vm = crate::bridge::JVM.get().ok_or_else(|| {
             DataFusionError::Execution("JVM memory authority is unavailable".into())
@@ -36,6 +45,15 @@ impl FlinkTaskOffHeapPool {
         .map_err(|e| DataFusionError::Execution(format!("reserve task off-heap memory: {e}")))
     }
 
+    /// Without the `jni` feature there is no TaskManager-wide authority to ask.
+    #[cfg(not(feature = "jni"))]
+    fn release(&self, _bytes: usize) -> Result<(), DataFusionError> {
+        Err(DataFusionError::Execution(
+            "JVM memory authority is unavailable".into(),
+        ))
+    }
+
+    #[cfg(feature = "jni")]
     fn release(&self, bytes: usize) -> Result<(), DataFusionError> {
         let vm = crate::bridge::JVM.get().ok_or_else(|| {
             DataFusionError::Execution("JVM memory authority is unavailable".into())
