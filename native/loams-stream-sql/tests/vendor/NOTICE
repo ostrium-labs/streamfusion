@@ -1,0 +1,14 @@
+Third-party test inputs vendored for loams-stream-sql's parser tests. They are test data only and
+are not compiled into any binary. Each row names the source, the revision and the licence.
+
+| Path | Source | Revision | Licence |
+|---|---|---|---|
+| flink-2.2.1/sql/sql-client/*.q (14 files) | https://github.com/apache/flink, flink-table/flink-sql-client/src/test/resources/sql/ | tag release-2.2.1 (commit 450c63e961805a90aa18cb815d6b412f44303b9b) | Apache-2.0; each file keeps its ASF licence header |
+| flink-2.2.1/sql/sql-gateway/*.q (9 files) | https://github.com/apache/flink, flink-table/flink-sql-gateway/src/test/resources/sql/ | tag release-2.2.1 (commit 450c63e961805a90aa18cb815d6b412f44303b9b) | Apache-2.0; each file keeps its ASF licence header |
+| nexmark/*.sql (q0-q22, ddl_gen.sql, ddl_gen_v2.sql, ddl_kafka.sql, ddl_views.sql, insert_kafka.sql) | https://github.com/nexmark/nexmark, nexmark-flink/src/main/resources/queries/ | commit 6b3646c3baec701f1fa74baf938d235f742e5d3c | Apache-2.0; nexmark/LICENSE is the project's licence file |
+
+Apache Flink
+Copyright 2014-2025 The Apache Software Foundation
+
+This product includes software developed at
+The Apache Software Foundation (http://www.apache.org/).
