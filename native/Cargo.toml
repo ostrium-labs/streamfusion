@@ -18,6 +18,7 @@ members = [
   "iceberg",
   "integration-tests",
   "benchmark-support",
+  "loams-stream-sql",
 ]
 
 [workspace.package]
@@ -26,6 +27,9 @@ edition = "2021"
 license = "Apache-2.0"
 
 [workspace.dependencies]
+# The SQL parser DataFusion 54.1 links (datafusion-sql requires ^0.62.0; FC1 Task 0 pins 0.62.0).
+# loams-stream-sql builds the Flink dialect on it.
+sqlparser = { version = "=0.62.0", features = ["visitor"] }
 criterion = "0.5"
 streamfusion-benchmark-support = { path = "benchmark-support" }
 jni = "0.21"
