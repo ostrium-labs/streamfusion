@@ -1,3 +1,7 @@
+// Without the `jni` feature the JNI entry points, the only callers of most operators today, are
+// compiled out, so the operator code reads as dead until the Rust operator driver (FC1 Task 2)
+// becomes its caller.
+#![cfg_attr(not(feature = "jni"), allow(dead_code, unused_imports))]
 pub(crate) use datafusion::catalog::memory::MemorySourceConfig;
 pub(crate) use datafusion::common::{DFSchema, DataFusionError, JoinSide, JoinType, NullEquality};
 pub(crate) use datafusion::execution::memory_pool::{
@@ -50,6 +54,7 @@ mod ipc;
 mod join_common;
 mod keyed_upsert;
 mod keys;
+#[cfg(feature = "jni")]
 mod logging;
 mod memory;
 mod mini_batch;
@@ -75,6 +80,9 @@ pub(crate) use {
     mini_batch::*, normalizer::*, over_agg::*, rowtime::*, session_agg::*, sorter::*, state::*,
     temporal_join::*, topn::*, updating_join::*, window_agg::*, window_join::*,
 };
+
+/// The engine's build version (the `native/` workspace's package version).
+pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub mod bench;
 #[cfg(test)]

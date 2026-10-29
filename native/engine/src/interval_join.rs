@@ -2261,6 +2261,7 @@ state_bytes_getter!(
 /// Creates an event-time INNER interval joiner and returns an opaque handle. The key/time column
 /// indices locate the equi-join key and rowtime within each side's input batch; `lower`/`upper` are
 /// the inclusive bounds (millis) on `left.rt - right.rt`. The JVM owns the handle across calls.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createIntervalJoiner<'local>(
@@ -2315,6 +2316,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createIntervalJoiner<'local
 }
 
 /// Pushes a left batch, probing the buffered right rows and exporting the matched pairs.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftIntervalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2340,6 +2342,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftIntervalJoiner<'loc
 }
 
 /// Pushes a right batch, probing the buffered left rows and exporting the matched pairs.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightIntervalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2366,6 +2369,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightIntervalJoiner<'lo
 
 /// Advances the combined watermark, evicting rows no future arrival can match, and exporting the
 /// null-padded rows for evicted outer rows that never matched (empty for an INNER join).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_advanceIntervalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2386,6 +2390,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_advanceIntervalJoiner<'loca
 }
 
 /// Releases the interval joiner and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeIntervalJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2397,6 +2402,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeIntervalJoiner<'local>
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotIntervalJoinerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -2416,6 +2422,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotIntervalJoinerParti
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreIntervalJoinerPartitions<'local>(

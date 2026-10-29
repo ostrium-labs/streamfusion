@@ -47,6 +47,7 @@ impl<W: Write, C: FnMut(&[u8], &mut [u8]) -> io::Result<usize>> Write for Encode
     }
 }
 
+#[cfg(feature = "jni")]
 pub(super) fn java_compressor(
     env: &mut jni::JNIEnv,
     codec: jni::objects::JObject,

@@ -11,11 +11,17 @@ use string_views::StringView;
 mod tests;
 
 struct HeapSnapshotProbe {
-    object: jni::objects::GlobalRef,
+    object: streamfusion_bridge::bridge::HostObject,
     max_parallelism: usize,
 }
 
 impl HeapSnapshotProbe {
+    #[cfg(not(feature = "jni"))]
+    fn call(&self, _key_group: i32, _key: &[u8], _clear: bool, _values: bool) -> bool {
+        match self.object {}
+    }
+
+    #[cfg(feature = "jni")]
     fn call(&self, key_group: i32, key: &[u8], clear: bool, values: bool) -> bool {
         use jni::objects::JValue;
         use streamfusion_bridge::bridge::{JavaException, JVM};
@@ -2550,6 +2556,7 @@ impl OverWindowAggregator {
         }
     }
 
+    #[cfg(feature = "jni")]
     pub(crate) fn with_heap_snapshot_probe(
         &mut self,
         object: jni::objects::GlobalRef,
@@ -4857,6 +4864,7 @@ state_bytes_getter!(
     OverWindowAggregator
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_overAggregatorLateDrops<'local>(
     env: JNIEnv<'local>,
@@ -4873,6 +4881,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_overAggregatorLateDrops<'lo
 /// batches and flushes completed rows with the running aggregates appended. The rt/value/key column
 /// indices locate those columns within the buffered input batch. `state_ttl_millis` is the
 /// idle-state retention — the scheme it drives depends on the shape (see the operator docs).
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createOverAggregator<'local>(
@@ -4912,6 +4921,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createOverAggregator<'local
 
 /// Buffers an input batch (no output); the rows are emitted later when a watermark completes them.
 /// `now_millis` is the operator's processing-time reading — the cleanup-deadline clock.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -4938,6 +4948,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushOverAggregator<'local>(
 /// Proctime OVER: folds a batch in arrival order and exports its rows immediately (no watermark),
 /// each with the running aggregate / window-function column(s) appended. `now_millis` is the
 /// operator's processing-time reading — the retention clock.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushProctimeOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -4964,6 +4975,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushProctimeOverAggregator<
 }
 
 /// Exports the rows the watermark has completed (input columns + running aggregates).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -4985,6 +4997,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushOverAggregator<'local>
 }
 
 /// Releases the OVER aggregator and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeOverAggregator<'local>(
     env: JNIEnv<'local>,
@@ -4996,6 +5009,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeOverAggregator<'local>
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotOverAggregatorPartitions<'local>(
     env: JNIEnv<'local>,
@@ -5015,6 +5029,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotOverAggregatorParti
     })
 }
 
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreOverAggregatorPartitions<'local>(
@@ -5070,6 +5085,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreOverAggregatorPartit
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreOverAggregatorCanonicalRangeOrder<
     'local,
@@ -5104,6 +5120,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreOverAggregatorCanoni
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_setOverAggregatorHeapSnapshotProbe<'local>(
     env: JNIEnv<'local>,

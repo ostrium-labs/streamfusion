@@ -4181,6 +4181,7 @@ pub(crate) struct WindowRanker {
 }
 
 impl WindowRanker {
+    #[cfg(feature = "jni")]
     pub(crate) fn set_calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.calendar = Some(crate::window_calendar::WindowCalendar::new(callback));
     }
@@ -4827,6 +4828,7 @@ state_bytes_getter!(
     WindowRanker
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_windowRankerLateDrops<'local>(
     env: JNIEnv<'local>,
@@ -4840,6 +4842,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_windowRankerLateDrops<'loca
 }
 
 /// [`state_bytes_getter`] for the Top-N handle, which wraps its two ranker variants in an enum.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_topNRankerStateBytes<'local>(
     env: JNIEnv<'local>,
@@ -4856,6 +4859,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_topNRankerStateBytes<'local
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_topNRankerCacheSize<'local>(
     env: JNIEnv<'local>,
@@ -4868,6 +4872,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_topNRankerCacheSize<'local>
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_topNRankerStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -4884,6 +4889,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_topNRankerStagingBytes<'loc
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_topNRankerStagedPartitions<'local>(
     env: JNIEnv<'local>,
@@ -4902,6 +4908,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_topNRankerStagedPartitions<
 
 /// Creates a window-rank ranker (window Top-N / window deduplication) over the attached
 /// window_start/window_end columns and returns an opaque handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -4933,6 +4940,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createWindowRanker<'local>(
 }
 
 /// Applies the plan's window-dedup tie rule after creation or state restoration.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_setWindowRankerKeepLastOnTie<'local>(
     env: JNIEnv<'local>,
@@ -4948,6 +4956,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_setWindowRankerKeepLastOnTi
 
 /// Buffers an input batch (no output); each window's top-N rows are emitted when the watermark
 /// closes the window.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -4971,6 +4980,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushWindowRanker<'local>(
 
 /// Exports the top-N rows of every window the watermark has closed (with the rank number appended
 /// when the host projects it).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -4990,6 +5000,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushWindowRanker<'local>(
 }
 
 /// Releases the window-rank ranker and its per-window state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeWindowRanker<'local>(
     env: JNIEnv<'local>,
@@ -5001,6 +5012,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeWindowRanker<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotWindowRankerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -5020,6 +5032,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotWindowRankerPartiti
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreWindowRankerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -5068,6 +5081,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreWindowRankerPartitio
 
 /// Builds the sort-column comparator config from three parallel arrays (column index, ascending,
 /// nulls-first), as the JVM passes the resolved ORDER BY spec.
+#[cfg(feature = "jni")]
 pub(crate) fn read_sort_columns(
     env: &JNIEnv,
     indices: &JIntArray,
@@ -5090,6 +5104,7 @@ pub(crate) fn read_sort_columns(
 
 /// Creates an append-only streaming Top-N ranker (`ROW_NUMBER ... <= limit`, no rank-number output)
 /// and returns an opaque handle. The JVM owns it and must release it with the matching close.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -5148,6 +5163,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createTopNRanker<'local>(
 }
 
 /// Enables independent first-bound state at operator initialization, before the first batch.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_enableNonTimeRowNumber<'local>(
     env: JNIEnv<'local>,
@@ -5167,6 +5183,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_enableNonTimeRowNumber<'loc
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_enableTopNFirstBound<'local>(
     env: JNIEnv<'local>,
@@ -5192,6 +5209,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_enableTopNFirstBound<'local
 /// Folds an input batch into the per-partition top-N and exports the changelog it produces (the
 /// input columns plus `$row_kind$`). `now_millis` is the host's processing-time reading — the
 /// state-TTL clock.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -5219,6 +5237,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushTopNRanker<'local>(
 }
 
 /// Emits the append-only ranker's net changes at a Flink logical mini-batch boundary.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -5233,6 +5252,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushTopNRanker<'local>(
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotTopNRankerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -5253,6 +5273,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotTopNRankerPartition
 
 /// Captures an immutable append-only Top-N checkpoint view. A zero return asks Java to use the
 /// synchronous compatibility path (empty/uninitialized state or a non-append ranker).
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_captureTopNRankerSnapshot<'local>(
     env: JNIEnv<'local>,
@@ -5268,6 +5289,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_captureTopNRankerSnapshot<'
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_topNRankerSnapshotKeyGroups<'local>(
     env: JNIEnv<'local>,
@@ -5286,6 +5308,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_topNRankerSnapshotKeyGroups
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_encodeTopNRankerSnapshotPartition<'local>(
     env: JNIEnv<'local>,
@@ -5304,6 +5327,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_encodeTopNRankerSnapshotPar
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeTopNRankerSnapshot<'local>(
     env: JNIEnv<'local>,
@@ -5315,6 +5339,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeTopNRankerSnapshot<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreTopNRankerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -5381,6 +5406,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreTopNRankerPartitions
 /// Creates an update-fast streaming Top-N ranker (Flink's `UpdatableTopNFunction` /
 /// `FastTop1Function` shape: unique-keyed changelog without retractions, monotonic sort key) and
 /// returns an opaque handle served by the shared Top-N push/flush/snapshot/close entry points.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createUpdateFastTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -5426,6 +5452,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createUpdateFastTopNRanker<
 }
 
 /// Rebuilds an update-fast Top-N ranker from raw keyed-state partition blobs.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreUpdateFastTopNRankerPartitions<
     'local,
@@ -5492,6 +5519,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreUpdateFastTopNRanker
 }
 
 /// Releases a Top-N ranker handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeTopNRanker<'local>(
     env: JNIEnv<'local>,
@@ -6022,6 +6050,7 @@ mod tests {
     }
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_setWindowRankerCalendar<'local>(
     env: JNIEnv<'local>,
@@ -6038,6 +6067,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_setWindowRankerCalendar<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_nextWindowRankerTimerDeadline<'local>(
     env: JNIEnv<'local>,

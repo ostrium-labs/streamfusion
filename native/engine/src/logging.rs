@@ -91,6 +91,7 @@ fn upcall(level: log::Level, logger: &str, message: &str) -> bool {
 /// Runs once per loaded StreamFusion library. A build running without the StreamFusion classes on
 /// the class path (the Flink-less extension-JAR probe) skips the install and drops logs; nothing
 /// here may leave a pending exception or fail the load.
+#[cfg(feature = "jni")]
 fn install(vm: *mut jni::sys::JavaVM) {
     let Ok(vm) = (unsafe { jni::JavaVM::from_raw(vm) }) else {
         return;
@@ -127,6 +128,7 @@ fn configured_level(value: Option<String>) -> log::LevelFilter {
         .unwrap_or(log::LevelFilter::Info)
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn JNI_OnLoad(
     vm: *mut jni::sys::JavaVM,

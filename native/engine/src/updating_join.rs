@@ -2241,6 +2241,7 @@ state_bytes_getter!(
     UpdatingJoiner
 );
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updatingJoinerStagingBytes<'local>(
     env: JNIEnv<'local>,
@@ -2253,6 +2254,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updatingJoinerStagingBytes<
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updatingJoinerStagedKeys<'local>(
     env: JNIEnv<'local>,
@@ -2265,6 +2267,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updatingJoinerStagedKeys<'l
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_updatingJoinerStagedRecords<'local>(
     env: JNIEnv<'local>,
@@ -2283,6 +2286,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_updatingJoinerStagedRecords
 /// `$row_kind$` byte); the join type selects INNER/outer/semi-anti; the two schema addresses seed the
 /// per-side data schemas (so outer null-padding can be typed); the encoded arrays carry the optional
 /// residual non-equi predicate. The JVM owns the handle and must release it with the matching close.
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createUpdatingJoiner<'local>(
@@ -2341,6 +2345,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createUpdatingJoiner<'local
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2361,6 +2366,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushUpdatingJoiner<'local>
 
 /// Folds a left batch into state and exports the join changelog it produces (left cols, right cols,
 /// then `$row_kind$`). `now_millis` is the host's processing-time reading — the state-TTL clock.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushLeftUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2388,6 +2394,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushLeftUpdatingJoiner<'loc
 }
 
 /// Folds a right batch into state and exports the join changelog it produces.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushRightUpdatingJoiner<'local>(
     env: JNIEnv<'local>,
@@ -2414,6 +2421,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushRightUpdatingJoiner<'lo
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotUpdatingJoinerPartitions<'local>(
     env: JNIEnv<'local>,
@@ -2432,6 +2440,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotUpdatingJoinerParti
     })
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 #[allow(clippy::too_many_arguments)]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreUpdatingJoinerPartitions<'local>(
@@ -2509,6 +2518,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_restoreUpdatingJoinerPartit
 }
 
 /// Releases an updating joiner handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeUpdatingJoiner<'local>(
     env: JNIEnv<'local>,

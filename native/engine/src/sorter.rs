@@ -300,6 +300,7 @@ state_bytes_getter!(
 );
 
 /// Creates an event-time sorter over the given rowtime column and returns an opaque handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -316,6 +317,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createTemporalSorter<'local
 
 /// Buffers an input batch (no output); the rows are emitted later, in rowtime order, as watermarks
 /// complete them.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_pushTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -336,6 +338,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_pushTemporalSorter<'local>(
 }
 
 /// Exports the rows the watermark has completed, sorted ascending by rowtime.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_flushTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -355,6 +358,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_flushTemporalSorter<'local>
 }
 
 /// Releases the event-time sorter and its buffered rows.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -367,6 +371,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_closeTemporalSorter<'local>
 }
 
 /// Serializes the sorter's buffered rows for a checkpoint.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_snapshotTemporalSorter<'local>(
     env: JNIEnv<'local>,
@@ -382,6 +387,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_snapshotTemporalSorter<'loc
 }
 
 /// Rebuilds an event-time sorter from a snapshot taken by a prior run and returns a fresh handle.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_restoreTemporalSorter<'local>(
     env: JNIEnv<'local>,

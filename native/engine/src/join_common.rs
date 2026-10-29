@@ -474,6 +474,7 @@ pub(crate) fn encode_null_row(conv: &RowConverter, schema: &SchemaRef) -> OwnedR
 
 /// Reads the encoded residual non-equi join predicate (empty `kinds` ⇒ no predicate). It compiles
 /// lazily against the joined `[left.., right..]` schema supplied at evaluation time.
+#[cfg(feature = "jni")]
 pub(crate) fn read_join_predicate(
     env: &mut JNIEnv,
     kinds: &JIntArray,

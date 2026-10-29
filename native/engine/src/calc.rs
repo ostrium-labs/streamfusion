@@ -9,6 +9,7 @@ use datafusion::physical_expr::utils::collect_columns;
 /// control-plane thread blocks on the shared runtime and pulls that stream to completion. This is
 /// the drive model every stateful operator will use; a filter is the simplest plan that exercises
 /// it because it actually changes the row count.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_filterGreaterThan<'local>(
     env: JNIEnv<'local>,
@@ -137,6 +138,7 @@ impl FilterExpression {
 
 /// Compiles a general predicate expression (the JVM's encoded tree) into a reusable handle. The
 /// handle owns the compiled plan and must be released with `closeFilterExpression`.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createFilterExpression<'local>(
     env: JNIEnv<'local>,
@@ -163,6 +165,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createFilterExpression<'loc
 }
 
 /// Filters a batch from the JVM through a compiled predicate handle, exporting the surviving rows.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_filterExpression<'local>(
     env: JNIEnv<'local>,
@@ -182,6 +185,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_filterExpression<'local>(
 }
 
 /// Releases a compiled predicate handle and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeFilterExpression<'local>(
     env: JNIEnv<'local>,
@@ -583,6 +587,7 @@ mod row_udf_tests {
 
 /// Compiles an encoded Calc (optional condition + projection trees) into a reusable handle, released
 /// with `closeCalcExpression`.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_createCalcExpression<'local>(
     env: JNIEnv<'local>,
@@ -619,6 +624,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createCalcExpression<'local
     })
 }
 
+#[cfg(feature = "jni")]
 #[allow(clippy::too_many_arguments)]
 fn read_calc_expression<'local>(
     env: &mut JNIEnv<'local>,
@@ -712,6 +718,7 @@ pub(crate) fn infer_calc_output_schema(
 /// Plan-time view of an encoded Calc's output; see [`infer_calc_output_schema`]. The input schema
 /// arrives, and the inferred schema leaves, through the C Data Interface (schemas only, no data).
 /// Returns null once the output schema is written, else the reason no schema could be inferred.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_inferCalcOutputSchema<'local>(
     env: JNIEnv<'local>,
@@ -760,6 +767,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_inferCalcOutputSchema<'loca
 }
 
 /// Runs a batch from the JVM through a compiled Calc handle, exporting the projected output batch.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_calcExpression<'local>(
     env: JNIEnv<'local>,
@@ -782,6 +790,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_calcExpression<'local>(
     );
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionAtWatermark<'local>(
     env: JNIEnv<'local>,
@@ -804,6 +813,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionAtWatermark<'
 
 /// Runs a later batch through a Calc after the first call established its immutable input schema.
 /// Only the ArrowArray crosses the boundary; the compiled handle supplies the cached struct type.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionArray<'local>(
     env: JNIEnv<'local>,
@@ -824,6 +834,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionArray<'local>
     );
 }
 
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionArrayAtWatermark<'local>(
     env: JNIEnv<'local>,
@@ -850,6 +861,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionArrayAtWaterm
 }
 
 /// Runs a later batch when the consumer already holds the immutable output schema.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionWithCachedSchemasAtWatermark<
     'local,
@@ -873,6 +885,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_calcExpressionWithCachedSch
 }
 
 /// Releases a compiled Calc handle and its native state.
+#[cfg(feature = "jni")]
 #[no_mangle]
 pub extern "system" fn Java_tech_streamfusion_Native_closeCalcExpression<'local>(
     env: JNIEnv<'local>,

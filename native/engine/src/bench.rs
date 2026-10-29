@@ -75,6 +75,7 @@ impl Filter {
 }
 
 /// Stateless regional assignment through the production Arrow and calendar boundary.
+#[cfg(feature = "jni")]
 pub fn assign_calendar_windows(
     input: &RecordBatch,
     time_column: usize,
@@ -114,6 +115,7 @@ impl Tumbling {
         ))
     }
 
+    #[cfg(feature = "jni")]
     pub fn calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.0.set_calendar(callback);
     }
@@ -431,6 +433,7 @@ impl Session {
         )
     }
 
+    #[cfg(feature = "jni")]
     pub fn calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.0.set_calendar(callback);
     }
@@ -509,6 +512,7 @@ impl Over {
         operator
     }
 
+    #[cfg(feature = "jni")]
     pub fn heap_snapshot_probe(&mut self, probe: jni::objects::GlobalRef) {
         self.0.with_heap_snapshot_probe(probe, 128);
     }
@@ -1507,6 +1511,7 @@ impl IntervalJoin {
 pub struct WindowJoin(WindowJoiner);
 
 impl WindowJoin {
+    #[cfg(feature = "jni")]
     pub fn calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.0.set_calendar(callback);
     }
@@ -1555,6 +1560,7 @@ pub struct PersistentWindowJoin(WindowJoiner);
 
 #[cfg(feature = "rocksdb-state")]
 impl PersistentWindowJoin {
+    #[cfg(feature = "jni")]
     pub fn calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.0.set_calendar(callback);
     }
@@ -2168,6 +2174,7 @@ pub struct WindowRankState(crate::topn::WindowRanker);
 
 #[cfg(feature = "rocksdb-state")]
 impl WindowRankState {
+    #[cfg(feature = "jni")]
     pub fn calendar(&mut self, callback: jni::objects::GlobalRef) {
         self.0.set_calendar(callback);
     }

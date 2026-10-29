@@ -3,7 +3,9 @@ description: Install the project toolchain without hashing the runner's unused s
 runs:
   using: composite
   steps:
-    - uses: dtolnay/rust-toolchain@1.94.0
+    - uses: dtolnay/rust-toolchain@1.97.1
+      with:
+        components: rustfmt, clippy
     - name: Remove the unused hosted stable toolchain
       shell: bash
       run: rustup toolchain uninstall stable
