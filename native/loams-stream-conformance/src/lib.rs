@@ -29,6 +29,7 @@ pub mod error;
 pub mod harness;
 pub mod nexmark;
 pub mod normalise;
+pub mod profile;
 pub mod result;
 pub mod runner;
 pub mod selfcheck;
