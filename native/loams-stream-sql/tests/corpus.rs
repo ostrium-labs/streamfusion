@@ -485,3 +485,66 @@ fn binder_types_nexmark() {
     }
     println!("Nexmark named refusals: {named:?}");
 }
+
+/// FC0 exit: every statement of the extracted corpus (Flink's own test programs, Nexmark and the
+/// smoke cases) parses, and binds or is refused with a named feature, in one session per case.
+#[test]
+fn parses_and_binds_the_extracted_corpus() {
+    use loams_stream_sql::binder::Binder;
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../dev/corpus");
+    let (mut statements, mut bound, mut named, mut cases) = (0, 0, 0, 0);
+    let mut parse_failures = vec![];
+    let mut bind_failures = vec![];
+    for corpus in ["smoke", "nexmark", "flink-programs"] {
+        let mut dirs: Vec<PathBuf> = fs::read_dir(root.join(corpus))
+            .unwrap()
+            .flatten()
+            .map(|e| e.path())
+            .filter(|p| p.join("case.toml").is_file())
+            .collect();
+        dirs.sort();
+        for dir in dirs {
+            cases += 1;
+            let mut binder = Binder::new();
+            for file in ["setup.sql", "query.sql"] {
+                let Ok(sql) = fs::read_to_string(dir.join(file)) else {
+                    continue;
+                };
+                let sql = sql
+                    .replace("${CASE_DIR}", "/data")
+                    .replace("${SINK_DIR}", "/sink");
+                match parse(&sql) {
+                    Err(e) => parse_failures.push(format!("{}/{file}: {e}", dir.display())),
+                    Ok(stmts) => {
+                        for s in stmts {
+                            statements += 1;
+                            match binder.bind(&s) {
+                                Ok(_) => bound += 1,
+                                Err(e) if e.feature.is_some() => named += 1,
+                                Err(e) => bind_failures.push(format!(
+                                    "{}: {}",
+                                    dir.file_name().unwrap().to_string_lossy(),
+                                    e.message.lines().next().unwrap_or("")
+                                )),
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    println!(
+        "extracted corpus: {cases} cases, {statements} statements; {bound} bound, {named} named refusals, {} bind failures",
+        bind_failures.len()
+    );
+    for f in &bind_failures {
+        println!("  bind: {f}");
+    }
+    assert!(parse_failures.is_empty(), "{}", parse_failures.join("\n"));
+    // Nexmark q6 is the one statement Flink rejects too (its WHERE uses a SELECT alias).
+    assert!(
+        bind_failures.iter().all(|f| f.starts_with("q6:")),
+        "{}",
+        bind_failures.join("\n")
+    );
+}

@@ -64,6 +64,25 @@ impl Scope {
         match matches.as_slice() {
             [f] => Ok(f.ty.clone()),
             [] => {
+                // Flink's ROW types peek their fields (Calcite's PEEK_FIELDS_NO_EXPAND): an
+                // unqualified name may be a field of a top-level ROW column, if unique.
+                if qualifier.is_none() {
+                    let nested: Vec<LogicalType> = self
+                        .fields
+                        .iter()
+                        .filter_map(|f| match &f.ty.kind {
+                            crate::types::LogicalKind::Row(fields) => {
+                                fields.iter().find(|r| r.name == name).map(|r| {
+                                    r.ty.clone().with_nullable(r.ty.nullable || f.ty.nullable)
+                                })
+                            }
+                            _ => None,
+                        })
+                        .collect();
+                    if let [t] = nested.as_slice() {
+                        return Ok(t.clone());
+                    }
+                }
                 // Flink's identifiers are case-sensitive, but Calcite reports a case mismatch.
                 Err(BindError::validation(
                     match qualifier {
@@ -476,7 +495,7 @@ fn bind_table_factor(
         } => {
             if args.is_some() {
                 return Err(BindError::unsupported(
-                    Feature::LATERAL_TABLE_FUNCTIONS,
+                    Feature::PROCESS_TABLE_FUNCTIONS,
                     factor.span(),
                 ));
             }
@@ -1030,8 +1049,18 @@ pub(crate) fn type_expr_in(b: &Binder, scope: &Scope, e: &Expr) -> BindResult<Lo
             access_fields(base, &names[1..], span)
         }
         Expr::CompoundFieldAccess { root, access_chain } => {
-            let mut t = ty(root)?;
-            for a in access_chain {
+            // `o.col[...]`: the root may be a table alias whose column is the first `.` step.
+            let mut chain = access_chain.as_slice();
+            let mut t = match (root.as_ref(), chain.first()) {
+                (Expr::Identifier(q), Some(AccessExpr::Dot(Expr::Identifier(c))))
+                    if scope.resolve(None, &q.value, span).is_err() =>
+                {
+                    chain = &chain[1..];
+                    scope.resolve(Some(&q.value), &c.value, span)?
+                }
+                _ => ty(root)?,
+            };
+            for a in chain {
                 t = match a {
                     AccessExpr::Dot(Expr::Identifier(i)) => {
                         access_fields(t, &[i.value.as_str()], span)?

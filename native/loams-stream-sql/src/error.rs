@@ -88,6 +88,10 @@ impl Feature {
         name: "MATCH_RECOGNIZE",
         status: FeatureStatus::Planned("FC2"),
     };
+    pub const PROCESS_TABLE_FUNCTIONS: Feature = Feature {
+        name: "process table functions (FLIP-440)",
+        status: FeatureStatus::Planned("FC4"),
+    };
     pub const CUSTOM_CATALOGS: Feature = Feature {
         name: "catalog types from user jars (CatalogFactory)",
         status: FeatureStatus::Planned("FC3"),
@@ -98,7 +102,7 @@ impl Feature {
     };
 
     /// Every feature the parser can name.
-    pub const ALL: [Feature; 18] = [
+    pub const ALL: [Feature; 19] = [
         Feature::ADD_JAR,
         Feature::REMOVE_JAR,
         Feature::HIVE_DIALECT,
@@ -117,6 +121,7 @@ impl Feature {
         Feature::MATCH_RECOGNIZE,
         Feature::LATERAL_TABLE_FUNCTIONS,
         Feature::CUSTOM_CATALOGS,
+        Feature::PROCESS_TABLE_FUNCTIONS,
     ];
 }
 
