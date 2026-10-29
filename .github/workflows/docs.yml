@@ -1,12 +1,7 @@
 name: docs
 
+# Loams fork (FC1): manual only; no push, PR or schedule triggers.
 on:
-  push:
-    branches: ['**']
-    paths:
-      - "docs/**"
-      - "mkdocs.yml"
-      - ".github/workflows/docs.yml"
   workflow_dispatch: {}
 
 permissions:

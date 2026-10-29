@@ -1,8 +1,12 @@
 name: CI
 
+# Loams fork (FC1, ruling R0.3 as trimmed 2026-10-29): PRs and pushes to main run the
+# Rust tests and the Java build only; every heavier job runs on workflow_dispatch. No schedules.
 on:
+  pull_request:
+    branches: [main]
   push:
-    branches: ['**']
+    branches: [main]
   workflow_dispatch: {}
 
 concurrency:
@@ -105,29 +109,19 @@ jobs:
         working-directory: native
         run: cargo fmt --all -- --check
 
+      - name: Clippy (warnings are errors; inherited findings are allowed per crate, FC task)
+        working-directory: native
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
   java-tests:
     needs: native-build
     name: Java tests (debug native build)${{ matrix.suffix }}${{ matrix.jdk == '11' && ' (JDK 11)' || '' }}
     strategy:
       fail-fast: false
+      # PRs and main: Flink 2.2 on JDK 17 only; the full matrix on workflow_dispatch.
       matrix:
-        include:
-          - line: '2.2'
-            profile: ''
-            suffix: ''
-            jdk: '17'
-          - line: '1.18'
-            profile: '-Pflink-1.18'
-            suffix: ' (Flink 1.18)'
-            jdk: '17'
-          - line: '2.2'
-            profile: ''
-            suffix: ''
-            jdk: '11'
-          - line: '1.18'
-            profile: '-Pflink-1.18'
-            suffix: ' (Flink 1.18)'
-            jdk: '11'
+        include: >-
+          ${{ fromJSON(github.event_name == 'workflow_dispatch' && '[{"line": "2.2", "profile": "", "suffix": "", "jdk": "17"}, {"line": "1.18", "profile": "-Pflink-1.18", "suffix": " (Flink 1.18)", "jdk": "17"}, {"line": "2.2", "profile": "", "suffix": "", "jdk": "11"}, {"line": "1.18", "profile": "-Pflink-1.18", "suffix": " (Flink 1.18)", "jdk": "11"}]' || '[{"line": "2.2", "profile": "", "suffix": "", "jdk": "17"}]') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     steps:
@@ -217,6 +211,7 @@ jobs:
 
   lake-module-tests:
     needs: native-build
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     name: ${{ matrix.name }} tests (debug native build)${{ matrix.jdk == '11' && ' (JDK 11)' || '' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 150
@@ -305,6 +300,7 @@ jobs:
 
   doris-tests:
     needs: native-build
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     name: Doris connector and upstream SQL tests
     runs-on: ubuntu-24.04
     timeout-minutes: 90
@@ -340,7 +336,7 @@ jobs:
           retention-days: 7
 
   image-integration:
-    if: ${{ github.repository != 'datafusion-contrib/StreamFusion' || github.ref == 'refs/heads/main' }}
+    if: ${{ github.event_name == 'workflow_dispatch' }}
     name: Flink image integration (optimized native build)${{ matrix.suffix }}
     runs-on: ubuntu-22.04
     timeout-minutes: 90
@@ -463,4 +459,4 @@ jobs:
       - name: Require every test job to succeed
         env:
           NEEDS_JSON: ${{ toJSON(needs) }}
-        run: jq -e 'length > 0 and all(.[]; .result == "success")' <<< "$NEEDS_JSON"
+        run: jq -e 'length > 0 and all(.[]; .result == "success" or .result == "skipped") and ."native-tests".result == "success" and ."java-tests".result == "success"' <<< "$NEEDS_JSON"

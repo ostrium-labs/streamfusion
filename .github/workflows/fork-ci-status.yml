@@ -1,8 +1,7 @@
 name: Fork CI status
 
+# Loams fork (FC1): manual only; no push, PR or schedule triggers.
 on:
-  pull_request_target:
-    types: [opened, reopened, synchronize]
   workflow_dispatch: {}
 
 permissions:
