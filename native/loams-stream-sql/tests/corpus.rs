@@ -97,13 +97,13 @@ fn read_q(path: &Path) -> Vec<Case> {
                 sql.push('\n');
             }
             sql.push_str(line);
-            if line.trim_end().ends_with(';') {
-                if let Ok(parts) = split_script(&sql) {
-                    if parts.len() == 1 && parts[0].terminated {
-                        taken = n + 1;
-                        break;
-                    }
-                }
+            if line.trim_end().ends_with(';')
+                && let Ok(parts) = split_script(&sql)
+                && parts.len() == 1
+                && parts[0].terminated
+            {
+                taken = n + 1;
+                break;
             }
         }
         assert!(taken > 0, "{file}:{start_line}: no statement before !{tag}");

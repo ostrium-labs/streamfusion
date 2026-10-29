@@ -957,12 +957,11 @@ impl StatementParser<'_, '_> {
         } else {
             None
         };
-        if let Some((key, value)) = &assignment {
-            if key.value.eq_ignore_ascii_case("table.sql-dialect")
-                && value.value.eq_ignore_ascii_case("hive")
-            {
-                return unsupported(Feature::HIVE_DIALECT, value.span);
-            }
+        if let Some((key, value)) = &assignment
+            && key.value.eq_ignore_ascii_case("table.sql-dialect")
+            && value.value.eq_ignore_ascii_case("hive")
+        {
+            return unsupported(Feature::HIVE_DIALECT, value.span);
         }
         Ok(Statement::Set(Set {
             assignment,
@@ -1072,16 +1071,16 @@ impl StatementParser<'_, '_> {
             "DATABASES" => {
                 self.p.next_token();
                 let from = self.show_from()?;
-                if let Some((_, name)) = &from {
-                    if name.0.len() > 1 {
-                        let span = crate::cursor::name_span(name);
-                        return syntax(
-                            format!(
-                                "Show databases from/in identifier [ {name} ] format error, catalog must be a single part identifier."
-                            ),
-                            span,
-                        );
-                    }
+                if let Some((_, name)) = &from
+                    && name.0.len() > 1
+                {
+                    let span = crate::cursor::name_span(name);
+                    return syntax(
+                        format!(
+                            "Show databases from/in identifier [ {name} ] format error, catalog must be a single part identifier."
+                        ),
+                        span,
+                    );
                 }
                 ShowObject::Databases {
                     from,

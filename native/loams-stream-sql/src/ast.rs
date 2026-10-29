@@ -54,6 +54,9 @@ pub enum HintKey {
     Literal(Literal),
 }
 
+/// A partition spec, `(k = literal, ...)` (`PartitionSpecCommaList`).
+pub type PartitionSpec = Vec<(Ident, Expr)>;
+
 /// One parsed statement.
 #[derive(Debug, Clone, PartialEq)]
 pub enum Statement {
@@ -374,7 +377,7 @@ pub enum AlterTableOperation {
     Set(Vec<Property>),
     AddPartitions {
         if_not_exists: bool,
-        partitions: Vec<(Vec<(Ident, Expr)>, Vec<Property>)>,
+        partitions: Vec<(PartitionSpec, Vec<Property>)>,
     },
     /// `ADD ...` / `MODIFY ...`; `parenthesized` records `ADD (a, b)` versus `ADD a`.
     AddOrModify {

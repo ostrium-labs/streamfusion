@@ -103,13 +103,13 @@ impl ParseError {
         match error {
             ParserError::TokenizerError(message) | ParserError::ParserError(message) => {
                 let (message, span) = split_location(&message, fallback);
-                if let Some(name) = message.strip_prefix(crate::dialect::UNSUPPORTED_MARK) {
-                    if let Some(feature) = Feature::ALL.iter().find(|f| f.name == name) {
-                        return ParseError::Unsupported {
-                            feature: *feature,
-                            span,
-                        };
-                    }
+                if let Some(name) = message.strip_prefix(crate::dialect::UNSUPPORTED_MARK)
+                    && let Some(feature) = Feature::ALL.iter().find(|f| f.name == name)
+                {
+                    return ParseError::Unsupported {
+                        feature: *feature,
+                        span,
+                    };
                 }
                 ParseError::Syntax { message, span }
             }
@@ -132,12 +132,12 @@ impl ParseError {
 fn split_location(message: &str, fallback: Span) -> (String, Span) {
     if let Some(at) = message.rfind(" at Line: ") {
         let tail = &message[at + " at Line: ".len()..];
-        if let Some((line, column)) = tail.split_once(", Column: ") {
-            if let (Ok(line), Ok(column)) = (line.trim().parse(), column.trim().parse()) {
-                let location = Location::new(line, column);
-                let text = message[..at].trim_start_matches("sql parser error: ");
-                return (text.to_string(), Span::new(location, location));
-            }
+        if let Some((line, column)) = tail.split_once(", Column: ")
+            && let (Ok(line), Ok(column)) = (line.trim().parse(), column.trim().parse())
+        {
+            let location = Location::new(line, column);
+            let text = message[..at].trim_start_matches("sql parser error: ");
+            return (text.to_string(), Span::new(location, location));
         }
     }
     (message.to_string(), fallback)
