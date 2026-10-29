@@ -85,5 +85,7 @@ pub(crate) use {
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 pub mod bench;
+#[cfg(feature = "semantics")]
+pub mod semantics;
 #[cfg(test)]
 mod tests;

@@ -51,6 +51,8 @@ jni = ["dep:jni", "streamfusion-bridge/jni"]
 mimalloc = ["dep:libmimalloc-sys", "libmimalloc-sys/v2"]
 rocksdb-state = ["dep:rocksdb", "dep:bytes"]
 rocksdb-io-uring = ["rocksdb-state", "rocksdb/io-uring"]
+# `pub mod semantics`: the Flink value kernels loams-stream-sql reuses (FC1 Task 4). Off by default.
+semantics = []
 
 [dependencies.rocksdb]
 workspace = true
