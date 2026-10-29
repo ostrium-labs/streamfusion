@@ -31,6 +31,7 @@ pub mod nexmark;
 pub mod normalise;
 pub mod result;
 pub mod runner;
+pub mod selfcheck;
 pub mod triage;
 
 pub use error::{Error, Result};

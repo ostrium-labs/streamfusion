@@ -41,19 +41,36 @@ pub async fn record(cases: &[Case], oracle: &Target, opts: &RunOptions) -> Repor
             Ok(t)
         });
         let line = match got {
-            Ok(t) => Triage {
-                case: case.name.clone(),
-                targets: vec![oracle.name.clone()],
-                verdict: Verdict::Recorded,
-                first_difference: None,
-                errors: BTreeMap::new(),
-                rows: BTreeMap::from([(oracle.name.clone(), t.rows.len())]),
-                millis,
-            },
+            Ok(t) => {
+                let differs = if case.spec.expect_error.is_some() {
+                    None
+                } else {
+                    crate::selfcheck::check(case, &t)
+                };
+                Triage {
+                    case: case.name.clone(),
+                    targets: vec![oracle.name.clone()],
+                    verdict: if differs.is_some() {
+                        Verdict::OracleDiffers
+                    } else {
+                        Verdict::Recorded
+                    },
+                    first_difference: None,
+                    errors: differs
+                        .map(|d| BTreeMap::from([("flink-test".to_owned(), d)]))
+                        .unwrap_or_default(),
+                    rows: BTreeMap::from([(oracle.name.clone(), t.rows.len())]),
+                    millis,
+                }
+            }
             Err(e) => Triage {
                 case: case.name.clone(),
                 targets: vec![oracle.name.clone()],
-                verdict: Verdict::ErrorOne,
+                verdict: if matches!(e, Error::Skipped(_)) {
+                    Verdict::Skipped
+                } else {
+                    Verdict::ErrorOne
+                },
                 first_difference: None,
                 errors: BTreeMap::from([(oracle.name.clone(), e.summary())]),
                 rows: BTreeMap::new(),
@@ -136,6 +153,11 @@ fn judge(
         rows: BTreeMap::new(),
         millis,
     };
+    if let Err(Error::Skipped(m)) = &got {
+        line.verdict = Verdict::Skipped;
+        line.errors.insert(name.to_owned(), m.clone());
+        return line;
+    }
     match (reference, got) {
         (Err(a), Err(b)) => {
             line.verdict = Verdict::ErrorBoth;
@@ -198,4 +220,184 @@ pub fn check(report: &Report) -> Result<()> {
             .join(", ");
         Err(Error::Invalid(format!("not every case passed: {counts}")))
     }
+}
+
+/// Writes `oracle-xfail.toml`: every case the oracle could not record, or whose recording differs
+/// from the expectation of Flink's own test program, with the reason. Cases the oracle skipped
+/// (a missing artefact) are listed separately.
+///
+/// # Errors
+///
+/// [`Error::Io`] when the file cannot be written.
+pub fn write_oracle_xfail(report: &Report, path: &std::path::Path) -> Result<()> {
+    let mut out = String::from(
+        "# Cases the oracle (Apache Flink 2.2.1 through the harness) does not record cleanly.\n\
+         # Written by `loams-stream-oracle record`; review before committing.\n",
+    );
+    let escape = |s: &str| {
+        s.replace('\\', "\\\\")
+            .replace('"', "\\\"")
+            .replace('\n', " ")
+    };
+    for line in &report.lines {
+        if line.verdict == Verdict::Recorded {
+            continue;
+        }
+        let reason = line.errors.values().cloned().collect::<Vec<_>>().join("; ");
+        out.push_str(&format!(
+            "\n[\"{}\"]\nverdict = \"{}\"\nreason = \"{}\"\n",
+            escape(&line.case),
+            line.verdict,
+            escape(&reason)
+        ));
+    }
+    std::fs::write(path, out).map_err(|e| Error::io(path.display(), e))
+}
+
+/// The operator kinds in the optimized physical plan of `EXPLAIN` output: the identifier before
+/// the `(` of each plan node line (`+- GroupAggregate(groupBy=[b], ...)` gives `GroupAggregate`).
+pub fn plan_operators(explain: &str) -> Vec<String> {
+    let section = explain
+        .split("== Optimized Physical Plan ==")
+        .nth(1)
+        .map(|rest| rest.split("\n== ").next().unwrap_or(rest))
+        .unwrap_or(explain);
+    let mut ops = std::collections::BTreeSet::new();
+    for line in section.lines() {
+        let t = line.trim_start_matches([' ', '+', '-', ':']).trim_start();
+        let Some(open) = t.find('(') else { continue };
+        let name = &t[..open];
+        if !name.is_empty() && name.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') {
+            ops.insert(name.to_owned());
+        }
+    }
+    ops.into_iter().collect()
+}
+
+/// Tag mode: for every case, runs `EXPLAIN` of its query on `oracle` after its setup, and writes
+/// the plan's operator kinds to the case's `operators.txt` (one per line), which maps features to
+/// cases (FC1 Task 6, Task 7's profile).
+pub async fn tag(cases: &[Case], oracle: &Target) -> Report {
+    use crate::client::{ExecuteStatement, FetchLimits, OpenSession};
+    let mut report = Report::default();
+    for case in cases {
+        let start = Instant::now();
+        let outcome: Result<Vec<String>> = async {
+            if case.spec.expect_error.is_some() {
+                return Ok(vec![]);
+            }
+            for need in &case.spec.requires {
+                if !oracle.jars.contains_key(need) {
+                    return Err(Error::Skipped(format!("requires {need}")));
+                }
+            }
+            let mut properties = crate::runner::session_defaults();
+            properties.insert(
+                "execution.runtime-mode".into(),
+                case.spec.mode.runtime_mode().into(),
+            );
+            properties.extend(case.spec.config.clone());
+            let client = &oracle.client;
+            let session = client
+                .open_session(&OpenSession {
+                    session_name: Some(format!("tag-{}", case.name)),
+                    properties,
+                })
+                .await?;
+            let limits = FetchLimits::default();
+            let result = async {
+                for need in &case.spec.requires {
+                    let jar = &oracle.jars[need];
+                    client
+                        .execute_and_collect(
+                            &session,
+                            &ExecuteStatement::new(format!("ADD JAR '{jar}'")),
+                            limits,
+                        )
+                        .await?;
+                }
+                for stmt in &case.setup {
+                    let sql = crate::case::substitute(
+                        stmt,
+                        "/oracle/work/tag/data",
+                        "/oracle/work/tag/sink",
+                    )?;
+                    client
+                        .execute_and_collect(&session, &ExecuteStatement::new(sql), limits)
+                        .await?;
+                }
+                let query = crate::case::substitute(
+                    &case.query,
+                    "/oracle/work/tag/data",
+                    "/oracle/work/tag/sink",
+                )?;
+                let got = client
+                    .execute_and_collect(
+                        &session,
+                        &ExecuteStatement::new(format!("EXPLAIN {query}")),
+                        limits,
+                    )
+                    .await?;
+                let text: String = got
+                    .table
+                    .rows
+                    .iter()
+                    .filter_map(|r| r.fields.first())
+                    .filter_map(|f| serde_json::from_str::<String>(f).ok())
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                Ok(plan_operators(&text))
+            }
+            .await;
+            let _ = client.close_session(&session).await;
+            result
+        }
+        .await;
+        let millis = start.elapsed().as_millis();
+        let line = match outcome {
+            Ok(ops) => {
+                let path = case.dir.join("operators.txt");
+                let body = if ops.is_empty() {
+                    String::new()
+                } else {
+                    ops.join("\n") + "\n"
+                };
+                match std::fs::write(&path, body) {
+                    Ok(()) => Triage {
+                        case: case.name.clone(),
+                        targets: vec![oracle.name.clone()],
+                        verdict: Verdict::Recorded,
+                        first_difference: None,
+                        errors: BTreeMap::new(),
+                        rows: BTreeMap::from([(oracle.name.clone(), ops.len())]),
+                        millis,
+                    },
+                    Err(e) => Triage {
+                        case: case.name.clone(),
+                        targets: vec![oracle.name.clone()],
+                        verdict: Verdict::ErrorOne,
+                        first_difference: None,
+                        errors: BTreeMap::from([(oracle.name.clone(), e.to_string())]),
+                        rows: BTreeMap::new(),
+                        millis,
+                    },
+                }
+            }
+            Err(e) => Triage {
+                case: case.name.clone(),
+                targets: vec![oracle.name.clone()],
+                verdict: if matches!(e, Error::Skipped(_)) {
+                    Verdict::Skipped
+                } else {
+                    Verdict::ErrorOne
+                },
+                first_difference: None,
+                errors: BTreeMap::from([(oracle.name.clone(), e.summary())]),
+                rows: BTreeMap::new(),
+                millis,
+            },
+        };
+        report.lines.push(line);
+    }
+    report
 }

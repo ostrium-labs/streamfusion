@@ -25,6 +25,11 @@ pub enum Verdict {
     Recorded,
     /// Nothing to compare with: one target and no `expected.jsonl`.
     NoExpectation,
+    /// A target cannot run the case (a required artefact is missing).
+    Skipped,
+    /// Record mode: the oracle ran, but its result differs from the expectation Flink's own
+    /// test program declares (listed in `oracle-xfail.toml`).
+    OracleDiffers,
 }
 
 impl Verdict {
@@ -37,12 +42,14 @@ impl Verdict {
             Verdict::ErrorOne => "error-one",
             Verdict::Recorded => "recorded",
             Verdict::NoExpectation => "no-expectation",
+            Verdict::Skipped => "skipped",
+            Verdict::OracleDiffers => "oracle-differs",
         }
     }
 
     /// Whether the verdict is a pass.
     pub fn is_pass(self) -> bool {
-        matches!(self, Verdict::Match | Verdict::Recorded)
+        matches!(self, Verdict::Match | Verdict::Recorded | Verdict::Skipped)
     }
 }
 

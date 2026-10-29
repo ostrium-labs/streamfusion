@@ -18,7 +18,7 @@ use std::time::Duration;
 use serde::Deserialize;
 use serde_json::value::RawValue;
 
-use crate::case::{Case, Collect, substitute};
+use crate::case::{Case, Collect, RestoreEnd, substitute};
 use crate::client::{ExecuteStatement, FetchLimits, GatewayClient, OpenSession};
 use crate::error::{Error, Result};
 use crate::result::{Column, ResultTable, Row, RowKind};
@@ -41,6 +41,8 @@ pub struct Target {
     pub client: GatewayClient,
     /// The shared directory.
     pub shared: Shared,
+    /// Artefacts a case may require (`requires`), by name: the jar path as the target sees it.
+    pub jars: BTreeMap<String, String>,
 }
 
 /// Session defaults every case starts from (a case's `[config]` overrides
@@ -81,18 +83,107 @@ pub async fn run_case(
     if case_data.is_dir() {
         copy_dir(&case_data, &local_data)?;
     }
+    for need in &case.spec.requires {
+        if !target.jars.contains_key(need) {
+            return Err(Error::Skipped(format!(
+                "case {} requires {need}, which target {} does not provide",
+                case.name, target.name
+            )));
+        }
+    }
     let result = run_in_session(
         target,
         case,
         &format!("{remote}/data"),
         &format!("{remote}/sink"),
+        &local_data,
         &local_sink,
     )
     .await;
     if !keep {
         let _ = std::fs::remove_dir_all(&local);
     }
-    result
+    match (&case.spec.expect_error, result) {
+        (None, r) => r,
+        (Some(want), Ok(_)) => Err(Error::Invalid(format!(
+            "case {}: expected the error {want:?}, but the run succeeded",
+            case.name
+        ))),
+        (Some(want), Err(e)) => {
+            let text = format!("{e}\n{}", e.summary());
+            let full = match &e {
+                Error::Api { errors, .. } => errors.join("\n"),
+                _ => String::new(),
+            };
+            if text.contains(want.as_str()) || full.contains(want.as_str()) {
+                Ok(ResultTable {
+                    columns: vec![Column::new("error", "STRING")],
+                    rows: vec![Row::new(
+                        RowKind::Insert,
+                        vec![serde_json::to_string(want).expect("a string serialises")],
+                    )],
+                })
+            } else {
+                Err(e)
+            }
+        }
+    }
+}
+
+/// Change events in the committed sink files under `dir` (0 when there are none yet).
+fn sink_events(dir: &Path) -> usize {
+    let mut files = Vec::new();
+    if list_files_with(dir, &mut files, true).is_err() {
+        return 0;
+    }
+    files
+        .iter()
+        .filter_map(|f| std::fs::read_to_string(f).ok())
+        .map(|t| t.lines().filter(|l| !l.trim().is_empty()).count())
+        .sum()
+}
+
+/// Waits until the sink holds at least `want` change events, or (when `want` is unknown) until
+/// it has stopped growing for `quiet`; fails after `timeout`.
+async fn wait_for_events(
+    dir: &Path,
+    want: Option<usize>,
+    timeout: Duration,
+    case: &str,
+) -> Result<usize> {
+    let quiet = Duration::from_secs(3);
+    let start = std::time::Instant::now();
+    let mut last = (0usize, std::time::Instant::now());
+    loop {
+        let n = sink_events(dir);
+        match want {
+            Some(w) if n >= w => return Ok(n),
+            None if n > 0 && n == last.0 && last.1.elapsed() >= quiet => return Ok(n),
+            _ => {}
+        }
+        if n != last.0 {
+            last = (n, std::time::Instant::now());
+        }
+        if start.elapsed() > timeout {
+            return Err(Error::Timeout(format!(
+                "case {case}: the sink holds {n} change events, waiting for {}",
+                want.map_or("quiescence".to_owned(), |w| w.to_string())
+            )));
+        }
+        tokio::time::sleep(Duration::from_millis(300)).await;
+    }
+}
+
+/// The first field of the first row, as a string (the job id of an async `INSERT`, the
+/// savepoint path of `STOP JOB ... WITH SAVEPOINT`).
+fn first_string(table: &ResultTable, what: &str) -> Result<String> {
+    let field = table
+        .rows
+        .first()
+        .and_then(|r| r.fields.first())
+        .ok_or_else(|| Error::Invalid(format!("no {what} in the result")))?;
+    serde_json::from_str::<String>(field)
+        .map_err(|e| Error::Invalid(format!("{what} is not a string: {e}")))
 }
 
 async fn run_in_session(
@@ -100,6 +191,7 @@ async fn run_in_session(
     case: &Case,
     case_dir: &str,
     sink_dir: &str,
+    local_data: &Path,
     local_sink: &Path,
 ) -> Result<ResultTable> {
     let client = &target.client;
@@ -108,6 +200,12 @@ async fn run_in_session(
         "execution.runtime-mode".into(),
         case.spec.mode.runtime_mode().into(),
     );
+    if case.spec.restore {
+        // The restore flow drives the job itself: asynchronous DML, and checkpoints so the
+        // filesystem sink commits files while the job runs.
+        properties.insert("table.dml-sync".into(), "false".into());
+        properties.insert("execution.checkpointing.interval".into(), "500ms".into());
+    }
     properties.extend(case.spec.config.clone());
     let session = client
         .open_session(&OpenSession {
@@ -120,6 +218,16 @@ async fn run_in_session(
         ..FetchLimits::default()
     };
     let outcome = async {
+        for need in &case.spec.requires {
+            let jar = &target.jars[need];
+            client
+                .execute_and_collect(
+                    &session,
+                    &ExecuteStatement::new(format!("ADD JAR '{jar}'")),
+                    limits,
+                )
+                .await?;
+        }
         for stmt in &case.setup {
             let sql = substitute(stmt, case_dir, sink_dir)?;
             client
@@ -127,6 +235,12 @@ async fn run_in_session(
                 .await?;
         }
         let query = substitute(&case.query, case_dir, sink_dir)?;
+        if case.spec.restore {
+            return run_restore(
+                target, case, &session, &query, local_data, local_sink, limits,
+            )
+            .await;
+        }
         let got = client
             .execute_and_collect(&session, &ExecuteStatement::new(query), limits)
             .await?;
@@ -151,6 +265,90 @@ async fn run_in_session(
     .await;
     let _ = client.close_session(&session).await;
     outcome
+}
+
+/// The stop-with-savepoint and restore flow (`restore = true`).
+async fn run_restore(
+    target: &Target,
+    case: &Case,
+    session: &crate::client::SessionHandle,
+    query: &str,
+    local_data: &Path,
+    local_sink: &Path,
+    limits: FetchLimits,
+) -> Result<ResultTable> {
+    let client = &target.client;
+    let timeout = Duration::from_secs(case.spec.timeout_secs);
+    let before = case.spec.restore_before_rows.expect("checked at load");
+    let after = case.spec.expected_rows().map(|(_, a)| a);
+    let run = |sql: String| async move {
+        client
+            .execute_and_collect(session, &ExecuteStatement::new(sql), limits)
+            .await
+    };
+    // Phase 1: the original data, then a savepoint.
+    let job = first_string(&run(query.to_owned()).await?.table, "job id")?;
+    if before > 0
+        && let Err(e) = wait_for_events(local_sink, Some(before), timeout, &case.name).await
+    {
+        let _ = run(format!("STOP JOB '{job}'")).await;
+        return Err(e);
+    }
+    let stopped = run(format!("STOP JOB '{job}' WITH SAVEPOINT")).await?;
+    let savepoint = first_string(&stopped.table, "savepoint path")?;
+    // Phase 2: the data that arrives after the restore, then the restored job.
+    let more = case.dir.join("data-after-restore");
+    if more.is_dir() {
+        copy_dir_renamed(&more, local_data, "after-restore-")?;
+    }
+    run(format!(
+        "SET 'execution.state-recovery.path' = '{savepoint}'"
+    ))
+    .await?;
+    let job = first_string(&run(query.to_owned()).await?.table, "job id")?;
+    let total = after.map(|a| before + a);
+    match total {
+        Some(t) if t > before => {
+            if let Err(e) = wait_for_events(local_sink, Some(t), timeout, &case.name).await {
+                let _ = run(format!("STOP JOB '{job}'")).await;
+                return Err(e);
+            }
+        }
+        _ => {
+            // Nothing more is expected: give the restored job a moment to (not) emit.
+            tokio::time::sleep(Duration::from_secs(2)).await;
+        }
+    }
+    let end = match case.spec.restore_end.unwrap_or(RestoreEnd::Drain) {
+        RestoreEnd::Drain => format!("STOP JOB '{job}' WITH SAVEPOINT WITH DRAIN"),
+        RestoreEnd::Cancel => format!("STOP JOB '{job}' WITH SAVEPOINT"),
+    };
+    run(end).await?;
+    let sink = case.spec.sink.as_deref().expect("checked at load");
+    let columns = describe(client, session, sink, limits).await?;
+    let rows = read_debezium_files(local_sink, &columns, true)?;
+    Ok(ResultTable { columns, rows })
+}
+
+/// Copies `from` into `to`, prefixing file names so they do not replace the files already there
+/// (a monitoring filesystem source picks the new files up).
+fn copy_dir_renamed(from: &Path, to: &Path, prefix: &str) -> Result<()> {
+    std::fs::create_dir_all(to).map_err(|e| Error::io(to.display(), e))?;
+    let entries = std::fs::read_dir(from).map_err(|e| Error::io(from.display(), e))?;
+    for entry in entries {
+        let entry = entry.map_err(|e| Error::io(from.display(), e))?;
+        let src = entry.path();
+        if src.is_dir() {
+            copy_dir_renamed(&src, &to.join(entry.file_name()), prefix)?;
+        } else {
+            let dst = to.join(format!("{prefix}{}", entry.file_name().to_string_lossy()));
+            // Write to a hidden name first, then rename: the source must not read half a file.
+            let tmp = to.join(format!(".{prefix}{}", entry.file_name().to_string_lossy()));
+            std::fs::copy(&src, &tmp).map_err(|e| Error::io(src.display(), e))?;
+            std::fs::rename(&tmp, &dst).map_err(|e| Error::io(dst.display(), e))?;
+        }
+    }
+    Ok(())
 }
 
 /// The columns of `table` from `DESCRIBE`: `name`, and the type with
@@ -219,8 +417,16 @@ struct Debezium<'a> {
 /// [`Error::Io`], or [`Error::Decode`] for a line that is not a change
 /// event over `columns`.
 pub fn read_debezium_dir(dir: &Path, columns: &[Column]) -> Result<Vec<Row>> {
+    read_debezium_files(dir, columns, false)
+}
+
+/// As [`read_debezium_dir`]; with `in_progress`, also the hidden in-progress part files. A
+/// row-format filesystem sink only finalises a part file when its rolling policy says so, so a
+/// job that is stopped (not drained) leaves its rows there; Flink truncates them to the last
+/// checkpoint on restore, so their content is exactly the committed changelog.
+pub fn read_debezium_files(dir: &Path, columns: &[Column], in_progress: bool) -> Result<Vec<Row>> {
     let mut files = Vec::new();
-    list_files(dir, &mut files)?;
+    list_files_with(dir, &mut files, in_progress)?;
     files.sort();
     let mut rows = Vec::new();
     for file in files {
@@ -276,18 +482,20 @@ pub fn read_debezium_dir(dir: &Path, columns: &[Column]) -> Result<Vec<Row>> {
     Ok(rows)
 }
 
-fn list_files(dir: &Path, out: &mut Vec<PathBuf>) -> Result<()> {
+fn list_files_with(dir: &Path, out: &mut Vec<PathBuf>, in_progress: bool) -> Result<()> {
     let entries = std::fs::read_dir(dir).map_err(|e| Error::io(dir.display(), e))?;
     for entry in entries {
         let entry = entry.map_err(|e| Error::io(dir.display(), e))?;
-        let name = entry.file_name();
-        if name.to_string_lossy().starts_with(['.', '_']) {
-            continue;
-        }
+        let name = entry.file_name().to_string_lossy().into_owned();
+        let hidden = name.starts_with(['.', '_']);
         let path = entry.path();
         if path.is_dir() {
-            list_files(&path, out)?;
-        } else {
+            if !hidden {
+                list_files_with(&path, out, in_progress)?;
+            }
+        } else if !hidden
+            || (in_progress && name.starts_with(".part-") && name.contains(".inprogress"))
+        {
             out.push(path);
         }
     }

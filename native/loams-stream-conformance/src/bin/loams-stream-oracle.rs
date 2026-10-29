@@ -6,6 +6,7 @@
 //! loams-stream-oracle record <corpus>            run every case on the oracle, write expected.jsonl
 //! loams-stream-oracle run <corpus>               run every case, compare with expected.jsonl
 //! loams-stream-oracle fixtures <dir>             record the gateway fixtures for v1..v4
+//! loams-stream-oracle tag <corpus>                 write each case's operators.txt from EXPLAIN on the oracle
 //! loams-stream-oracle nexmark-gen --events N     write person.json, auction.json, bid.json
 //!                                                (Nexmark events, JSON lines) into --out [.]
 //!
@@ -17,6 +18,8 @@
 //!   --only <substring>        only cases whose name contains it
 //!   --out <dir>               where triage.jsonl and summary.md go [<shared>/reports/<run>]
 //!   --keep                    keep each case's data and sink files
+//!   --jar <name>=<path>       an artefact cases may require, as the target sees it (repeatable),
+//!                             e.g. flink-test-udfs=/oracle/work/jars/flink-table-planner_2.12-2.2.1-tests.jar
 //!
 //! nexmark-gen options:
 //!   --events N                events to generate (required)
@@ -50,6 +53,7 @@ struct Args {
     only: Option<String>,
     out: Option<PathBuf>,
     keep: bool,
+    jars: std::collections::BTreeMap<String, String>,
     events: Option<u64>,
     seed: Option<u64>,
     base_time_ms: Option<i64>,
@@ -58,8 +62,8 @@ struct Args {
 }
 
 fn usage() -> &'static str {
-    "usage: loams-stream-oracle <up|down|record|run|fixtures> [path] [--compose F] [--target N=URL]... \
-     [--api vN] [--shared LOCAL=REMOTE] [--only S] [--out DIR] [--keep]\n       \
+    "usage: loams-stream-oracle <up|down|record|run|tag|fixtures> [path] [--compose F] [--target N=URL]... \
+     [--api vN] [--shared LOCAL=REMOTE] [--only S] [--out DIR] [--keep] [--jar NAME=PATH]...\n       \
      loams-stream-oracle nexmark-gen --events N [--seed S] [--out DIR] [--base-time-ms T] [--rate R] \
      [--side-input ROWS]"
 }
@@ -90,6 +94,11 @@ fn parse(mut it: impl Iterator<Item = String>) -> std::result::Result<Args, Stri
             "--only" => a.only = Some(value("--only")?),
             "--out" => a.out = Some(value("--out")?.into()),
             "--keep" => a.keep = true,
+            "--jar" => {
+                let v = value("--jar")?;
+                let (n, p) = v.split_once('=').ok_or("--jar takes NAME=PATH")?;
+                a.jars.insert(n.to_owned(), p.to_owned());
+            }
             "--events" => a.events = Some(number(&value("--events")?, "--events")?),
             "--seed" => a.seed = Some(number(&value("--seed")?, "--seed")?),
             "--base-time-ms" => {
@@ -209,6 +218,31 @@ async fn main_inner(a: Args) -> Result<bool> {
             }
             Ok(true)
         }
+        "tag" => {
+            let corpus = a
+                .path
+                .clone()
+                .ok_or_else(|| Error::Invalid("tag needs a corpus directory".into()))?;
+            let mut cases = discover(&corpus)?;
+            if let Some(only) = &a.only {
+                cases.retain(|c| c.name.contains(only.as_str()));
+            }
+            let (name, url) = target_specs
+                .first()
+                .ok_or_else(|| Error::Invalid("tag needs a target".into()))?;
+            let target = Target {
+                name: name.clone(),
+                client: client(url, a.api).await?,
+                shared: Shared {
+                    local: shared_local.clone(),
+                    remote: shared_remote.clone(),
+                },
+                jars: a.jars.clone(),
+            };
+            let report = harness::tag(&cases, &target).await;
+            print!("{}", report.summary());
+            Ok(report.all_passed())
+        }
         "record" | "run" => {
             let corpus = a
                 .path
@@ -227,6 +261,7 @@ async fn main_inner(a: Args) -> Result<bool> {
                         local: shared_local.clone(),
                         remote: shared_remote.clone(),
                     },
+                    jars: a.jars.clone(),
                 });
             }
             let opts = RunOptions {
@@ -240,7 +275,13 @@ async fn main_inner(a: Args) -> Result<bool> {
                         "record takes one target (the oracle)".into(),
                     ));
                 }
-                harness::record(&cases, &targets[0], &opts).await
+                let report = harness::record(&cases, &targets[0], &opts).await;
+                if a.only.is_none() {
+                    let xfail = corpus.join("oracle-xfail.toml");
+                    harness::write_oracle_xfail(&report, &xfail)?;
+                    eprintln!("wrote {}", xfail.display());
+                }
+                report
             } else {
                 harness::run(&cases, &targets, &opts).await
             };
