@@ -1,0 +1,7 @@
+{"columns":[{"name":"auction","type":"BIGINT"},{"name":"bidder","type":"BIGINT"},{"name":"price","type":"BIGINT"},{"name":"dateTime","type":"TIMESTAMP(3)"},{"name":"extra","type":"STRING"}]}
+{"kind":"+I","fields":[1000,95902720,2007,"2026-01-01 07:59:37.94","XaU]\\aSQN`VZPZPS]YrvqawaHLZ]^QP^^RQSvxkcziczbgfuRR`RJY"]}
+{"kind":"+I","fields":[1000,96122704,2001,"2026-01-01 07:59:49.44","linzyrspuwinqtpdqyjytzudyuqdkmlJ[IMU^awwnarPVSP`I]RU`MMLLYRNW^]QQVaxzbnxnVJPP"]}
+{"kind":"+I","fields":[1000,95831548,2001,"2026-01-01 07:59:57.14","_[IYqzqolcftzyazLJO\\]INUK\\]]hngmghbadlwuJY]UQIhrshvwZS]L\\Zfbie"]}
+{"kind":"+I","fields":[1000,99748740,2001,"2026-01-01 08:00:00.82","VNXV]P[Ytmxgll^Y_MK\\ddhwlraowmtiLMR__KhosikjV[^[KJvpljbgpfvxvarlyanwea"]}
+{"kind":"+I","fields":[1100,99121036,2031,"2026-01-01 08:00:18.16","TJQNZqlsjoghcpwkuZLKRI[JUa`LJfpsubqaQPUM`XNSaKSzjhulhmtd"]}
+{"kind":"+I","fields":[1100,97001450,2001,"2026-01-01 08:00:28.74","qpyqQZVPQ[yhphfhqqfccnPVLH^`ziikwfWHP]I\\[[TUUYklccecY][_KHga"]}

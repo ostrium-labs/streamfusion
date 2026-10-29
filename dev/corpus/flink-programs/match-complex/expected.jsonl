@@ -1,0 +1,3 @@
+{"columns":[{"name":"somestring","type":"STRING"},{"name":"a","type":"BIGINT"},{"name":"b","type":"BIGINT"},{"name":"c","type":"BIGINT"}]}
+{"kind":"+I","fields":["ACME",19,13,null]}
+{"kind":"+I","fields":["BETA",18,16,null]}

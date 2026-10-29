@@ -1,0 +1,8 @@
+{"columns":[{"name":"a","type":"INT"},{"name":"c1","type":"STRING"},{"name":"c2","type":"STRING"}]}
+{"kind":"+I","fields":[1,"BakerBaker","Baker6"]}
+{"kind":"+I","fields":[1,"BakerBaker","Baker3"]}
+{"kind":"+I","fields":[1,"BakerBaker","Baker8"]}
+{"kind":"+I","fields":[1,"BakerBaker","Baker2"]}
+{"kind":"+I","fields":[1,"BakerBaker","Baker2"]}
+{"kind":"+I","fields":[2,"HeHe","Baker5"]}
+{"kind":"+I","fields":[2,"PostRestoreRight","Baker5"]}

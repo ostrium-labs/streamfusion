@@ -1,0 +1,5 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"ts","type":"TIMESTAMP_LTZ(3)"},{"name":"w","type":"TIMESTAMP_LTZ(3)"}]}
+{"kind":"+I","fields":["Bob","1970-01-01 00:00:00Z",null]}
+{"kind":"+I","fields":["Bob","1970-01-01 00:00:00.001Z",null]}
+{"kind":"+I","fields":["Alice","1970-01-01 00:00:00.002Z","1970-01-01 00:00:00.001Z"]}
+{"kind":"+I","fields":["Bob","1970-01-01 00:00:00.003Z","1970-01-01 00:00:00.002Z"]}

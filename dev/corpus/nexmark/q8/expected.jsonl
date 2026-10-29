@@ -1,0 +1,1 @@
+{"columns":[{"name":"id","type":"BIGINT"},{"name":"name","type":"STRING"},{"name":"stime","type":"TIMESTAMP(3)"}]}

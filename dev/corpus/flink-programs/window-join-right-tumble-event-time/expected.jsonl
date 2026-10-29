@@ -1,0 +1,19 @@
+{"columns":[{"name":"window_start","type":"TIMESTAMP(3)"},{"name":"window_end","type":"TIMESTAMP(3)"},{"name":"name","type":"STRING"},{"name":"L_id","type":"STRING"},{"name":"L_num","type":"INT"},{"name":"R_id","type":"STRING"},{"name":"R_num","type":"INT"}]}
+{"kind":"+I","fields":["2020-10-10 00:00:00","2020-10-10 00:00:05","a","L1",1,"R1",5]}
+{"kind":"+I","fields":["2020-10-10 00:00:00","2020-10-10 00:00:05","a","L7",5,"R1",5]}
+{"kind":"+I","fields":["2020-10-10 00:00:00","2020-10-10 00:00:05","a","L4",5,"R1",5]}
+{"kind":"+I","fields":[null,null,null,null,null,"R7",3]}
+{"kind":"+I","fields":[null,null,null,null,null,"R2",7]}
+{"kind":"+I","fields":[null,null,null,null,null,"R3",7]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","a","L9",3,"R9",3]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","b","L8",3,"R8",8]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","b","L6",6,"R8",8]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","b","L8",3,"R6",6]}
+{"kind":"+I","fields":["2020-10-10 00:00:05","2020-10-10 00:00:10","b","L6",6,"R6",6]}
+{"kind":"+I","fields":[null,null,null,null,null,"R17",4]}
+{"kind":"+I","fields":["2020-10-10 00:00:30","2020-10-10 00:00:35","b","L12",1,"R33",1]}
+{"kind":"+I","fields":[null,null,null,null,null,"R31",7]}
+{"kind":"+I","fields":["2020-10-10 00:00:40","2020-10-10 00:00:45","c","L43",12,"R42",11]}
+{"kind":"+I","fields":[null,null,null,null,null,"R44",13]}
+{"kind":"+I","fields":[null,null,null,null,null,"R43",12]}
+{"kind":"+I","fields":[null,null,null,null,null,"R41",10]}

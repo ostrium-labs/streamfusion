@@ -1,0 +1,6 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"score","type":"BIGINT"}]}
+{"kind":"+I","fields":["Alice",3]}
+{"kind":"+I","fields":["Bob",5]}
+{"kind":"-D","fields":["Bob",5]}
+{"kind":"+I","fields":["Bob",11]}
+{"kind":"+I","fields":["Charly",33]}

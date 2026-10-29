@@ -7,6 +7,6 @@ run says so. "Typed" functions bind with Flink's types; running them needs the o
 | Layer | Supported | Planned | Won't do |
 |---|---|---|---|
 | Built-in functions (typed by the binder) | 210 | 8 | 0 |
-| Physical operators (run natively) | 0 | 47 | 0 |
+| Physical operators (run natively) | 0 | 54 | 0 |
 | Statement forms | 0 | 25 | 3 |
 | Connectors | 0 | 11 | 1 |

@@ -1,0 +1,12 @@
+{"columns":[{"name":"b","type":"BIGINT NOT NULL"},{"name":"a","type":"BIGINT"},{"name":"c","type":"STRING"}]}
+{"kind":"+I","fields":[1,1,null]}
+{"kind":"-D","fields":[1,1,null]}
+{"kind":"+I","fields":[1,1,"Hi"]}
+{"kind":"+I","fields":[2,1,null]}
+{"kind":"-D","fields":[2,1,null]}
+{"kind":"+I","fields":[2,1,"Hello"]}
+{"kind":"-D","fields":[2,1,"Hello"]}
+{"kind":"+I","fields":[2,2,"Hello"]}
+{"kind":"+I","fields":[5,1,null]}
+{"kind":"-D","fields":[5,1,null]}
+{"kind":"+I","fields":[5,1,"Hello there"]}

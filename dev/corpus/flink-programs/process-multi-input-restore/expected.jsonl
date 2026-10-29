@@ -1,0 +1,9 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"name0","type":"STRING"},{"name":"out","type":"STRING"}]}
+{"kind":"+I","fields":["Bob","Bob","{+I[Bob, 12], null}"]}
+{"kind":"+I","fields":["Bob","Bob","{null, +I[Bob, London]}"]}
+{"kind":"+I","fields":["Alice","Alice","{+I[Alice, 42], null}"]}
+{"kind":"+I","fields":["Alice","Alice","{null, +I[Alice, Berlin]}"]}
+{"kind":"+I","fields":["Bob","Bob","{+I[Bob, 99], null}"]}
+{"kind":"+I","fields":["Charly","Charly","{null, +I[Charly, Paris]}"]}
+{"kind":"+I","fields":["Bob","Bob","{+I[Bob, 100], null}"]}
+{"kind":"+I","fields":["Alice","Alice","{+I[Alice, 400], null}"]}

@@ -1,0 +1,15 @@
+{"columns":[{"name":"user_id","type":"STRING"},{"name":"name","type":"STRING"},{"name":"order_id","type":"STRING"},{"name":"payment_id","type":"STRING"},{"name":"location","type":"STRING"}]}
+{"kind":"+I","fields":["1","Gus",null,"1","London"]}
+{"kind":"+I","fields":["3","Nomad",null,"3","New York"]}
+{"kind":"-D","fields":["1","Gus",null,"1","London"]}
+{"kind":"+I","fields":["1","Gus","order0","1","London"]}
+{"kind":"+I","fields":["2","Bob","order2","2","Paris"]}
+{"kind":"-D","fields":["3","Nomad",null,"3","New York"]}
+{"kind":"+I","fields":["3","Nomad","order3","3","New York"]}
+{"kind":"-D","fields":["2","Bob","order2","2","Paris"]}
+{"kind":"+I","fields":["1","Gus","order1","1","London"]}
+{"kind":"+I","fields":["3","Nomad","order3","3","Brasília"]}
+{"kind":"+I","fields":["6","Frank","order6","6",null]}
+{"kind":"+I","fields":["4","David","order4","4",null]}
+{"kind":"+I","fields":["9","Charlie Taylor","order9","9","Melbourne"]}
+{"kind":"+I","fields":["5","Eve",null,"5",null]}

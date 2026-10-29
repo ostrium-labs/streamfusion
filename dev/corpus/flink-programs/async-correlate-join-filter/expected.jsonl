@@ -1,0 +1,5 @@
+{"columns":[{"name":"a","type":"STRING"},{"name":"b","type":"STRING"}]}
+{"kind":"+I","fields":["hello#world","hello"]}
+{"kind":"+I","fields":["hello#world","world"]}
+{"kind":"+I","fields":["bar#fiz","bar"]}
+{"kind":"+I","fields":["bar#fiz","fiz"]}

@@ -1,0 +1,11 @@
+{"columns":[{"name":"b","type":"BIGINT NOT NULL"},{"name":"cnt","type":"BIGINT"},{"name":"avg_a","type":"DOUBLE"},{"name":"min_c","type":"STRING"}]}
+{"kind":"+I","fields":[1,1,null,"Hi"]}
+{"kind":"+I","fields":[2,1,2.0,"Hello"]}
+{"kind":"-D","fields":[2,1,2.0,"Hello"]}
+{"kind":"+I","fields":[2,2,2.0,"Hello"]}
+{"kind":"-D","fields":[1,1,null,"Hi"]}
+{"kind":"+I","fields":[1,2,null,"Hi"]}
+{"kind":"-D","fields":[2,2,2.0,"Hello"]}
+{"kind":"+I","fields":[2,3,2.0,"Hello"]}
+{"kind":"-D","fields":[2,3,2.0,"Hello"]}
+{"kind":"+I","fields":[2,4,2.0,"Hello"]}

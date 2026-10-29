@@ -1,0 +1,502 @@
+# Cases the oracle (Apache Flink 2.2.1 through the harness) does not record cleanly.
+# Written by `loams-stream-oracle record`; review before committing.
+
+["agg-with-state-ttl-hint"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (2 rows expected, 2 produced); missing [\"1, 1, null, Hi Again!\", \"2, 2, 2.0, Hello Again!\"]; extra [\"1, 2, null, Hi\", \"2, 4, 2.0, Hello\"]"
+
+["async-vector-search"]
+verdict = "error-one"
+reason = "java.lang.ClassCastException: class org.apache.flink.connector.file.table.FileSystemTableSource cannot be cast to class org.apache.flink.table.connector.source.VectorSearchTableSource (org.apache.flink.connector.file.table.FileSystemTableSource and org.apache.flink.table.connector.source.VectorSearchTableSource are in unnamed module of loader 'app')"
+
+["calc-current-watermark"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (4 rows expected, 4 produced); missing [\"Bob, 1970-01-01T00:00:00.001Z, 1970-01-01T00:00:00Z\", \"Bob, 1970-01-01T00:00:00Z, null\"]; extra [\"Bob, 1970-01-01T00:00:00.001Z, null\", \"Bob, 1970-01-01T00:00Z, null\"]"
+
+["changelog-normalize-upsert-filter-watermark"]
+verdict = "error-one"
+reason = "results of operation 0124b555-6007-437e-8ebc-cc1e24a02c81 not ready after 180s"
+
+["constraint-enforcer-drop-not-null-nested-arrays"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (1 rows expected, 1 produced); missing [\"+I[3, [[1]]]\"]; extra [\"{ab=[[1]], id=3}\"]"
+
+["constraint-enforcer-drop-not-null-nested-rows"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (1 rows expected, 1 produced); missing [\"+I[3, +I[1, 1]]\"]; extra [\"{ab={aba=1, ignore=1}, id=3}\"]"
+
+["constraint-enforcer-trim-pad-length-nested-rows"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (3 rows expected, 3 produced); missing [\"+I[1, +I[a , a, [1, 0], [1]]]\", \"+I[2, +I[ab, ab, [1, 2], [1, 2]]]\", \"+I[3, +I[ab, ab, [1, 2], [1, 2]]]\"]; extra [\"{ab={aba=a , abb=a, abc=AQA=, abd=AQ==}, id=1}\", \"{ab={aba=ab, abb=ab, abc=AQI=, abd=AQI=}, id=2}\", \"{ab={aba=ab, abb=ab, abc=AQI=, abd=AQI=}, id=3}\"]"
+
+["correlate-with-literal-agg"]
+verdict = "error-one"
+reason = "case correlate-with-literal-agg: the sink holds 4 change events, waiting for 6"
+
+["interval-join-event-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (4 rows expected, 4 produced); missing [\"1, 2020-04-15 08:00:01, 2020-04-15 08:00:02\", \"10, 2020-04-15 08:00:11, 2020-04-15 08:00:16\", \"2, 2020-04-15 08:00:02, 2020-04-15 08:00:05\"]; extra [\"1, 2020-04-15T08:00:01, 2020-04-15T08:00:02\", \"10, 2020-04-15T08:00:11, 2020-04-15T08:00:16\", \"2, 2020-04-15T08:00:02, 2020-04-15T08:00:05\"]"
+
+["interval-join-negative-interval"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (7 rows expected, 7 produced); missing [\"1, 2020-04-15 08:00:01, null\", \"10, 2020-04-15 08:00:11, null\", \"2, 2020-04-15 08:00:02, null\"]; extra [\"1, 2020-04-15T08:00:01, null\", \"10, 2020-04-15T08:00:11, null\", \"2, 2020-04-15T08:00:02, null\"]"
+
+["interval-join-proc-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (6 rows expected, 7 produced); missing [\"1, 2020-04-15 08:00:01, 2020-04-15 08:00:02\", \"10, 2020-04-15 08:00:11, 2020-04-15 08:00:16\", \"2, 2020-04-15 08:00:02, 2020-04-15 08:00:05\"]; extra [\"1, 2020-04-15T08:00:01, 2020-04-15T08:00:02\", \"10, 2020-04-15T08:00:11, 2020-04-15T08:00:16\", \"2, 2020-04-15T08:00:02, 2020-04-15T08:00:05\"]"
+
+["kafka-with-non-key-filter"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (1 rows expected, 2 produced); missing []; extra [\"one, 2, bb\"]"
+
+["lookup-join-async-hint"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-filter-pushdown"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-left-join"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-post-filter"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-pre-filter"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-pre-post-filter"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-project-pushdown"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-retry-hint"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["lookup-join-with-try-resolve"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Processing-time temporal join is not supported yet."
+
+["over-aggregate-bounded-non-partitioned-rows-with-out-of-order-records"]
+verdict = "error-one"
+reason = "case over-aggregate-bounded-non-partitioned-rows-with-out-of-order-records: the sink holds 16 change events, waiting for 18"
+
+["over-aggregate-non-time-rows-unbounded-avg-append-mode"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (63286ab0fc935b6f280f58139e92410b)"
+
+["over-aggregate-non-time-rows-unbounded-multiple-aggs-append-mode"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (b4b5768a0479efe7b746cf4358d5366c)"
+
+["over-aggregate-non-time-rows-unbounded-sum-append-mode"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (62810209427f5c1097473f157c53d5eb)"
+
+["over-aggregate-non-time-rows-unbounded-sum-no-partition-by"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (28d7e519be60c1f1c95c2af3cf310f4c)"
+
+["over-aggregate-non-time-rows-unbounded-sum-retract-mode"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (50f1df15e38321c9fe0246d04bcd7eba)"
+
+["over-aggregate-non-time-rows-unbounded-sum-retract-mode-sink-primary-key"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (b9817a67181e59fe5ff77173f516aef4)"
+
+["over-aggregate-non-time-rows-unbounded-sum-retract-mode-sort-by-key"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (5e4e894b229b706513713233c9e6a254)"
+
+["over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-primary-key"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (66750dd3dd53ac12401c77859f1c4fd2)"
+
+["over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-sink-primary-key"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (383030e2f079476932d8ea3ba2100632)"
+
+["over-aggregate-non-time-rows-unbounded-sum-retract-mode-source-sink-primary-key-partition-by-non-pk"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (13e5bc8a74646c0c0e8b65bbf65fb5a9)"
+
+["process-chained-time"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-clearing-state"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-context"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-default-pojo-state"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-descriptor"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-empty-args"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-invalid-pass-through-timers"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-invalid-row-kind"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-invalid-row-semantic-table-timers"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-late-events"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-list-state"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-map-state"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-multi-input"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-multi-state"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-optional-on-time"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-optional-partition-by"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-optional-partition-by-time"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-partitioned-named-timers"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-partitioned-named-timers-restore"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (17 rows expected, 17 produced); missing [\"Bob, {Clearing all timers at time 2 watermark 9223372036854775807}, 1970-01-01T00:00:00.002Z\", \"Bob, {Clearing timer timeout3 at time 1 watermark 9223372036854775807}, 1970-01-01T00:00:00.001Z\", \"Bob, {Processing input row +I[Bob, 1, 1970-01-01T00:00:00Z] at time 0 watermark null}, 1970-01-01T00:00:00Z\"]; extra [\"Bob, {Clearing all timers at time 5 watermark 5}, 1970-01-01T00:00:00.005Z\", \"Bob, {Clearing timer timeout3 at time 1 watermark 1}, 1970-01-01T00:00:00.001Z\", \"Bob, {Processing input row +I[Bob, 1, 1970-01-01T00:00:00Z] at time 0 watermark null}, 1970-01-01T00:00Z\"]"
+
+["process-partitioned-unnamed-timers"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-pojo-args"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-pojo-state"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-pojo-state-time"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-regular-timestamp"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-row"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-row-pass-through"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-row-semantic-table-restore"]
+verdict = "error-one"
+reason = "org.apache.flink.runtime.messages.FlinkJobNotFoundException: org.apache.flink.runtime.messages.FlinkJobNotFoundException: Could not find Flink job (4bf6155be31ed42d3618d07583c4ae66)"
+
+["process-scalar-args"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-scalar-args-time"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-set"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-set-atomic-wrapping"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-set-pass-through"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-state-ttl"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-stateful-multi-input-with-timeout"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-time-conversions"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-typed-row"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-typed-set"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-updating-input-enforced-full-deletes"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-updating-input-enforced-retract"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-updating-input-partial-deletes"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-updating-input-retract"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-updating-input-upsert"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-updating-multi-input"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Can't generate a valid execution plan for the given query:"
+
+["process-updating-output-full-deletes"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Can't generate a valid execution plan for the given query:"
+
+["process-updating-output-partial-deletes"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Can't generate a valid execution plan for the given query:"
+
+["process-updating-output-retract"]
+verdict = "error-one"
+reason = "java.lang.UnsupportedOperationException: Unsupported to visit node StreamPhysicalProcessTableFunction, please add the visit implementation if it is a newly added stream physical node."
+
+["process-updating-output-upsert"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Can't generate a valid execution plan for the given query:"
+
+["process-updating-output-upsert-restore"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.TableException: Can't generate a valid execution plan for the given query:"
+
+["rank-test-append-fast-strategy"]
+verdict = "error-one"
+reason = "case rank-test-append-fast-strategy: the sink holds 6 change events, waiting for 9"
+
+["rank-test-update-fast-strategy"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (7 rows expected, 8 produced); missing [\"3, b, 1, 2\", \"4, b, 2, 1\"]; extra [\"3, b, 1, 1\", \"4, b, 1, 2\", \"4, d, 1, 1\"]"
+
+["sink-overwrite"]
+verdict = "error-one"
+reason = "java.lang.IllegalStateException: Streaming mode not support overwrite."
+
+["sink-partition"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.ValidationException: Static partition column 'b' should be in the partition keys list [] for table 'default_catalog.default_database.sink_t'."
+
+["sink-writing-metadata"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.ValidationException: Table 'default_catalog.default_database.sink_t' declares persistable metadata columns, but the underlying DynamicTableSink doesn't implement the SupportsWritingMetadata interface. If the column should not be persisted, it can be declared with the VIRTUAL keyword."
+
+["sync-vector-search"]
+verdict = "error-one"
+reason = "java.lang.ClassCastException: class org.apache.flink.connector.file.table.FileSystemTableSource cannot be cast to class org.apache.flink.table.connector.source.VectorSearchTableSource (org.apache.flink.connector.file.table.FileSystemTableSource and org.apache.flink.table.connector.source.VectorSearchTableSource are in unnamed module of loader 'app')"
+
+["table-source-scan-multiple-pushdowns"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.ValidationException: Invalid metadata key 'ts' in column 'ts' of table 'default_catalog.default_database.source_t'. The DynamicTableSource class 'org.apache.flink.connector.file.table.FileSystemTableSource' supports the following metadata keys for reading:"
+
+["table-source-scan-project-push-down-disabled"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.ValidationException: Invalid metadata key 'ts' in column 'ts' of table 'default_catalog.default_database.source_t'. The DynamicTableSource class 'org.apache.flink.connector.file.table.FileSystemTableSource' supports the following metadata keys for reading:"
+
+["table-source-scan-reading-metadata"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.ValidationException: Invalid metadata key 'd' in column 'd' of table 'default_catalog.default_database.source_t'. The DynamicTableSource class 'org.apache.flink.connector.file.table.FileSystemTableSource' supports the following metadata keys for reading:"
+
+["table-source-scan-reuse-source.sink_one_t"]
+verdict = "error-one"
+reason = "dev/oracle/work/runs/run-1793272413-1408814/flink/table-source-scan-reuse-source.sink_one_t/sink/sink_two_t/part-9888a35a-af69-40cf-b638-277dbff740b9-0-0:1: cannot decode: no field \"c\""
+
+["table-source-scan-reuse-source.sink_two_t"]
+verdict = "error-one"
+reason = "dev/oracle/work/runs/run-1793272413-1408814/flink/table-source-scan-reuse-source.sink_two_t/sink/sink_one_t/part-7cad6069-397b-42fe-9796-d9254682b0cd-0-0:1: cannot decode: no field \"b\""
+
+["table-source-scan-source-watermark"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.ValidationException: Invalid metadata key 'ts' in column 'ts' of table 'default_catalog.default_database.source_t'. The DynamicTableSource class 'org.apache.flink.connector.file.table.FileSystemTableSource' supports the following metadata keys for reading:"
+
+["upsert-with-non-key-filter"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (1 rows expected, 2 produced); missing []; extra [\"one, 2, bb\"]"
+
+["vector-search-with-runtime-config"]
+verdict = "error-one"
+reason = "java.lang.ClassCastException: class org.apache.flink.connector.file.table.FileSystemTableSource cannot be cast to class org.apache.flink.table.connector.source.VectorSearchTableSource (org.apache.flink.connector.file.table.FileSystemTableSource and org.apache.flink.table.connector.source.VectorSearchTableSource are in unnamed module of loader 'app')"
+
+["watermark-assigner-pushdown-computed"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (6 rows expected, 6 produced); missing [\"2, b, 1970-01-01T00:00:00.002Z, 1969-12-31T23:59:59.001Z\", \"3, c, 1970-01-01T00:00:00.003Z, 1969-12-31T23:59:59.002Z\", \"5, e, 1970-01-01T00:00:00.005Z, 1969-12-31T23:59:59.004Z\"]; extra [\"2, b, 1970-01-01T00:00:00.002Z, null\", \"3, c, 1970-01-01T00:00:00.003Z, null\", \"5, e, 1970-01-01T00:00:00.005Z, null\"]"
+
+["watermark-assigner-pushdown-metadata"]
+verdict = "error-one"
+reason = "org.apache.flink.table.api.ValidationException: Invalid metadata key 'ts' in column 'ts' of table 'default_catalog.default_database.source_t'. The DynamicTableSource class 'org.apache.flink.connector.file.table.FileSystemTableSource' supports the following metadata keys for reading:"
+
+["window-deduplicate-asc-cumulate-first-row"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (5 rows expected, 5 produced); missing [\"2020-04-15T08:00:05, 4.00, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2.00, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:15, 1\", \"2020-04-15T08:00:11, 2.00, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\"]; extra [\"2020-04-15T08:00:05, 4, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:15, 1\", \"2020-04-15T08:00:11, 2, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\"]"
+
+["window-deduplicate-asc-hop-first-row"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (6 rows expected, 6 produced); missing [\"2020-04-15T08:00:05, 4.00, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:05, 4.00, A, supplier1, 2020-04-15T08:00:05, 2020-04-15T08:00:15, 1\", \"2020-04-15T08:00:11, 2.00, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\"]; extra [\"2020-04-15T08:00:05, 4, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:05, 4, A, supplier1, 2020-04-15T08:00:05, 2020-04-15T08:00:15, 1\", \"2020-04-15T08:00:11, 2, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\"]"
+
+["window-deduplicate-asc-partition-by-item-tumble-first-row"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (9 rows expected, 9 produced); missing [\"2020-04-15T08:00:05, 4.00, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:07, 2.00, G, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:09, 5.00, D, supplier4, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\"]; extra [\"2020-04-15T08:00:05, 4, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:07, 2, G, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:09, 5, D, supplier4, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\"]"
+
+["window-deduplicate-asc-tumble-first-row"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (3 rows expected, 3 produced); missing [\"2020-04-15T08:00:05, 4.00, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2.00, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:21, 2.00, B, supplier7, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]; extra [\"2020-04-15T08:00:05, 4, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:21, 2, B, supplier7, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]"
+
+["window-deduplicate-asc-tumble-first-row-condition-1"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (3 rows expected, 3 produced); missing [\"2020-04-15T08:00:05, 4.00, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2.00, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:21, 2.00, B, supplier7, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]; extra [\"2020-04-15T08:00:05, 4, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:21, 2, B, supplier7, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]"
+
+["window-deduplicate-asc-tumble-first-row-condition-3"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (3 rows expected, 3 produced); missing [\"2020-04-15T08:00:05, 4.00, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2.00, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:21, 2.00, B, supplier7, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]; extra [\"2020-04-15T08:00:05, 4, A, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:11, 2, B, supplier3, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:21, 2, B, supplier7, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]"
+
+["window-deduplicate-desc-partition-by-item-tumble-first-row"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (9 rows expected, 9 produced); missing [\"2020-04-15T08:00:07, 2.00, G, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:08, 2.00, A, supplier3, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:09, 5.00, D, supplier4, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\"]; extra [\"2020-04-15T08:00:07, 2, G, supplier1, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:08, 2, A, supplier3, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:09, 5, D, supplier4, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\"]"
+
+["window-deduplicate-desc-tumble-last-row"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (3 rows expected, 3 produced); missing [\"2020-04-15T08:00:09, 5.00, D, supplier4, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:17, 6.00, D, supplier5, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:28, 6.00, A, supplier8, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]; extra [\"2020-04-15T08:00:09, 5, D, supplier4, 2020-04-15T08:00, 2020-04-15T08:00:10, 1\", \"2020-04-15T08:00:17, 6, D, supplier5, 2020-04-15T08:00:10, 2020-04-15T08:00:20, 1\", \"2020-04-15T08:00:28, 6, A, supplier8, 2020-04-15T08:00:20, 2020-04-15T08:00:30, 1\"]"
+
+["window-join-cumulate-event-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (24 rows expected, 25 produced); missing []; extra [\"2020-10-10T00:00, 2020-10-10T00:00:05, a, L4, 5, R1, 5\"]"
+
+["window-join-inner-tumble-event-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (9 rows expected, 11 produced); missing []; extra [\"2020-10-10T00:00, 2020-10-10T00:00:05, a, L1, 1, R4, 5\", \"2020-10-10T00:00, 2020-10-10T00:00:05, a, L7, 5, R4, 5\"]"
+
+["window-join-left-tumble-event-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (16 rows expected, 17 produced); missing []; extra [\"2020-10-10T00:00, 2020-10-10T00:00:05, a, L4, 5, R1, 5\"]"
+
+["window-join-right-tumble-event-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (17 rows expected, 18 produced); missing []; extra [\"2020-10-10T00:00, 2020-10-10T00:00:05, a, L4, 5, R1, 5\"]"
+
+["window-rank-cumulate-tvf-min-top-n"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (13 rows expected, 13 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4.00, A, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:07, supplier1, 2.00, G, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:08, supplier3, 2.00, B, 2\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4, A, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:07, supplier1, 2, G, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:08, supplier3, 2, B, 2\"]"
+
+["window-rank-hop-tvf-min-top-n"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (17 rows expected, 17 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4.00, A, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:07, supplier1, 2.00, G, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:08, supplier3, 2.00, B, 2\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4, A, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:07, supplier1, 2, G, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:08, supplier3, 2, B, 2\"]"
+
+["window-rank-tumble-tvf-agg-max-top-n"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (9 rows expected, 9 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, supplier1, 6.00, 2, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier2, 4.00, 1, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier4, 5.00, 1, 2\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, supplier1, 6, 2, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier2, 4, 1, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier4, 5, 1, 2\"]"
+
+["window-rank-tumble-tvf-agg-min-top-n"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (9 rows expected, 9 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, supplier2, 4.00, 1, 2\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier3, 2.00, 1, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier4, 5.00, 1, 3\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, supplier2, 4, 1, 2\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier3, 2, 1, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, supplier4, 5, 1, 3\"]"
+
+["window-rank-tumble-tvf-max-top-n"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (9 rows expected, 9 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4.00, A, 2\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:06, supplier2, 4.00, C, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09, supplier4, 5.00, D, 1\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4, A, 2\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:06, supplier2, 4, C, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09, supplier4, 5, D, 1\"]"
+
+["window-rank-tumble-tvf-min-top-n"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (9 rows expected, 9 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4.00, A, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:07, supplier1, 2.00, G, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:08, supplier3, 2.00, B, 2\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:05, supplier1, 4, A, 3\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:07, supplier1, 2, G, 1\", \"2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:08, supplier3, 2, B, 2\"]"
+
+["window-table-function-cumulate-tvf"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (11 rows expected, 11 produced); missing [\"2020-04-15T08:00:05, 4.00, C, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:07, 2.00, A, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:09, 5.00, D, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\"]; extra [\"2020-04-15T08:00:05, 4, C, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:07, 2, A, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:09, 5, D, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\"]"
+
+["window-table-function-cumulate-tvf-agg"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (5 rows expected, 5 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, 11.00\", \"2020-04-15T08:00:10, 2020-04-15T08:00:15, 4.00\", \"2020-04-15T08:00:10, 2020-04-15T08:00:20, 10.00\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, 11\", \"2020-04-15T08:00:10, 2020-04-15T08:00:15, 4\", \"2020-04-15T08:00:10, 2020-04-15T08:00:20, 10.0\"]"
+
+["window-table-function-cumulate-tvf-agg-proc-time"]
+verdict = "error-one"
+reason = "case window-table-function-cumulate-tvf-agg-proc-time: the sink holds 1 change events, waiting for 2"
+
+["window-table-function-hop-tvf"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (16 rows expected, 16 produced); missing [\"2020-04-15T08:00:05, 4.00, C, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:05, 4.00, C, 2020-04-15T08:00:05, 2020-04-15T08:00:15, 2020-04-15T08:00:14.999Z\", \"2020-04-15T08:00:07, 2.00, A, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\"]; extra [\"2020-04-15T08:00:05, 4, C, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:05, 4, C, 2020-04-15T08:00:05, 2020-04-15T08:00:15, 2020-04-15T08:00:14.999Z\", \"2020-04-15T08:00:07, 2, A, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\"]"
+
+["window-table-function-hop-tvf-agg"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (6 rows expected, 6 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, 11.00\", \"2020-04-15T08:00:05, 2020-04-15T08:00:15, 15.00\", \"2020-04-15T08:00:10, 2020-04-15T08:00:20, 10.00\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, 11\", \"2020-04-15T08:00:05, 2020-04-15T08:00:15, 15\", \"2020-04-15T08:00:10, 2020-04-15T08:00:20, 10.0\"]"
+
+["window-table-function-hop-tvf-agg-proc-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (3 rows expected, 3 produced); missing [\"21.00\", \"21.00\", \"9.00\"]; extra [\"21\", \"21\", \"9\"]"
+
+["window-table-function-tumble-tvf"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (8 rows expected, 8 produced); missing [\"2020-04-15T08:00:05, 4.00, C, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:07, 2.00, A, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:09, 5.00, D, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\"]; extra [\"2020-04-15T08:00:05, 4, C, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:07, 2, A, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\", \"2020-04-15T08:00:09, 5, D, 2020-04-15T08:00, 2020-04-15T08:00:10, 2020-04-15T08:00:09.999Z\"]"
+
+["window-table-function-tumble-tvf-agg"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (3 rows expected, 3 produced); missing [\"2020-04-15T08:00, 2020-04-15T08:00:10, 11.00\", \"2020-04-15T08:00:10, 2020-04-15T08:00:20, 10.00\", \"2020-04-15T08:00:20, 2020-04-15T08:00:30, 9.00\"]; extra [\"2020-04-15T08:00, 2020-04-15T08:00:10, 11\", \"2020-04-15T08:00:10, 2020-04-15T08:00:20, 10.0\", \"2020-04-15T08:00:20, 2020-04-15T08:00:30, 9\"]"
+
+["window-table-function-tumble-tvf-agg-proc-time"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (2 rows expected, 2 produced); missing [\"21.00\", \"9.00\"]; extra [\"21\", \"9\"]"
+
+["window-table-function-tumble-tvf-negative-offset"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (8 rows expected, 8 produced); missing [\"2020-04-15T08:00:05, 4.00, C, 2020-04-15T08:00:04, 2020-04-15T08:00:14, 2020-04-15T08:00:13.999Z\", \"2020-04-15T08:00:07, 2.00, A, 2020-04-15T08:00:04, 2020-04-15T08:00:14, 2020-04-15T08:00:13.999Z\", \"2020-04-15T08:00:09, 5.00, D, 2020-04-15T08:00:04, 2020-04-15T08:00:14, 2020-04-15T08:00:13.999Z\"]; extra [\"2020-04-15T08:00:05, 4, C, 2020-04-15T08:00:04, 2020-04-15T08:00:14, 2020-04-15T08:00:13.999Z\", \"2020-04-15T08:00:07, 2, A, 2020-04-15T08:00:04, 2020-04-15T08:00:14, 2020-04-15T08:00:13.999Z\", \"2020-04-15T08:00:09, 5, D, 2020-04-15T08:00:04, 2020-04-15T08:00:14, 2020-04-15T08:00:13.999Z\"]"
+
+["window-table-function-tumble-tvf-positive-offset"]
+verdict = "oracle-differs"
+reason = "oracle differs from Flink's own expectation (8 rows expected, 8 produced); missing [\"2020-04-15T08:00:05, 4.00, C, 2020-04-15T07:59:56, 2020-04-15T08:00:06, 2020-04-15T08:00:05.999Z\", \"2020-04-15T08:00:07, 2.00, A, 2020-04-15T08:00:06, 2020-04-15T08:00:16, 2020-04-15T08:00:15.999Z\", \"2020-04-15T08:00:09, 5.00, D, 2020-04-15T08:00:06, 2020-04-15T08:00:16, 2020-04-15T08:00:15.999Z\"]; extra [\"2020-04-15T08:00:05, 4, C, 2020-04-15T07:59:56, 2020-04-15T08:00:06, 2020-04-15T08:00:05.999Z\", \"2020-04-15T08:00:07, 2, A, 2020-04-15T08:00:06, 2020-04-15T08:00:16, 2020-04-15T08:00:15.999Z\", \"2020-04-15T08:00:09, 5, D, 2020-04-15T08:00:06, 2020-04-15T08:00:16, 2020-04-15T08:00:15.999Z\"]"

@@ -1,0 +1,7 @@
+{"columns":[{"name":"a","type":"INT"},{"name":"b","type":"STRING"},{"name":"c","type":"INT"}]}
+{"kind":"+I","fields":[4,"b",8]}
+{"kind":"+I","fields":[6,"c",10]}
+{"kind":"+I","fields":[0,"a",6]}
+{"kind":"+I","fields":[3,"b",7]}
+{"kind":"+I","fields":[5,"c",9]}
+{"kind":"+I","fields":[1,"a",5]}

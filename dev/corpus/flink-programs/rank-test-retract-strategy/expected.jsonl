@@ -1,0 +1,12 @@
+{"columns":[{"name":"a","type":"INT"},{"name":"b","type":"STRING"},{"name":"c","type":"BIGINT"}]}
+{"kind":"+I","fields":[2,"a",1]}
+{"kind":"+I","fields":[4,"b",1]}
+{"kind":"+I","fields":[6,"c",1]}
+{"kind":"-D","fields":[2,"a",1]}
+{"kind":"+I","fields":[1,"a",1]}
+{"kind":"-D","fields":[4,"b",1]}
+{"kind":"+I","fields":[3,"b",1]}
+{"kind":"-D","fields":[6,"c",1]}
+{"kind":"+I","fields":[5,"c",1]}
+{"kind":"+I","fields":[4,"d",1]}
+{"kind":"+I","fields":[3,"e",1]}

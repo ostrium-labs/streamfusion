@@ -1,0 +1,4 @@
+{"columns":[{"name":"user_id","type":"STRING"},{"name":"name","type":"STRING"},{"name":"order_id","type":"STRING"},{"name":"payment_id","type":"STRING"}]}
+{"kind":"+I","fields":["1","Gus",null,"payment3"]}
+{"kind":"-D","fields":["1","Gus",null,"payment3"]}
+{"kind":"+I","fields":["1","Gus","order1","payment3"]}

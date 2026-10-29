@@ -1,0 +1,3 @@
+{"columns":[{"name":"a","type":"BIGINT"},{"name":"b","type":"DOUBLE"}]}
+{"kind":"+I","fields":[421,42.0]}
+{"kind":"+I","fields":[422,42.1]}

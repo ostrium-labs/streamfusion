@@ -1,0 +1,31 @@
+{"columns":[{"name":"d","type":"BIGINT NOT NULL"},{"name":"s1","type":"BIGINT"},{"name":"c1","type":"STRING"}]}
+{"kind":"+I","fields":[1,1,"Hello World Like"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice"]}
+{"kind":"-D","fields":[2,2,"Hello World Its nice"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World"]}
+{"kind":"-D","fields":[1,1,"Hello World Like"]}
+{"kind":"+I","fields":[1,1,"Hello World Like|Hello"]}
+{"kind":"-D","fields":[1,1,"Hello World Like|Hello"]}
+{"kind":"+I","fields":[1,1,"Hello World Like|Hello|GHI"]}
+{"kind":"-D","fields":[2,2,"Hello World Its nice|Hello World"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World|ABC"]}
+{"kind":"-D","fields":[2,2,"Hello World Its nice|Hello World|ABC"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH"]}
+{"kind":"-D","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE"]}
+{"kind":"-D","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE|JKL"]}
+{"kind":"-D","fields":[1,1,"Hello World Like|Hello|GHI"]}
+{"kind":"+I","fields":[1,1,"Hello World Like|Hello|GHI|EFG"]}
+{"kind":"-D","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE|JKL"]}
+{"kind":"+I","fields":[2,2,"Hello World Its nice|Hello World|ABC|FGH|CDE|JKL|KLM"]}
+{"kind":"+I","fields":[3,3,"HIJ"]}
+{"kind":"-D","fields":[1,1,"Hello World Like|Hello|GHI|EFG"]}
+{"kind":"+I","fields":[1,1,"Hello World Like|Hello|GHI|EFG|DEF"]}
+{"kind":"-D","fields":[3,3,"HIJ"]}
+{"kind":"+I","fields":[3,3,"HIJ|IJK"]}
+{"kind":"-D","fields":[3,3,"HIJ|IJK"]}
+{"kind":"+I","fields":[3,3,"HIJ|IJK|BCD"]}
+{"kind":"+I","fields":[7,7,"MNO"]}
+{"kind":"-D","fields":[7,7,"MNO"]}
+{"kind":"+I","fields":[7,7,"MNO|XYZ"]}

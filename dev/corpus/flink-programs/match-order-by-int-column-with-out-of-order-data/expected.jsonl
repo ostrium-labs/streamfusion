@@ -1,0 +1,4 @@
+{"columns":[{"name":"first","type":"BIGINT"},{"name":"last","type":"BIGINT"},{"name":"up","type":"BIGINT"}]}
+{"kind":"+I","fields":[9,8,10]}
+{"kind":"+I","fields":[7,5,8]}
+{"kind":"+I","fields":[9,3,11]}

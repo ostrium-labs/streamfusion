@@ -1,0 +1,6 @@
+# Cases the oracle (Apache Flink 2.2.1 through the harness) does not record cleanly.
+# Written by `loams-stream-oracle record`; review before committing.
+
+["q6"]
+verdict = "error-one"
+reason = "org.apache.calcite.sql.validate.SqlValidatorException: Column 'rownum' not found in any table"

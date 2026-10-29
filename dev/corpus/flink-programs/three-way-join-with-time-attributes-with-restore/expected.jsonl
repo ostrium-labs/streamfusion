@@ -1,0 +1,3 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"order_id","type":"STRING"},{"name":"rowtime","type":"TIMESTAMP(3)"},{"name":"price","type":"INT"}]}
+{"kind":"+I","fields":["Gus","order1","2024-01-01 12:00:00.123",100]}
+{"kind":"+I","fields":["Bob","order2","2024-01-01 12:00:01.456",200]}

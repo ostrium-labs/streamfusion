@@ -1,0 +1,4 @@
+{"columns":[{"name":"deptno","type":"INT"},{"name":"department_num","type":"INT"}]}
+{"kind":"+I","fields":[2,2]}
+{"kind":"+I","fields":[4,4]}
+{"kind":"+I","fields":[4,4]}

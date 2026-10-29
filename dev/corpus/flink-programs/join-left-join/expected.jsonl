@@ -1,0 +1,21 @@
+{"columns":[{"name":"name","type":"STRING"},{"name":"department_name","type":"STRING"}]}
+{"kind":"+I","fields":["Adam",null]}
+{"kind":"+I","fields":["Baker",null]}
+{"kind":"+I","fields":["Charlie",null]}
+{"kind":"+I","fields":["Don",null]}
+{"kind":"+I","fields":["Victor",null]}
+{"kind":"-D","fields":["Baker",null]}
+{"kind":"+I","fields":["Baker","Research"]}
+{"kind":"-D","fields":["Charlie",null]}
+{"kind":"+I","fields":["Charlie","Human Resources"]}
+{"kind":"+I","fields":["Charlie","HR"]}
+{"kind":"-D","fields":["Don",null]}
+{"kind":"+I","fields":["Don","Sales"]}
+{"kind":"+I","fields":["Juliet",null]}
+{"kind":"+I","fields":["Helena",null]}
+{"kind":"+I","fields":["Charlie","People Operations"]}
+{"kind":"+I","fields":["Ivana","Research"]}
+{"kind":"-D","fields":["Helena",null]}
+{"kind":"+I","fields":["Helena","Engineering"]}
+{"kind":"-D","fields":["Juliet",null]}
+{"kind":"+I","fields":["Juliet","Engineering"]}

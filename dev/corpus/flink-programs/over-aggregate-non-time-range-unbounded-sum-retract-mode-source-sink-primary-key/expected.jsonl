@@ -1,0 +1,18 @@
+{"columns":[{"name":"key","type":"STRING NOT NULL"},{"name":"val","type":"BIGINT"},{"name":"ts","type":"BIGINT"},{"name":"sum_val","type":"BIGINT"}]}
+{"kind":"+I","fields":["key1",1,100,1]}
+{"kind":"-D","fields":["key1",1,100,1]}
+{"kind":"+I","fields":["key1",2,200,2]}
+{"kind":"-D","fields":["key1",2,200,2]}
+{"kind":"+I","fields":["key1",5,500,5]}
+{"kind":"-D","fields":["key1",5,500,5]}
+{"kind":"+I","fields":["key1",6,600,6]}
+{"kind":"-D","fields":["key1",6,600,6]}
+{"kind":"+I","fields":["key1",3,200,3]}
+{"kind":"+I","fields":["key2",1,100,1]}
+{"kind":"-D","fields":["key2",1,100,1]}
+{"kind":"+I","fields":["key2",2,200,2]}
+{"kind":"+I","fields":["key3",1,100,1]}
+{"kind":"-D","fields":["key1",3,200,3]}
+{"kind":"+I","fields":["key1",4,400,4]}
+{"kind":"-D","fields":["key1",4,400,4]}
+{"kind":"+I","fields":["key1",3,300,3]}

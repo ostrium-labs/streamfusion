@@ -1,0 +1,4 @@
+{"columns":[{"name":"vehicle_id","type":"BIGINT"},{"name":"Initial_Temp","type":"INT"},{"name":"Final_Temp","type":"INT"}]}
+{"kind":"+I","fields":[1,100,106]}
+{"kind":"+I","fields":[1,107,107]}
+{"kind":"+I","fields":[1,100,111]}

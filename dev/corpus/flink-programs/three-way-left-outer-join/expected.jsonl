@@ -1,0 +1,6 @@
+{"columns":[{"name":"user_id","type":"STRING"},{"name":"name","type":"STRING"},{"name":"order_id","type":"STRING"},{"name":"payment_id","type":"STRING"}]}
+{"kind":"+I","fields":["1","Gus","order1","payment3"]}
+{"kind":"+I","fields":["1","Gus","order1","payment1"]}
+{"kind":"+I","fields":["2","Bob","order2","payment2"]}
+{"kind":"+I","fields":["2","Bob","order3","payment2"]}
+{"kind":"+I","fields":["3","Alice",null,null]}

@@ -1,0 +1,2 @@
+{"columns":[{"name":"error","type":"STRING"}]}
+{"kind":"+I","fields":["Column 'a.ab.aba' is NOT NULL, however, a null value is being written into it. You can set job configuration 'table.exec.sink.not-null-enforcer'='DROP' to suppress this exception and drop such records silently."]}

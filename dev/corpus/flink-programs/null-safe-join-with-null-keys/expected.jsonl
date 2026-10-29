@@ -1,0 +1,3 @@
+{"columns":[{"name":"user_id","type":"STRING"},{"name":"name","type":"STRING"},{"name":"order_id","type":"STRING"}]}
+{"kind":"+I","fields":["1","Gus","order1"]}
+{"kind":"+I","fields":[null,"NullUser","nullOrder"]}

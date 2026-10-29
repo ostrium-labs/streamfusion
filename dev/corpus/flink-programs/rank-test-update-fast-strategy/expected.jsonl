@@ -1,0 +1,19 @@
+{"columns":[{"name":"a","type":"INT NOT NULL"},{"name":"b","type":"STRING"},{"name":"count_c","type":"BIGINT NOT NULL"},{"name":"row_num","type":"BIGINT NOT NULL"}]}
+{"kind":"+I","fields":[2,"a",1,1]}
+{"kind":"+I","fields":[4,"b",1,1]}
+{"kind":"+I","fields":[6,"c",1,1]}
+{"kind":"-D","fields":[2,"a",1,1]}
+{"kind":"+I","fields":[1,"a",1,1]}
+{"kind":"+I","fields":[2,"a",1,2]}
+{"kind":"-D","fields":[4,"b",1,1]}
+{"kind":"+I","fields":[3,"b",1,1]}
+{"kind":"+I","fields":[4,"b",1,2]}
+{"kind":"-D","fields":[6,"c",1,1]}
+{"kind":"+I","fields":[5,"c",1,1]}
+{"kind":"+I","fields":[6,"c",1,2]}
+{"kind":"+I","fields":[4,"d",1,1]}
+{"kind":"-D","fields":[1,"a",1,1]}
+{"kind":"+I","fields":[0,"a",1,1]}
+{"kind":"-D","fields":[2,"a",1,2]}
+{"kind":"+I","fields":[1,"a",1,2]}
+{"kind":"+I","fields":[2,"a",1,3]}

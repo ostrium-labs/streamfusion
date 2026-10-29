@@ -1,0 +1,2 @@
+{"columns":[{"name":"error","type":"STRING"}]}
+{"kind":"+I","fields":["Column 'a.ab.abc' is BINARY(2), however, a string of length 3 is being written into it. You can set job configuration 'table.exec.sink.type-length-enforcer' to control this behaviour."]}

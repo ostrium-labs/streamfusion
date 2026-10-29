@@ -1,0 +1,8 @@
+{"columns":[{"name":"a","type":"STRING"},{"name":"b","type":"INT"},{"name":"c","type":"BIGINT"}]}
+{"kind":"+I","fields":["book",1,1]}
+{"kind":"+I","fields":["book",2,2]}
+{"kind":"+I","fields":["fruit",4,1]}
+{"kind":"+I","fields":["cereal",6,1]}
+{"kind":"+I","fields":["cereal",7,2]}
+{"kind":"+I","fields":["apple",8,1]}
+{"kind":"+I","fields":["fruit",9,2]}

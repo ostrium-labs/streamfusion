@@ -1,0 +1,3 @@
+{"columns":[{"name":"a","type":"BIGINT"},{"name":"a1","type":"STRING"},{"name":"b","type":"INT NOT NULL"},{"name":"b1","type":"STRING"},{"name":"c1","type":"STRING"},{"name":"c2","type":"STRING"},{"name":"d1","type":"TIMESTAMP(3)"}]}
+{"kind":"+I","fields":[5,"5",11,"11 and 11 and 1702688461000","hello world11","$hello","2023-12-16 01:01:00"]}
+{"kind":"+I","fields":[5,"5",11,"11 and 11 and 1702688461000","hello world11","$hello","2023-12-16 01:01:00"]}

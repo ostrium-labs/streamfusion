@@ -1,0 +1,14 @@
+{"columns":[{"name":"id","type":"BIGINT"},{"name":"final","type":"BIGINT"}]}
+{"kind":"+I","fields":[12,4616007]}
+{"kind":"-D","fields":[12,4616007]}
+{"kind":"+I","fields":[12,77720651]}
+{"kind":"-D","fields":[12,77720651]}
+{"kind":"+I","fields":[12,91511301]}
+{"kind":"-D","fields":[12,91511301]}
+{"kind":"+I","fields":[12,92788880]}
+{"kind":"-D","fields":[12,92788880]}
+{"kind":"+I","fields":[12,95541294]}
+{"kind":"-D","fields":[12,95541294]}
+{"kind":"+I","fields":[12,97770528]}
+{"kind":"-D","fields":[12,97770528]}
+{"kind":"+I","fields":[12,99121036]}
