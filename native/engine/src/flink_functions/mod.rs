@@ -32,6 +32,7 @@ pub(crate) mod split;
 pub(crate) mod split_index;
 pub(crate) mod substring;
 pub(crate) mod to_date;
+pub(crate) mod to_timestamp;
 
 mod abs;
 pub(crate) mod array_cast;
@@ -188,6 +189,8 @@ pub(crate) fn function(op: i64, arity: usize) -> Option<ScalarUDF> {
         129 => rpad::function(),
         130 => split_index::function(),
         131 => to_date::function(),
+        // Loams Stream additions (no JVM to evaluate these on): 900 and up.
+        900 => to_timestamp::function(),
         133 => calendar::function(calendar::Field::Quarter),
         134 => calendar::function(calendar::Field::Week),
         135 => calendar::function(calendar::Field::DayOfYear),

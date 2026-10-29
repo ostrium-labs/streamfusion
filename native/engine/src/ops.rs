@@ -73,6 +73,8 @@ pub struct WindowAggParams {
     pub shape: WindowShape,
     pub value_types: Vec<i64>,
     pub aggregate_kinds: Vec<i64>,
+    /// The windows' offset from the epoch (`TUMBLE(..., OFFSET => ...)`), in milliseconds.
+    pub offset_ms: i64,
     pub memory_budget_bytes: i64,
 }
 
@@ -165,6 +167,72 @@ pub struct IntervalJoinParams {
     pub memory_budget_bytes: i64,
 }
 
+/// A regular (non-windowed) join over changelogs (`Join`): inner, outer, semi or anti.
+#[derive(Debug, Clone, PartialEq)]
+pub struct UpdatingJoinParams {
+    pub left_keys: Vec<usize>,
+    pub right_keys: Vec<usize>,
+    /// 0 inner, 1 left outer, 2 right outer, 3 full outer, 4 semi, 5 anti.
+    pub join_type: i32,
+    /// The data schemas of each side, without the row-kind column.
+    pub left_schema: SchemaRef,
+    pub right_schema: SchemaRef,
+    /// A non-equi condition over `[left fields.., right fields..]`, if any.
+    pub predicate: Option<EncodedExpr>,
+    pub key_timestamp_precisions: Vec<i32>,
+    /// Per key: 1 when `=` drops NULL keys, 0 for `IS NOT DISTINCT FROM`; empty for all 1.
+    pub filter_nulls: Vec<i32>,
+    pub left_unique: bool,
+    pub right_unique: bool,
+    pub mini_batch: bool,
+    pub left_state_ttl_ms: i64,
+    pub right_state_ttl_ms: i64,
+    pub memory_budget_bytes: i64,
+}
+
+/// The windowing TVF on its own (`WindowTableFunction`): each row fanned out to its windows, with
+/// `window_start`, `window_end` and `window_time` appended in the time column's timestamp layout.
+#[derive(Debug, Clone, PartialEq)]
+pub struct WindowTvfParams {
+    pub time_column: usize,
+    pub shape: WindowShape,
+    pub offset_ms: i64,
+}
+
+/// Window Top-N and window deduplication (`WindowRank`, `WindowDeduplicate`) over a windowing
+/// TVF's output: per window and partition key, the first `limit` rows by `sort`, emitted when the
+/// watermark closes the window.
+#[derive(Debug, Clone, PartialEq)]
+pub struct WindowRankParams {
+    pub window_start_column: usize,
+    pub window_end_column: usize,
+    pub partition_columns: Vec<usize>,
+    pub sort: Vec<SortKey>,
+    pub limit: i64,
+    pub output_rank_number: bool,
+    /// Window deduplication keeping the last row: a tie keeps the later row.
+    pub keep_last_on_tie: bool,
+    pub memory_budget_bytes: i64,
+}
+
+/// A window join (`WindowJoin`): two windowing-TVF inputs joined within equal windows.
+#[derive(Debug, Clone, PartialEq)]
+pub struct WindowJoinParams {
+    pub left_keys: Vec<usize>,
+    pub right_keys: Vec<usize>,
+    pub left_window_start: usize,
+    pub left_window_end: usize,
+    pub right_window_start: usize,
+    pub right_window_end: usize,
+    /// 0 inner, 1 left outer, 2 right outer, 3 full outer, 4 semi, 5 anti.
+    pub join_type: i32,
+    pub left_schema: SchemaRef,
+    pub right_schema: SchemaRef,
+    pub predicate: Option<EncodedExpr>,
+    pub key_timestamp_precisions: Vec<i32>,
+    pub memory_budget_bytes: i64,
+}
+
 /// The key timestamp precisions to apply: empty means the operator's default (`-1`, not a
 /// timestamp, per key column), as when the JNI path passes none.
 fn precisions(given: &[i32], keys: usize) -> Vec<i32> {
@@ -201,14 +269,17 @@ pub(crate) fn window_aggregator(
             step_ms,
         } => (max_size_ms, step_ms, true),
     };
-    TumblingAggregator::new(
+    let mut aggregator = TumblingAggregator::new(
         size,
         slide,
         cumulative,
         p.value_types.clone(),
         p.aggregate_kinds.clone(),
-    )
-    .with_memory_budget(p.memory_budget_bytes)
+    );
+    if p.offset_ms != 0 {
+        aggregator.set_assignment_offset(p.offset_ms);
+    }
+    aggregator.with_memory_budget(p.memory_budget_bytes)
 }
 
 pub(crate) fn group_aggregator(p: &GroupAggParams) -> Result<GroupAggregator, DataFusionError> {
@@ -341,6 +412,184 @@ pub(crate) fn interval_joiner(p: &IntervalJoinParams) -> Result<IntervalJoiner, 
     .with_memory_budget(p.memory_budget_bytes)
 }
 
+pub(crate) fn updating_joiner(
+    p: &UpdatingJoinParams,
+) -> Result<crate::updating_join::UpdatingJoiner, DataFusionError> {
+    let keys = p.left_keys.len();
+    let filter_nulls = if p.filter_nulls.is_empty() {
+        vec![1; keys]
+    } else {
+        p.filter_nulls.clone()
+    };
+    crate::updating_join::UpdatingJoiner::new(
+        p.left_keys.clone(),
+        p.right_keys.clone(),
+        JoinKind::from_code(p.join_type),
+        p.left_schema.clone(),
+        p.right_schema.clone(),
+        p.predicate.as_ref().and_then(join_predicate),
+    )
+    .with_key_timestamp_precisions(precisions(&p.key_timestamp_precisions, keys))
+    .with_filter_nulls(filter_nulls)
+    .with_unique_join_keys(p.left_unique, p.right_unique)
+    .with_mini_batch(p.mini_batch)
+    .with_state_ttl(p.left_state_ttl_ms, p.right_state_ttl_ms)
+    .with_memory_budget(p.memory_budget_bytes)
+}
+
+pub(crate) fn window_ranker(
+    p: &WindowRankParams,
+) -> Result<crate::topn::WindowRanker, DataFusionError> {
+    let sort = p
+        .sort
+        .iter()
+        .map(|s| SortColumn {
+            index: s.index,
+            ascending: s.ascending,
+            nulls_first: s.nulls_first,
+        })
+        .collect();
+    let mut ranker = crate::topn::WindowRanker::new(
+        p.window_start_column,
+        p.window_end_column,
+        p.partition_columns.clone(),
+        sort,
+        p.limit,
+        p.output_rank_number,
+    );
+    if p.keep_last_on_tie {
+        ranker.set_keep_last_on_tie(true);
+    }
+    ranker.with_memory_budget(p.memory_budget_bytes)
+}
+
+pub(crate) fn window_joiner(
+    p: &WindowJoinParams,
+) -> Result<crate::window_join::WindowJoiner, DataFusionError> {
+    crate::window_join::WindowJoiner::new(
+        p.left_keys.clone(),
+        p.right_keys.clone(),
+        p.left_window_start,
+        p.left_window_end,
+        p.right_window_start,
+        p.right_window_end,
+        p.predicate.as_ref().and_then(join_predicate),
+        JoinKind::from_code(p.join_type),
+        p.left_schema.clone(),
+        p.right_schema.clone(),
+    )
+    .with_key_timestamp_precisions(precisions(&p.key_timestamp_precisions, p.left_keys.len()))
+    .with_memory_budget(p.memory_budget_bytes)
+}
+
+/// The stateless windowing TVF.
+struct WindowTvf {
+    params: WindowTvfParams,
+}
+
+impl NativeOperator for WindowTvf {
+    fn push(
+        &mut self,
+        input: usize,
+        batch: RecordBatch,
+        now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        one_input(input)?;
+        let (size, slide, cumulative) = match self.params.shape {
+            WindowShape::Tumble { size_ms } => (size_ms, size_ms, false),
+            WindowShape::Hop { size_ms, slide_ms } => (size_ms, slide_ms, false),
+            WindowShape::Cumulate {
+                max_size_ms,
+                step_ms,
+            } => (max_size_ms, step_ms, true),
+        };
+        let _ = now;
+        let window_type = batch
+            .schema()
+            .field(self.params.time_column)
+            .data_type()
+            .clone();
+        crate::window_agg::assign_windows(
+            &batch,
+            self.params.time_column,
+            size,
+            slide,
+            cumulative,
+            None,
+            &window_type,
+            self.params.offset_ms,
+        )
+        .map(some)
+    }
+    fn watermark(&mut self, _wm: i64, _now: i64) -> Result<Option<RecordBatch>, DataFusionError> {
+        Ok(None)
+    }
+    fn flush(&mut self, _end: bool, _now: i64) -> Result<Option<RecordBatch>, DataFusionError> {
+        Ok(None)
+    }
+}
+
+impl NativeOperator for crate::topn::WindowRanker {
+    fn push(
+        &mut self,
+        input: usize,
+        batch: RecordBatch,
+        _now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        one_input(input)?;
+        crate::topn::WindowRanker::push(self, &batch)?;
+        Ok(None)
+    }
+    fn watermark(
+        &mut self,
+        watermark: i64,
+        _now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        crate::topn::WindowRanker::flush(self, watermark).map(some)
+    }
+    fn flush(&mut self, end: bool, _now: i64) -> Result<Option<RecordBatch>, DataFusionError> {
+        if end {
+            crate::topn::WindowRanker::flush(self, i64::MAX).map(some)
+        } else {
+            Ok(None)
+        }
+    }
+}
+
+impl NativeOperator for crate::window_join::WindowJoiner {
+    fn push(
+        &mut self,
+        input: usize,
+        batch: RecordBatch,
+        _now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        match input {
+            0 => self.push_left(batch)?,
+            1 => self.push_right(batch)?,
+            other => {
+                return Err(DataFusionError::Execution(format!(
+                    "a window join has two inputs, got a batch on input {other}"
+                )));
+            }
+        }
+        Ok(None)
+    }
+    fn watermark(
+        &mut self,
+        watermark: i64,
+        _now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        crate::window_join::WindowJoiner::flush(self, watermark).map(some)
+    }
+    fn flush(&mut self, end: bool, _now: i64) -> Result<Option<RecordBatch>, DataFusionError> {
+        if end {
+            crate::window_join::WindowJoiner::flush(self, i64::MAX).map(some)
+        } else {
+            Ok(None)
+        }
+    }
+}
+
 /// The parameters of any native operator.
 #[derive(Debug, Clone, PartialEq)]
 pub enum OperatorParams {
@@ -351,6 +600,10 @@ pub enum OperatorParams {
     KeepLast(KeepLastParams),
     TopN(TopNParams),
     IntervalJoin(IntervalJoinParams),
+    UpdatingJoin(UpdatingJoinParams),
+    WindowTvf(WindowTvfParams),
+    WindowRank(WindowRankParams),
+    WindowJoin(WindowJoinParams),
 }
 
 /// What a runtime drives. Every call returns the rows it produces (`None` for none).
@@ -561,6 +814,30 @@ impl NativeOperator for IntervalJoiner {
     }
 }
 
+impl NativeOperator for crate::updating_join::UpdatingJoiner {
+    fn push(
+        &mut self,
+        input: usize,
+        batch: RecordBatch,
+        now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        match input {
+            0 | 1 => {
+                crate::updating_join::UpdatingJoiner::push(self, &batch, input == 0, now).map(some)
+            }
+            other => Err(DataFusionError::Execution(format!(
+                "a join has two inputs, got a batch on input {other}"
+            ))),
+        }
+    }
+    fn watermark(&mut self, _wm: i64, _now: i64) -> Result<Option<RecordBatch>, DataFusionError> {
+        Ok(None)
+    }
+    fn flush(&mut self, _end: bool, _now: i64) -> Result<Option<RecordBatch>, DataFusionError> {
+        self.flush_mini_batch().map(some)
+    }
+}
+
 /// Builds the operator `params` describes.
 pub fn build(params: &OperatorParams) -> Result<Box<dyn NativeOperator>, DataFusionError> {
     Ok(match params {
@@ -574,5 +851,9 @@ pub fn build(params: &OperatorParams) -> Result<Box<dyn NativeOperator>, DataFus
         OperatorParams::KeepLast(p) => Box::new(keep_last(p)?),
         OperatorParams::TopN(p) => Box::new(top_n(p)?),
         OperatorParams::IntervalJoin(p) => Box::new(interval_joiner(p)?),
+        OperatorParams::UpdatingJoin(p) => Box::new(updating_joiner(p)?),
+        OperatorParams::WindowTvf(p) => Box::new(WindowTvf { params: p.clone() }),
+        OperatorParams::WindowRank(p) => Box::new(window_ranker(p)?),
+        OperatorParams::WindowJoin(p) => Box::new(window_joiner(p)?),
     })
 }

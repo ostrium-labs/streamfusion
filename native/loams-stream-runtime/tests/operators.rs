@@ -60,6 +60,7 @@ fn window_spec(shape: WindowShape) -> OpSpec {
         shape,
         value_types: vec![0],
         aggregate_kinds: vec![0],
+        offset_ms: 0,
         memory_budget_bytes: -1,
     })
 }
@@ -328,6 +329,7 @@ fn nexmark_q0_and_q5_like_run_in_the_driver() {
         shape: WindowShape::Tumble { size_ms: 2000 },
         value_types: vec![0],
         aggregate_kinds: vec![3],
+        offset_ms: 0,
         memory_budget_bytes: -1,
     });
     let mut d = Driver::new(&count).unwrap();

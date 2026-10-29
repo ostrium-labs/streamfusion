@@ -52,6 +52,9 @@ pub struct WindowAggSpec {
     pub shape: WindowShape,
     pub value_types: Vec<i64>,
     pub aggregate_kinds: Vec<i64>,
+    /// The windows' offset from the epoch, in milliseconds.
+    #[serde(default)]
+    pub offset_ms: i64,
     #[serde(default = "unbounded")]
     pub memory_budget_bytes: i64,
 }
@@ -163,6 +166,80 @@ pub struct IntervalJoinSpec {
     pub memory_budget_bytes: i64,
 }
 
+/// A regular join over changelogs (`Join`).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct UpdatingJoinSpec {
+    pub left_keys: Vec<usize>,
+    pub right_keys: Vec<usize>,
+    /// 0 inner, 1 left outer, 2 right outer, 3 full outer, 4 semi, 5 anti.
+    pub join_type: i32,
+    pub left_fields: Vec<Field>,
+    pub right_fields: Vec<Field>,
+    #[serde(default)]
+    pub predicate: Option<EncodedExpr>,
+    #[serde(default)]
+    pub key_timestamp_precisions: Vec<i32>,
+    #[serde(default)]
+    pub filter_nulls: Vec<i32>,
+    #[serde(default)]
+    pub left_unique: bool,
+    #[serde(default)]
+    pub right_unique: bool,
+    #[serde(default)]
+    pub mini_batch: bool,
+    #[serde(default)]
+    pub left_state_ttl_ms: i64,
+    #[serde(default)]
+    pub right_state_ttl_ms: i64,
+    #[serde(default = "unbounded")]
+    pub memory_budget_bytes: i64,
+}
+
+/// The windowing TVF on its own (`WindowTableFunction`).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WindowTvfSpec {
+    pub time_column: usize,
+    pub shape: WindowShape,
+    #[serde(default)]
+    pub offset_ms: i64,
+}
+
+/// Window Top-N and window deduplication (`WindowRank`, `WindowDeduplicate`).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WindowRankSpec {
+    pub window_start_column: usize,
+    pub window_end_column: usize,
+    pub partition_columns: Vec<usize>,
+    pub sort: Vec<SortKey>,
+    pub limit: i64,
+    pub output_rank_number: bool,
+    #[serde(default)]
+    pub keep_last_on_tie: bool,
+    #[serde(default = "unbounded")]
+    pub memory_budget_bytes: i64,
+}
+
+/// A window join (`WindowJoin`).
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WindowJoinSpec {
+    pub left_keys: Vec<usize>,
+    pub right_keys: Vec<usize>,
+    pub left_window_start: usize,
+    pub left_window_end: usize,
+    pub right_window_start: usize,
+    pub right_window_end: usize,
+    /// 0 inner, 1 left outer, 2 right outer, 3 full outer, 4 semi, 5 anti.
+    pub join_type: i32,
+    pub left_fields: Vec<Field>,
+    pub right_fields: Vec<Field>,
+    #[serde(default)]
+    pub predicate: Option<EncodedExpr>,
+    #[serde(default)]
+    pub key_timestamp_precisions: Vec<i32>,
+    #[serde(default = "unbounded")]
+    pub memory_budget_bytes: i64,
+}
+
 /// One native operator and its parameters.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "op", rename_all = "snake_case")]
@@ -174,13 +251,17 @@ pub enum OpSpec {
     KeepLast(KeepLastSpec),
     TopN(TopNSpec),
     IntervalJoin(IntervalJoinSpec),
+    UpdatingJoin(UpdatingJoinSpec),
+    WindowTvf(WindowTvfSpec),
+    WindowRank(WindowRankSpec),
+    WindowJoin(WindowJoinSpec),
 }
 
 impl OpSpec {
     /// The number of inputs the operator takes.
     pub fn inputs(&self) -> usize {
         match self {
-            OpSpec::IntervalJoin(_) => 2,
+            OpSpec::IntervalJoin(_) | OpSpec::UpdatingJoin(_) | OpSpec::WindowJoin(_) => 2,
             _ => 1,
         }
     }
@@ -226,6 +307,7 @@ mod tests {
                 },
                 value_types: vec![0],
                 aggregate_kinds: vec![3],
+                offset_ms: 0,
                 memory_budget_bytes: -1,
             }),
             OpSpec::GroupAgg(GroupAggSpec {
@@ -293,6 +375,55 @@ mod tests {
                 left_fields: vec![Field::new("k", DataType::Int64, false)],
                 right_fields: vec![Field::new("k", DataType::Int64, false)],
                 predicate: None,
+                memory_budget_bytes: -1,
+            }),
+            OpSpec::UpdatingJoin(UpdatingJoinSpec {
+                left_keys: vec![0],
+                right_keys: vec![1],
+                join_type: 1,
+                left_fields: vec![Field::new("k", DataType::Int64, false)],
+                right_fields: vec![Field::new("v", DataType::Utf8, true)],
+                predicate: None,
+                key_timestamp_precisions: vec![-1],
+                filter_nulls: vec![1],
+                left_unique: false,
+                right_unique: false,
+                mini_batch: false,
+                left_state_ttl_ms: 0,
+                right_state_ttl_ms: 0,
+                memory_budget_bytes: -1,
+            }),
+            OpSpec::WindowTvf(WindowTvfSpec {
+                time_column: 2,
+                shape: WindowShape::Tumble { size_ms: 1000 },
+                offset_ms: 0,
+            }),
+            OpSpec::WindowRank(WindowRankSpec {
+                window_start_column: 3,
+                window_end_column: 4,
+                partition_columns: vec![0],
+                sort: vec![SortKey {
+                    index: 1,
+                    ascending: true,
+                    nulls_first: true,
+                }],
+                limit: 3,
+                output_rank_number: false,
+                keep_last_on_tie: false,
+                memory_budget_bytes: -1,
+            }),
+            OpSpec::WindowJoin(WindowJoinSpec {
+                left_keys: vec![0],
+                right_keys: vec![0],
+                left_window_start: 1,
+                left_window_end: 2,
+                right_window_start: 1,
+                right_window_end: 2,
+                join_type: 0,
+                left_fields: vec![Field::new("k", DataType::Int64, false)],
+                right_fields: vec![Field::new("k", DataType::Int64, false)],
+                predicate: None,
+                key_timestamp_precisions: vec![],
                 memory_budget_bytes: -1,
             }),
         ]

@@ -2389,6 +2389,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createTumblingAggregator<'l
             },
             value_types: read_int_array(&env, &value_types),
             aggregate_kinds: read_int_array(&env, &aggregate_kinds),
+            offset_ms: 0,
             memory_budget_bytes,
         };
         boxed_or_throw(&mut env, crate::ops::window_aggregator(&params))
@@ -2417,6 +2418,7 @@ pub extern "system" fn Java_tech_streamfusion_Native_createCumulativeAggregator<
             },
             value_types: read_int_array(&env, &value_types),
             aggregate_kinds: read_int_array(&env, &aggregate_kinds),
+            offset_ms: 0,
             memory_budget_bytes,
         };
         boxed_or_throw(&mut env, crate::ops::window_aggregator(&params))

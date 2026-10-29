@@ -3326,6 +3326,13 @@ dependencies = [
 [[package]]
 name = "loams-stream-connectors"
 version = "0.1.0-preview.1"
+dependencies = [
+ "arrow 58.4.0",
+ "base64 0.22.1",
+ "loams-stream-sql",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "loams-stream-coord"
@@ -3335,7 +3342,10 @@ version = "0.1.0-preview.1"
 name = "loams-stream-plan"
 version = "0.1.0-preview.1"
 dependencies = [
+ "arrow-ipc 58.4.0",
  "arrow-schema 58.4.0",
+ "base64 0.22.1",
+ "loams-stream-sql",
  "serde",
  "serde_json",
 ]
@@ -3351,7 +3361,10 @@ dependencies = [
  "arrow 58.4.0",
  "arrow-schema 58.4.0",
  "datafusion",
+ "loams-stream-conformance",
+ "loams-stream-connectors",
  "loams-stream-plan",
+ "loams-stream-sql",
  "serde_json",
  "streamfusion",
 ]

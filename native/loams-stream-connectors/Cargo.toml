@@ -7,3 +7,11 @@ description = "Loams Stream sources, sinks and formats (preview)"
 publish = false
 
 [dependencies]
+arrow = { workspace = true }
+# Flink's json format writes binary values as base64.
+base64 = { workspace = true }
+serde = { workspace = true }
+# raw_value keeps each field's JSON text, so numbers decode from their exact digits.
+serde_json = { workspace = true, features = ["raw_value"] }
+# Flink's logical types and their Arrow layout.
+loams-stream-sql = { path = "../loams-stream-sql" }

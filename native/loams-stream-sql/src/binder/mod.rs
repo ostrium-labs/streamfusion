@@ -24,7 +24,7 @@ pub use catalog::{
     Catalog, CatalogError, CatalogObject, ColumnKind, InMemoryCatalog, ObjectIdentifier,
     ResolvedColumn, ResolvedSchema,
 };
-pub use expr::Scope;
+pub use expr::{Scope, ScopeField, type_expr};
 
 /// Whether the binder types `name` (upper case) as a built-in function: the binder's part of the
 /// function matrix (FC1 Task 7).

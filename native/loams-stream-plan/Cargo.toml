@@ -10,7 +10,12 @@ publish = false
 # Schemas travel in the operator spec (an interval join's input schemas); arrow-schema's serde
 # feature gives Field and DataType a stable serde form.
 arrow-schema = { workspace = true, features = ["serde"] }
+# A typed NULL literal carries its Arrow type as an IPC schema message, as the engine decodes it.
+arrow-ipc = "58.4.0"
+base64 = { workspace = true }
 serde = { workspace = true }
+# The parser, binder and type system the planner works from.
+loams-stream-sql = { path = "../loams-stream-sql" }
 
 [dev-dependencies]
 serde_json = { workspace = true }
