@@ -1,0 +1,5 @@
+{"columns":[{"name":"id","type":"BIGINT"},{"name":"user_id","type":"INTEGER"},{"name":"amount","type":"DOUBLE"},{"name":"ts","type":"TIMESTAMP_LTZ(3)"}]}
+{"kind":"+I","fields":[1,1,1.75,"1970-01-01T00:00:01.3Z"]}
+{"kind":"+I","fields":[2,2,0.25,"1970-01-01T00:00:02.6Z"]}
+{"kind":"+I","fields":[3,3,2.0,"1970-01-01T00:00:03Z"]}
+{"kind":"+I","fields":[4,0,0.5,"1970-01-01T00:00:04.3Z"]}

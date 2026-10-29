@@ -1,0 +1,6 @@
+description = "Regular inner join of two append-only streams (insert-only result)"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

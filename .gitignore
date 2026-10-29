@@ -38,3 +38,6 @@ build/
 # Profiling artifacts (regenerable; see .claude/research/nexmark-operator-profiles-2026-07.md)
 .claude/profiles/
 hs_err_pid*.log
+
+# The differential oracle's work volume (loams-stream-oracle).
+dev/oracle/work/

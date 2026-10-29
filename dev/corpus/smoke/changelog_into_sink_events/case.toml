@@ -1,0 +1,7 @@
+description = "The same changelog as written, event by event (debezium-json writes -U as d and +U as c)"
+mode = "streaming"
+order_sensitive = true
+changelog_significant = true
+timeout_secs = 120
+collect = "sink"
+sink = "totals"

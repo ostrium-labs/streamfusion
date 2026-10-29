@@ -1,0 +1,6 @@
+description = "Left outer interval join: unmatched events padded with NULL once the watermark passes"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 120
+collect = "query"

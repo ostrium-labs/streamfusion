@@ -1,0 +1,6 @@
+description = "Regular FULL OUTER JOIN on aggregated sides, folded into the final table"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = false
+timeout_secs = 120
+collect = "query"

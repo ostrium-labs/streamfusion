@@ -1,0 +1,143 @@
+[
+  {
+    "method": "GET",
+    "path": "/api_versions",
+    "body": null,
+    "status": 200,
+    "response": "{\"versions\":[\"V1\",\"V2\",\"V3\",\"V4\"]}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/info",
+    "body": null,
+    "status": 200,
+    "response": "{\"productName\":\"Apache Flink\",\"version\":\"2.2.1\"}"
+  },
+  {
+    "method": "POST",
+    "path": "/v2/sessions",
+    "body": {
+      "properties": {
+        "execution.runtime-mode": "batch",
+        "table.local-time-zone": "UTC"
+      },
+      "sessionName": "fixtures"
+    },
+    "status": 200,
+    "response": "{\"sessionHandle\":\"af6b5775-8c21-46be-a462-cd179fb315e9\"}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9",
+    "body": null,
+    "status": 200,
+    "response": "{\"properties\":{\"blob.server.port\":\"6124\",\"high-availability.type\":\"NONE\",\"restart-strategy.type\":\"none\",\"table.local-time-zone\":\"UTC\",\"jobmanager.rpc.address\":\"flink-jobmanager\",\"sql-gateway.endpoint.rest.port\":\"8083\",\"sql-gateway.endpoint.rest.bind-address\":\"0.0.0.0\",\"execution.checkpointing.num-retained\":\"1\",\"execution.runtime-mode\":\"batch\",\"jobmanager.bind-host\":\"0.0.0.0\",\"table.resources.download-dir\":\"/tmp/sql-gateway-af6b5775-8c21-46be-a462-cd179fb315e9\",\"execution.checkpointing.savepoint-dir\":\"file:///oracle/work/savepoints\",\"sql-gateway.endpoint.type\":\"rest\",\"parallelism.default\":\"1\",\"taskmanager.numberOfTaskSlots\":\"8\",\"execution.checkpointing.dir\":\"file:///oracle/work/checkpoints\",\"state.backend.type\":\"hashmap\",\"execution.checkpointing.mode\":\"EXACTLY_ONCE\",\"sql-gateway.session.max-num\":\"100\",\"taskmanager.memory.process.size\":\"2048m\",\"taskmanager.bind-host\":\"0.0.0.0\",\"sql-gateway.endpoint.rest.address\":\"flink-sql-gateway\",\"web.cancel.enable\":\"true\",\"execution.target\":\"remote\",\"jobmanager.memory.process.size\":\"1600m\",\"sql-gateway.session.idle-timeout\":\"30 min\",\"jobmanager.rpc.port\":\"6123\",\"taskmanager.rpc.port\":\"6122\",\"rest.bind-address\":\"0.0.0.0\",\"execution.checkpointing.interval\":\"1 s\",\"rest.port\":\"8081\",\"execution.state-recovery.claim-mode\":\"NO_CLAIM\",\"execution.attached\":\"true\",\"execution.checkpointing.externalized-checkpoint-retention\":\"DELETE_ON_CANCELLATION\",\"execution.shutdown-on-attached-exit\":\"false\",\"web.submit.enable\":\"false\",\"rest.address\":\"flink-jobmanager\",\"execution.state-recovery.ignore-unclaimed-state\":\"false\",\"sql-gateway.session.check-interval\":\"1 min\",\"$internal.deployment.config-dir\":\"/opt/flink/conf\"}}"
+  },
+  {
+    "method": "POST",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/heartbeat",
+    "body": {},
+    "status": 200,
+    "response": "{}"
+  },
+  {
+    "method": "POST",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/configure-session",
+    "body": {
+      "statement": "SET 'parallelism.default' = '1'"
+    },
+    "status": 200,
+    "response": "{}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/complete-statement",
+    "body": {
+      "position": 11,
+      "statement": "SELECT * FR"
+    },
+    "status": 200,
+    "response": "{\"candidates\":[\"FROM\"]}"
+  },
+  {
+    "method": "POST",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/statements",
+    "body": {
+      "statement": "SELECT a, CAST(a AS DOUBLE) / 3 AS d, CAST(1.5 AS FLOAT) AS f, 1.10 AS dc, CAST(1e20 AS DOUBLE) AS big, DATE '2024-01-01' AS dt, TIMESTAMP '2024-01-01 00:00:01.5' AS ts, TO_TIMESTAMP_LTZ(1000, 3) AS ltz, CAST(NULL AS STRING) AS nn, ARRAY[a, 2] AS arr, MAP['k', a] AS m, ROW(a, 'x') AS r FROM (VALUES (1), (2)) AS t(a)"
+    },
+    "status": 200,
+    "response": "{\"operationHandle\":\"77652348-d8dd-4c23-9f9d-d7b665cccae1\"}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/77652348-d8dd-4c23-9f9d-d7b665cccae1/status",
+    "body": null,
+    "status": 200,
+    "response": "{\"status\":\"RUNNING\"}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/77652348-d8dd-4c23-9f9d-d7b665cccae1/result/0?rowFormat=JSON",
+    "body": null,
+    "status": 200,
+    "response": "{\"resultType\":\"NOT_READY\",\"nextResultUri\":\"/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/77652348-d8dd-4c23-9f9d-d7b665cccae1/result/0?rowFormat=JSON\"}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/77652348-d8dd-4c23-9f9d-d7b665cccae1/result/0?rowFormat=JSON",
+    "body": null,
+    "status": 200,
+    "response": "{\"resultType\":\"PAYLOAD\",\"isQueryResult\":true,\"jobID\":\"23acf3cfcb24fd403c6131c93438b219\",\"resultKind\":\"SUCCESS_WITH_CONTENT\",\"results\":{\"columns\":[{\"name\":\"a\",\"logicalType\":{\"type\":\"INTEGER\",\"nullable\":false},\"comment\":null},{\"name\":\"d\",\"logicalType\":{\"type\":\"DOUBLE\",\"nullable\":false},\"comment\":null},{\"name\":\"f\",\"logicalType\":{\"type\":\"FLOAT\",\"nullable\":false},\"comment\":null},{\"name\":\"dc\",\"logicalType\":{\"type\":\"DECIMAL\",\"nullable\":false,\"precision\":3,\"scale\":2},\"comment\":null},{\"name\":\"big\",\"logicalType\":{\"type\":\"DOUBLE\",\"nullable\":false},\"comment\":null},{\"name\":\"dt\",\"logicalType\":{\"type\":\"DATE\",\"nullable\":false},\"comment\":null},{\"name\":\"ts\",\"logicalType\":{\"type\":\"TIMESTAMP_WITHOUT_TIME_ZONE\",\"nullable\":false,\"precision\":1},\"comment\":null},{\"name\":\"ltz\",\"logicalType\":{\"type\":\"TIMESTAMP_WITH_LOCAL_TIME_ZONE\",\"nullable\":true,\"precision\":3},\"comment\":null},{\"name\":\"nn\",\"logicalType\":{\"type\":\"VARCHAR\",\"nullable\":true,\"length\":2147483647},\"comment\":null},{\"name\":\"arr\",\"logicalType\":{\"type\":\"ARRAY\",\"nullable\":false,\"elementType\":{\"type\":\"INTEGER\",\"nullable\":false}},\"comment\":null},{\"name\":\"m\",\"logicalType\":{\"type\":\"MAP\",\"nullable\":false,\"keyType\":{\"type\":\"CHAR\",\"nullable\":false,\"length\":1},\"valueType\":{\"type\":\"INTEGER\",\"nullable\":false}},\"comment\":null},{\"name\":\"r\",\"logicalType\":{\"type\":\"ROW\",\"nullable\":false,\"fields\":[{\"name\":\"EXPR$0\",\"fieldType\":{\"type\":\"INTEGER\",\"nullable\":false}},{\"name\":\"EXPR$1\",\"fieldType\":{\"type\":\"CHAR\",\"nullable\":false,\"length\":1}}]},\"comment\":null}],\"rowFormat\":\"JSON\",\"data\":[{\"kind\":\"INSERT\",\"fields\":[1,0.3333333333333333,1.5,1.1,1.0E20,\"2024-01-01\",\"2024-01-01T00:00:01.5\",\"1970-01-01T00:00:01Z\",null,[1,2],{\"k\":1},{\"EXPR$0\":1,\"EXPR$1\":\"x\"}]},{\"kind\":\"INSERT\",\"fields\":[2,0.6666666666666666,1.5,1.1,1.0E20,\"2024-01-01\",\"2024-01-01T00:00:01.5\",\"1970-01-01T00:00:01Z\",null,[2,2],{\"k\":2},{\"EXPR$0\":2,\"EXPR$1\":\"x\"}]}]},\"nextResultUri\":\"/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/77652348-d8dd-4c23-9f9d-d7b665cccae1/result/1?rowFormat=JSON\"}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/77652348-d8dd-4c23-9f9d-d7b665cccae1/result/1?rowFormat=JSON",
+    "body": null,
+    "status": 200,
+    "response": "{\"resultType\":\"EOS\",\"isQueryResult\":true,\"jobID\":\"23acf3cfcb24fd403c6131c93438b219\",\"resultKind\":\"SUCCESS_WITH_CONTENT\",\"results\":{\"columns\":[{\"name\":\"a\",\"logicalType\":{\"type\":\"INTEGER\",\"nullable\":false},\"comment\":null},{\"name\":\"d\",\"logicalType\":{\"type\":\"DOUBLE\",\"nullable\":false},\"comment\":null},{\"name\":\"f\",\"logicalType\":{\"type\":\"FLOAT\",\"nullable\":false},\"comment\":null},{\"name\":\"dc\",\"logicalType\":{\"type\":\"DECIMAL\",\"nullable\":false,\"precision\":3,\"scale\":2},\"comment\":null},{\"name\":\"big\",\"logicalType\":{\"type\":\"DOUBLE\",\"nullable\":false},\"comment\":null},{\"name\":\"dt\",\"logicalType\":{\"type\":\"DATE\",\"nullable\":false},\"comment\":null},{\"name\":\"ts\",\"logicalType\":{\"type\":\"TIMESTAMP_WITHOUT_TIME_ZONE\",\"nullable\":false,\"precision\":1},\"comment\":null},{\"name\":\"ltz\",\"logicalType\":{\"type\":\"TIMESTAMP_WITH_LOCAL_TIME_ZONE\",\"nullable\":true,\"precision\":3},\"comment\":null},{\"name\":\"nn\",\"logicalType\":{\"type\":\"VARCHAR\",\"nullable\":true,\"length\":2147483647},\"comment\":null},{\"name\":\"arr\",\"logicalType\":{\"type\":\"ARRAY\",\"nullable\":false,\"elementType\":{\"type\":\"INTEGER\",\"nullable\":false}},\"comment\":null},{\"name\":\"m\",\"logicalType\":{\"type\":\"MAP\",\"nullable\":false,\"keyType\":{\"type\":\"CHAR\",\"nullable\":false,\"length\":1},\"valueType\":{\"type\":\"INTEGER\",\"nullable\":false}},\"comment\":null},{\"name\":\"r\",\"logicalType\":{\"type\":\"ROW\",\"nullable\":false,\"fields\":[{\"name\":\"EXPR$0\",\"fieldType\":{\"type\":\"INTEGER\",\"nullable\":false}},{\"name\":\"EXPR$1\",\"fieldType\":{\"type\":\"CHAR\",\"nullable\":false,\"length\":1}}]},\"comment\":null}],\"rowFormat\":\"JSON\",\"data\":[]}}"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/77652348-d8dd-4c23-9f9d-d7b665cccae1/close",
+    "body": null,
+    "status": 200,
+    "response": "{\"status\":\"CLOSED\"}"
+  },
+  {
+    "method": "POST",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/statements",
+    "body": {
+      "statement": "SELECT * FROM no_such_table"
+    },
+    "status": 200,
+    "response": "{\"operationHandle\":\"a7312753-ae1a-4d38-a722-4d9b82e095c3\"}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/a7312753-ae1a-4d38-a722-4d9b82e095c3/result/0?rowFormat=JSON",
+    "body": null,
+    "status": 200,
+    "response": "{\"resultType\":\"NOT_READY\",\"nextResultUri\":\"/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/a7312753-ae1a-4d38-a722-4d9b82e095c3/result/0?rowFormat=JSON\"}"
+  },
+  {
+    "method": "GET",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/a7312753-ae1a-4d38-a722-4d9b82e095c3/result/0?rowFormat=JSON",
+    "body": null,
+    "status": 500,
+    "response": "{\"errors\":[\"Internal server error.\",\"<Exception on server side:\\norg.apache.flink.table.gateway.api.utils.SqlGatewayException: org.apache.flink.table.gateway.api.utils.SqlGatewayException: Failed to fetchResults.\\nCaused by: org.apache.flink.table.gateway.api.utils.SqlGatewayException: Failed to fetchResults.\\nCaused by: org.apache.flink.table.gateway.service.utils.SqlExecutionException: Failed to execute the operation a7312753-ae1a-4d38-a722-4d9b82e095c3.\\nCaused by: org.apache.flink.table.api.ValidationException: SQL validation failed. From line 1, column 15 to line 1, column 27: Object 'no_such_table' not found\\nCaused by: org.apache.calcite.runtime.CalciteContextException: From line 1, column 15 to line 1, column 27: Object 'no_such_table' not found\\nCaused by: org.apache.calcite.sql.validate.SqlValidatorException: Object 'no_such_table' not found\\n\\nEnd of exception on server side>\"]}"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9/operations/a7312753-ae1a-4d38-a722-4d9b82e095c3/close",
+    "body": null,
+    "status": 200,
+    "response": "{\"status\":\"CLOSED\"}"
+  },
+  {
+    "method": "DELETE",
+    "path": "/v2/sessions/af6b5775-8c21-46be-a462-cd179fb315e9",
+    "body": null,
+    "status": 200,
+    "response": "{\"status\":\"CLOSED\"}"
+  }
+]

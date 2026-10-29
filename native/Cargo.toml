@@ -18,6 +18,7 @@ members = [
   "iceberg",
   "integration-tests",
   "benchmark-support",
+  "loams-stream-conformance",
 ]
 
 [workspace.package]

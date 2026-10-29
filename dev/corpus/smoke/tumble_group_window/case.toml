@@ -1,0 +1,6 @@
+description = "Legacy group window: GROUP BY TUMBLE(ts, ...) with TUMBLE_START and TUMBLE_END"
+mode = "streaming"
+order_sensitive = false
+changelog_significant = true
+timeout_secs = 120
+collect = "query"
