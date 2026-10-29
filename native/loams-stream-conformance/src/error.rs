@@ -35,6 +35,8 @@ pub enum Error {
     Invalid(String),
     /// Waited too long.
     Timeout(String),
+    /// The target cannot run the case (a required artefact is missing); not a failure.
+    Skipped(String),
     /// A local file could not be read or written.
     Io {
         /// The path.
@@ -90,6 +92,7 @@ impl fmt::Display for Error {
             ),
             Error::Decode { url, message } => write!(f, "{url}: cannot decode: {message}"),
             Error::Unsupported(m) | Error::Invalid(m) | Error::Timeout(m) => f.write_str(m),
+            Error::Skipped(m) => write!(f, "skipped: {m}"),
             Error::Io { path, message } => write!(f, "{path}: {message}"),
         }
     }

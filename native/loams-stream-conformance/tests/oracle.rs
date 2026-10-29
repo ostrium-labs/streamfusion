@@ -79,6 +79,7 @@ async fn oracle_records_expectations() {
             local: oracle.work_dir(),
             remote: "/oracle/work".into(),
         },
+        jars: Default::default(),
     };
     let opts = RunOptions {
         run_id: harness::new_run_id(),

@@ -76,7 +76,7 @@ pub enum Collect {
 }
 
 /// `case.toml`.
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct CaseSpec {
     /// The case's name; defaults to the directory's.
@@ -106,6 +106,47 @@ pub struct CaseSpec {
     /// Session configuration.
     #[serde(default)]
     pub config: BTreeMap<String, String>,
+    /// A stop-with-savepoint and restore case: run on `data/` until the sink holds
+    /// `restore_before_rows` change events, stop with a savepoint, add `data-after-restore/`,
+    /// restore and run to the end (`restore_end`).
+    #[serde(default)]
+    pub restore: bool,
+    /// Change events the sink must hold before the savepoint.
+    #[serde(default)]
+    pub restore_before_rows: Option<usize>,
+    /// How the restored job ends.
+    #[serde(default)]
+    pub restore_end: Option<RestoreEnd>,
+    /// The run must fail with an error containing this text.
+    #[serde(default)]
+    pub expect_error: Option<String>,
+    /// Artefacts the target must provide (`flink-test-udfs`: the jar with Flink's test UDFs).
+    #[serde(default)]
+    pub requires: Vec<String>,
+    /// Where the case came from (written by generators; not interpreted except
+    /// `expected_rows`).
+    #[serde(default)]
+    pub origin: Option<toml::Table>,
+}
+
+/// How a restored job ends.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum RestoreEnd {
+    /// `STOP JOB ... WITH SAVEPOINT WITH DRAIN`: watermarks to the end, timers fire.
+    Drain,
+    /// `STOP JOB ...` without draining.
+    Cancel,
+}
+
+impl CaseSpec {
+    /// `origin.expected_rows`: the change events Flink's own program expects before and after
+    /// the restore.
+    pub fn expected_rows(&self) -> Option<(usize, usize)> {
+        let rows = self.origin.as_ref()?.get("expected_rows")?.as_table()?;
+        let get = |k: &str| rows.get(k).and_then(|v| v.as_integer()).map(|v| v as usize);
+        Some((get("before")?, get("after").unwrap_or(0)))
+    }
 }
 
 fn default_timeout() -> u64 {
@@ -113,7 +154,7 @@ fn default_timeout() -> u64 {
 }
 
 /// A loaded case.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Case {
     /// The case's name.
     pub name: String,
@@ -174,6 +215,14 @@ impl Case {
             return Err(bad(
                 "order_sensitive = true needs changelog_significant = true".into(),
             ));
+        }
+        if spec.restore {
+            if spec.collect != Collect::Sink {
+                return Err(bad("restore = true needs collect = \"sink\"".into()));
+            }
+            if spec.restore_before_rows.is_none() {
+                return Err(bad("restore = true needs restore_before_rows".into()));
+            }
         }
         if spec.upsert_key.is_some() && spec.changelog_significant {
             return Err(bad(
@@ -304,6 +353,10 @@ pub fn split_statements(sql: &str) -> Vec<String> {
                 }
                 cur.push(' ');
             }
+            ';' if in_statement_set_block(&cur) => {
+                // `EXECUTE STATEMENT SET BEGIN ...; ...; END;` is one statement.
+                cur.push(';');
+            }
             ';' => {
                 if has_code {
                     out.push(cur.trim().to_owned());
@@ -323,6 +376,20 @@ pub fn split_statements(sql: &str) -> Vec<String> {
         out.push(cur.trim().to_owned());
     }
     out
+}
+
+/// Whether `cur` is inside `EXECUTE STATEMENT SET BEGIN ... END` (its `END` not yet seen).
+fn in_statement_set_block(cur: &str) -> bool {
+    let words: Vec<String> = cur
+        .split_whitespace()
+        .map(|w| w.to_ascii_uppercase())
+        .collect();
+    let opens = words.len() >= 4
+        && words[0] == "EXECUTE"
+        && words[1] == "STATEMENT"
+        && words[2] == "SET"
+        && words[3] == "BEGIN";
+    opens && words.last().map(String::as_str) != Some("END")
 }
 
 /// Replaces `${CASE_DIR}` and `${SINK_DIR}`.
