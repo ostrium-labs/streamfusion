@@ -52,8 +52,53 @@ impl Feature {
         status: FeatureStatus::Planned("FC1"),
     };
 
+    pub const MODULES: Feature = Feature {
+        name: "modules (LOAD MODULE, UNLOAD MODULE, USE MODULES)",
+        status: FeatureStatus::NotBuilt,
+    };
+    pub const PROCEDURES: Feature = Feature {
+        name: "stored procedures (CALL)",
+        status: FeatureStatus::Planned("FC2"),
+    };
+    pub const COMPILED_PLANS: Feature = Feature {
+        name: "COMPILE PLAN and EXECUTE PLAN",
+        status: FeatureStatus::Planned("FC2"),
+    };
+    pub const ANALYZE_TABLE: Feature = Feature {
+        name: "ANALYZE TABLE",
+        status: FeatureStatus::Planned("FC4"),
+    };
+    pub const ROW_LEVEL_MODIFICATION: Feature = Feature {
+        name: "row-level modification (DELETE, UPDATE, TRUNCATE TABLE)",
+        status: FeatureStatus::Planned("FC2"),
+    };
+    pub const ICEBERG_CATALOG: Feature = Feature {
+        name: "CREATE CATALOG of type iceberg",
+        status: FeatureStatus::Planned("FC1"),
+    };
+    pub const JDBC_CATALOG: Feature = Feature {
+        name: "CREATE CATALOG of type jdbc",
+        status: FeatureStatus::Planned("FC2"),
+    };
+    pub const USER_DEFINED_FUNCTIONS: Feature = Feature {
+        name: "Java and Python user-defined functions",
+        status: FeatureStatus::Planned("FC2"),
+    };
+    pub const MATCH_RECOGNIZE: Feature = Feature {
+        name: "MATCH_RECOGNIZE",
+        status: FeatureStatus::Planned("FC2"),
+    };
+    pub const CUSTOM_CATALOGS: Feature = Feature {
+        name: "catalog types from user jars (CatalogFactory)",
+        status: FeatureStatus::Planned("FC3"),
+    };
+    pub const LATERAL_TABLE_FUNCTIONS: Feature = Feature {
+        name: "LATERAL table functions",
+        status: FeatureStatus::Planned("FC2"),
+    };
+
     /// Every feature the parser can name.
-    pub const ALL: [Feature; 7] = [
+    pub const ALL: [Feature; 18] = [
         Feature::ADD_JAR,
         Feature::REMOVE_JAR,
         Feature::HIVE_DIALECT,
@@ -61,6 +106,17 @@ impl Feature {
         Feature::MODEL,
         Feature::MATCH_RECOGNIZE_WITHIN,
         Feature::JSON_FUNCTION_CLAUSES,
+        Feature::MODULES,
+        Feature::PROCEDURES,
+        Feature::COMPILED_PLANS,
+        Feature::ANALYZE_TABLE,
+        Feature::ROW_LEVEL_MODIFICATION,
+        Feature::ICEBERG_CATALOG,
+        Feature::JDBC_CATALOG,
+        Feature::USER_DEFINED_FUNCTIONS,
+        Feature::MATCH_RECOGNIZE,
+        Feature::LATERAL_TABLE_FUNCTIONS,
+        Feature::CUSTOM_CATALOGS,
     ];
 }
 

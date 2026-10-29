@@ -32,6 +32,10 @@ struct Case {
     sql: String,
     /// The `.q` file expects Flink's parser to reject the statement.
     parse_error: bool,
+    /// The `.q` file expects Flink to reject the statement (parse or validation).
+    error: bool,
+    /// The output the `.q` file records for the statement.
+    output: String,
 }
 
 fn is_parse_error(output: &str) -> bool {
@@ -84,6 +88,8 @@ fn read_q(path: &Path) -> Vec<Case> {
                 line,
                 sql,
                 parse_error: error && is_parse_error(&block.join("\n")),
+                error,
+                output: block.join("\n"),
             });
             continue;
         }
@@ -113,6 +119,8 @@ fn read_q(path: &Path) -> Vec<Case> {
             line: start_line,
             sql,
             parse_error: error && is_parse_error(&output),
+            error,
+            output,
         });
     }
     cases
@@ -386,4 +394,94 @@ fn syntax_errors_carry_spans() {
     assert_eq!(error.span().start.column, 23, "{error}");
     let error = parse("SELECT \"x\" FROM t").unwrap_err();
     assert!(error.to_string().contains("Lexical error"), "{error}");
+}
+
+/// The binder against the `.q` files: each file is one session, bound statement by statement.
+/// A statement Flink accepts must bind or be refused with a named feature (D2268); a statement
+/// Flink rejects should be rejected too (the binder is permissive where Flink's coercion is wide,
+/// so those are reported, not failed).
+#[test]
+fn binder_errors_match_q_files() {
+    use loams_stream_sql::binder::Binder;
+    let cases = q_cases();
+    let mut sessions: BTreeMap<String, Binder> = BTreeMap::new();
+    let (mut bound, mut both_reject, mut accepted_flink_rejects) = (0, 0, 0);
+    let mut named = BTreeMap::<&str, usize>::new();
+    let mut failures = vec![];
+    for case in &cases {
+        if case.parse_error {
+            continue;
+        }
+        let Ok(statements) = parse(&case.sql) else {
+            continue;
+        };
+        let binder = sessions.entry(case.file.clone()).or_default();
+        for statement in &statements {
+            match (binder.bind(statement), case.error) {
+                (Ok(_), false) => bound += 1,
+                (Err(e), _) if e.feature.is_some() => {
+                    *named.entry(e.feature.unwrap().name).or_default() += 1;
+                }
+                (Err(_), true) => both_reject += 1,
+                (Ok(_), true) => {
+                    accepted_flink_rejects += 1;
+                    println!(
+                        "accepted, Flink rejects: {}:{}: {}\n  Flink: {}",
+                        case.file,
+                        case.line,
+                        case.sql.lines().next().unwrap_or(""),
+                        case.output
+                            .lines()
+                            .find(|l| l.contains("Exception") || l.contains("ERROR"))
+                            .unwrap_or("")
+                    );
+                }
+                (Err(e), false) => failures.push(format!(
+                    "{}:{}: {}\n{}",
+                    case.file, case.line, e.message, case.sql
+                )),
+            }
+        }
+    }
+    println!(
+        "binder over .q files: {bound} bound; {both_reject} rejected as Flink rejects them; {accepted_flink_rejects} accepted that Flink rejects; named {named:?}"
+    );
+    assert!(
+        failures.is_empty(),
+        "{} failures:\n{}",
+        failures.len(),
+        failures.join("\n\n")
+    );
+}
+
+/// Every Nexmark query binds after the DDL, or is refused with a named feature.
+#[test]
+fn binder_types_nexmark() {
+    use loams_stream_sql::binder::Binder;
+    let scripts: BTreeMap<String, String> = nexmark_scripts().into_iter().collect();
+    let mut named = vec![];
+    for (file, sql) in &scripts {
+        if !file.starts_with('q') {
+            continue;
+        }
+        let mut binder = Binder::new();
+        for setup in ["ddl_gen.sql", "ddl_views.sql"] {
+            for s in parse(&scripts[setup]).unwrap() {
+                binder
+                    .bind(&s)
+                    .unwrap_or_else(|e| panic!("{setup}: {e}\n{s}"));
+            }
+        }
+        for s in parse(sql).unwrap() {
+            match binder.bind(&s) {
+                Ok(_) => {}
+                Err(e) if e.feature.is_some() => named.push(format!("{file}: {}", e.message)),
+                // Nexmark marks q6 unsupported: its WHERE refers to a SELECT alias, which Flink's
+                // validator rejects too (Task 6's corpus records it as an oracle xfail).
+                Err(e) if file == "q6.sql" && e.message.contains("rownum") => {}
+                Err(e) => panic!("{file}: {e}\n{s}"),
+            }
+        }
+    }
+    println!("Nexmark named refusals: {named:?}");
 }

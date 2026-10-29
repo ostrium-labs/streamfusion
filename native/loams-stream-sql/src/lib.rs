@@ -20,6 +20,7 @@
 //! suites and Nexmark q0–q22; the binder (FC1 Task 4) gives them meaning.
 
 mod ast;
+pub mod binder;
 mod cursor;
 mod dialect;
 mod display;
