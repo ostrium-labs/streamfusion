@@ -38,3 +38,13 @@ harness = false
 [[bench]]
 name = "parquet_host_reader"
 harness = false
+
+# Inherited from StreamFusion: these findings predate the Loams fork. They are allowed here so
+# `clippy -D warnings` is clean workspace-wide while new crates stay strict; fix incrementally
+# (FC1 ruling R4.5).
+[lints.clippy]
+items_after_test_module = "allow"
+cloned_ref_to_slice_refs = "allow"
+needless_borrow = "allow"
+large_enum_variant = "allow"
+too_many_arguments = "allow"

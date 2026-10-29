@@ -27,7 +27,7 @@ mod error;
 mod lexer;
 mod parser;
 mod render;
-mod types;
+pub mod types;
 
 pub use ast::*;
 pub use dialect::{FlinkDialect, TableArgument, map_constructor, table_argument};

@@ -11,7 +11,7 @@ use string_views::StringView;
 mod tests;
 
 struct HeapSnapshotProbe {
-    object: streamfusion_bridge::bridge::HostObject,
+    object: crate::HostObject,
     max_parallelism: usize,
 }
 

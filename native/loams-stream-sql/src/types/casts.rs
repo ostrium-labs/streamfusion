@@ -138,8 +138,7 @@ fn supports_casting(source: &LogicalType, target: &LogicalType, allow_explicit: 
     if source.is(F::Constructed) && target.is(F::Constructed) {
         return supports_constructed_casting(source, target, allow_explicit);
     }
-    if (s == R::Raw && !target.is(F::BinaryString) && !target.is(F::CharacterString))
-        || t == R::Raw
+    if (s == R::Raw && !target.is(F::BinaryString) && !target.is(F::CharacterString)) || t == R::Raw
     {
         return false;
     }
@@ -351,10 +350,7 @@ fn calcite_can_cast_from(to: &LogicalType, from: &LogicalType) -> bool {
             }
             let (tc, fc) = (to.children(), from.children());
             return tc.len() == fc.len()
-                && tc
-                    .iter()
-                    .zip(&fc)
-                    .all(|(t, f)| calcite_can_cast_from(t, f));
+                && tc.iter().zip(&fc).all(|(t, f)| calcite_can_cast_from(t, f));
         }
         // fromType is a struct and toType is not: same family only (never for ROW).
         return false;
@@ -411,13 +407,17 @@ pub fn runtime_cast_exists(source: &LogicalType, target: &LogicalType) -> bool {
     if is_identity_cast(source, target) {
         return true;
     }
-    if target.is(F::CharacterString) && !matches!(target.kind, LogicalKind::Varchar(MAX_LENGTH))
-    {
+    if target.is(F::CharacterString) && !matches!(target.kind, LogicalKind::Varchar(MAX_LENGTH)) {
         return runtime_cast_exists(source, &LogicalType::string());
     }
     let (s, t) = (source.root(), target.root());
     let to_string = matches!(target.kind, LogicalKind::Varchar(MAX_LENGTH));
-    let ts = |r: R| matches!(r, R::TimestampWithoutTimeZone | R::TimestampWithLocalTimeZone);
+    let ts = |r: R| {
+        matches!(
+            r,
+            R::TimestampWithoutTimeZone | R::TimestampWithLocalTimeZone
+        )
+    };
     let int_or_approx = |r: R| r.is(F::IntegerNumeric) || r.is(F::ApproximateNumeric);
     let direct = (s == R::Decimal && t == R::Decimal)
         || (int_or_approx(s) && t == R::Decimal)
@@ -580,13 +580,33 @@ mod tests {
             ("STRING", "FLOAT", false, true),
             ("FLOAT", "STRING", false, true),
             ("DECIMAL(3, 2)", "STRING", false, true),
-            ("RAW('java.lang.Integer', 'a')", "RAW('java.lang.Integer', 'a')", true, true),
-            ("RAW('java.lang.Integer', 'a')", "RAW('java.lang.Object', 'b')", false, false),
+            (
+                "RAW('java.lang.Integer', 'a')",
+                "RAW('java.lang.Integer', 'a')",
+                true,
+                true,
+            ),
+            (
+                "RAW('java.lang.Integer', 'a')",
+                "RAW('java.lang.Object', 'b')",
+                false,
+                false,
+            ),
             ("ARRAY<INT>", "ARRAY<BIGINT>", true, true),
             ("ARRAY<INT>", "ARRAY<STRING>", false, true),
             ("ROW<f1 INT, f2 INT>", "ROW<f1 INT, f2 BIGINT>", true, true),
-            ("ROW<f1 INT 'description', f2 INT>", "ROW<f1 INT, f2 BIGINT>", true, true),
-            ("ROW<f1 INT, f2 INT>", "ROW<f1 INT, f2 BOOLEAN>", false, true),
+            (
+                "ROW<f1 INT 'description', f2 INT>",
+                "ROW<f1 INT, f2 BIGINT>",
+                true,
+                true,
+            ),
+            (
+                "ROW<f1 INT, f2 INT>",
+                "ROW<f1 INT, f2 BOOLEAN>",
+                false,
+                true,
+            ),
             ("ROW<f1 INT, f2 INT>", "STRING", false, true),
             // timestamp type and timestamp_ltz type
             ("TIMESTAMP(9)", "TIMESTAMP(9)", true, true),

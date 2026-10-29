@@ -1,3 +1,5 @@
+// Inherited from StreamFusion: these tests ignore some `Result`s (FC1 ruling R4.5).
+#![allow(unused_must_use)]
 use super::*;
 
 #[test]

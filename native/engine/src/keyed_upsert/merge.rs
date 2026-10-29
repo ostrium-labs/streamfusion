@@ -31,7 +31,7 @@ pub(super) struct Options {
     pub remove_on_delete: bool,
     pub remove_on_sequence_group: Vec<usize>,
     #[serde(skip)]
-    pub host_aggregates: Vec<Option<streamfusion_bridge::bridge::HostObject>>,
+    pub host_aggregates: Vec<Option<crate::HostObject>>,
 }
 
 impl Default for Options {
@@ -818,7 +818,7 @@ fn host_reference(cell: &Cell) -> i32 {
 
 #[cfg(not(feature = "jni"))]
 fn evaluate_host_column(
-    kernel: &streamfusion_bridge::bridge::HostObject,
+    kernel: &crate::HostObject,
     _column: &ArrayRef,
     _program: Vec<i32>,
     _cells: Vec<Cell>,

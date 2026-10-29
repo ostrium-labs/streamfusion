@@ -175,7 +175,9 @@ fn find_common_nullable_type(
             continue;
         }
         match root {
-            R::Array => return find_common_children(types).map(|c| LogicalType::array(c[0].clone())),
+            R::Array => {
+                return find_common_children(types).map(|c| LogicalType::array(c[0].clone()));
+            }
             R::Multiset => {
                 return find_common_children(types).map(|c| LogicalType::multiset(c[0].clone()));
             }
@@ -266,7 +268,13 @@ fn find_common_nullable_type(
 
 /// `areSimilarTypes`: the two could be the operands of an equality predicate.
 fn are_similar_types(left: &LogicalType, right: &LogicalType) -> bool {
-    for family in [F::CharacterString, F::BinaryString, F::Numeric, F::Time, F::Timestamp] {
+    for family in [
+        F::CharacterString,
+        F::BinaryString,
+        F::Numeric,
+        F::Time,
+        F::Timestamp,
+    ] {
         if left.is(family) && right.is(family) {
             return true;
         }
@@ -337,7 +345,10 @@ fn common_exact_numeric(result: &LogicalType, ty: &LogicalType) -> LogicalType {
             result.clone()
         };
     }
-    let (p1, p2) = (result.precision().unwrap() as i32, ty.precision().unwrap() as i32);
+    let (p1, p2) = (
+        result.precision().unwrap() as i32,
+        ty.precision().unwrap() as i32,
+    );
     let (s1, s2) = (result.scale().unwrap() as i32, ty.scale().unwrap() as i32);
     let max = MAX_DECIMAL_PRECISION as i32;
     let d = (p1 - s1).max(p2 - s2).min(max);
@@ -529,12 +540,21 @@ mod tests {
             (vec![ty("INT"), ty("ARRAY<INT>")], None),
             (vec![ty("INT"), ty("VARCHAR(23)")], None),
             (vec![ty("BINARY"), ty("VARCHAR(23)")], None),
-            (vec![ty("INT NOT NULL"), ty("INT NOT NULL")], Some(ty("INT NOT NULL"))),
+            (
+                vec![ty("INT NOT NULL"), ty("INT NOT NULL")],
+                Some(ty("INT NOT NULL")),
+            ),
             (vec![ty("INT"), ty("BIGINT NOT NULL")], Some(ty("BIGINT"))),
             (vec![null.clone(), null.clone()], None),
             (vec![null.clone(), ty("INT"), ty("INT")], Some(ty("INT"))),
-            (vec![ty("ARRAY<INT>"), ty("ARRAY<INT>")], Some(ty("ARRAY<INT>"))),
-            (vec![ty("ARRAY<BIGINT>"), ty("ARRAY<INT>")], Some(ty("ARRAY<BIGINT>"))),
+            (
+                vec![ty("ARRAY<INT>"), ty("ARRAY<INT>")],
+                Some(ty("ARRAY<INT>")),
+            ),
+            (
+                vec![ty("ARRAY<BIGINT>"), ty("ARRAY<INT>")],
+                Some(ty("ARRAY<BIGINT>")),
+            ),
             (
                 vec![ty("MULTISET<BIGINT>"), ty("MULTISET<INT>")],
                 Some(ty("MULTISET<BIGINT>")),
@@ -557,12 +577,18 @@ mod tests {
             ),
             (vec![ty("CHAR(2)"), ty("CHAR(4)")], Some(ty("VARCHAR(4)"))),
             (vec![ty("VARCHAR(2)"), ty("STRING")], Some(ty("STRING"))),
-            (vec![ty("VARCHAR(2)"), ty("CHAR(5)")], Some(ty("VARCHAR(5)"))),
+            (
+                vec![ty("VARCHAR(2)"), ty("CHAR(5)")],
+                Some(ty("VARCHAR(5)")),
+            ),
             (
                 vec![ty("CHAR(5)"), ty("VARCHAR(2)"), ty("VARCHAR(7)")],
                 Some(ty("VARCHAR(7)")),
             ),
-            (vec![ty("BINARY(2)"), ty("BINARY(4)")], Some(ty("VARBINARY(4)"))),
+            (
+                vec![ty("BINARY(2)"), ty("BINARY(4)")],
+                Some(ty("VARBINARY(4)")),
+            ),
             (
                 vec![ty("BINARY(5)"), ty("VARBINARY(2)"), ty("VARBINARY(7)")],
                 Some(ty("VARBINARY(7)")),
@@ -575,7 +601,11 @@ mod tests {
                 Some(ty("DOUBLE")),
             ),
             (
-                vec![ty("DECIMAL(2, 2)"), ty("DECIMAL(5, 2)"), ty("DECIMAL(7, 5)")],
+                vec![
+                    ty("DECIMAL(2, 2)"),
+                    ty("DECIMAL(5, 2)"),
+                    ty("DECIMAL(7, 5)"),
+                ],
                 Some(ty("DECIMAL(8, 5)")),
             ),
             (

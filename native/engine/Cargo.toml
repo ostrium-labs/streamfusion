@@ -243,3 +243,57 @@ harness = false
 [[bench]]
 name = "unique_join_retractions"
 harness = false
+
+# Inherited from StreamFusion: these findings predate the Loams fork. They are allowed here so
+# `clippy -D warnings` is clean workspace-wide while new crates stay strict; fix incrementally
+# (FC1 ruling R4.5).
+[lints.clippy]
+useless_vec = "allow"
+byte_char_slices = "allow"
+items_after_test_module = "allow"
+unit_arg = "allow"
+iter_cloned_collect = "allow"
+redundant_closure = "allow"
+while_let_on_iterator = "allow"
+cloned_ref_to_slice_refs = "allow"
+needless_question_mark = "allow"
+useless_conversion = "allow"
+needless_borrows_for_generic_args = "allow"
+manual_inspect = "allow"
+needless_lifetimes = "allow"
+obfuscated_if_else = "allow"
+ptr_arg = "allow"
+box_collection = "allow"
+drop_non_drop = "allow"
+manual_slice_size_calculation = "allow"
+unnecessary_map_or = "allow"
+unnecessary_unwrap = "allow"
+iter_kv_map = "allow"
+manual_div_ceil = "allow"
+manual_range_contains = "allow"
+manual_is_multiple_of = "allow"
+bool_comparison = "allow"
+manual_flatten = "allow"
+question_mark = "allow"
+map_entry = "allow"
+wrong_self_convention = "allow"
+type_complexity = "allow"
+large_enum_variant = "allow"
+unnecessary_cast = "allow"
+needless_return = "allow"
+too_many_arguments = "allow"
+unnecessary_lazy_evaluations = "allow"
+doc_lazy_continuation = "allow"
+needless_range_loop = "allow"
+needless_borrow = "allow"
+empty_line_after_doc_comments = "allow"
+
+# Inherited from StreamFusion: these findings predate the Loams fork. They are allowed here so
+# `clippy -D warnings` is clean workspace-wide while new crates stay strict; fix incrementally
+# (FC1 ruling R4.5).
+[lints.rust]
+unused_mut = "allow"
+unexpected_cfgs = "allow"
+private_interfaces = "allow"
+unused_imports = "allow"
+dead_code = "allow"
