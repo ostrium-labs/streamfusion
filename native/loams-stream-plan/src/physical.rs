@@ -63,6 +63,40 @@ pub struct WatermarkSpec {
     pub delay_ms: i64,
 }
 
+/// What a NULL in a `NOT NULL` column does (`table.exec.sink.not-null-enforcer`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum NotNullEnforcer {
+    Error,
+    Drop,
+}
+
+/// What a string or binary of the wrong length does (`table.exec.sink.type-length-enforcer`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LengthEnforcer {
+    Ignore,
+    Error,
+    TrimPad,
+}
+
+/// How deep the checks go (`table.exec.sink.nested-constraint-enforcer`).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum NestedEnforcer {
+    Ignore,
+    Rows,
+    RowsAndCollections,
+}
+
+/// A sink's constraint checks, over its columns (`fields` are the sink's types).
+#[derive(Debug, Clone, PartialEq)]
+pub struct EnforcerSpec {
+    pub fields: Vec<Field>,
+    /// Top-level columns checked for NULL (declared `NOT NULL` in the sink, nullable in the query).
+    pub not_null_columns: Vec<usize>,
+    pub not_null: NotNullEnforcer,
+    pub length: LengthEnforcer,
+    pub nested: NestedEnforcer,
+}
+
 /// A physical operator.
 #[derive(Debug, Clone, PartialEq)]
 pub enum PhysicalOp {
@@ -74,6 +108,8 @@ pub enum PhysicalOp {
     Watermark(WatermarkSpec),
     /// A native operator (`Calc`, window and group aggregates, Top-N, deduplication, joins).
     Native(Box<OpSpec>),
+    /// `ConstraintEnforcer`: the sink's `NOT NULL` and character/binary length constraints.
+    ConstraintEnforcer(EnforcerSpec),
     /// `Union` (ALL) of its inputs.
     Union,
     /// `Sink`.

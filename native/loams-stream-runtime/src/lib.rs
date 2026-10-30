@@ -7,6 +7,7 @@
 //! Tasks 11 and 13.
 
 pub mod driver;
+pub mod enforcer;
 pub mod local;
 
 pub use driver::{Driver, DriverError};

@@ -386,7 +386,7 @@ impl Encoder {
                     )
                 };
                 if temporal(l.ty()) || temporal(r.ty()) {
-                    return not_yet("temporal arithmetic".into());
+                    return self.temporal_arithmetic(op, l, r);
                 }
                 if is_decimal(ty) {
                     let kind = match op {
@@ -580,6 +580,49 @@ impl Encoder {
             }
             Op::Function(name) => self.function(name, args, ty),
         }
+    }
+
+    /// `datetime ± interval` (`nativeIntervalArithmetic`): the engine's temporal kernels take the
+    /// datetime, the interval and whether to subtract.
+    fn temporal_arithmetic(&mut self, op: &Op, l: &ScalarExpr, r: &ScalarExpr) -> PlanResult<()> {
+        let interval = |t: &LogicalType| {
+            matches!(
+                t.kind,
+                LogicalKind::IntervalDayTime { .. } | LogicalKind::IntervalYearMonth { .. }
+            )
+        };
+        let (value, delta) = match op {
+            Op::Plus | Op::Minus if interval(r.ty()) && !interval(l.ty()) => (l, r),
+            Op::Plus if interval(l.ty()) && !interval(r.ty()) => (r, l),
+            _ => {
+                return Err(PlanError::not_yet(format!(
+                    "native expression: {op:?} of {} and {}",
+                    l.ty(),
+                    r.ty()
+                )));
+            }
+        };
+        let months = matches!(delta.ty().kind, LogicalKind::IntervalYearMonth { .. });
+        let code = match (&value.ty().kind, months) {
+            (LogicalKind::Timestamp { .. } | LogicalKind::TimestampLtz { .. }, false) => 210,
+            (LogicalKind::Timestamp { .. } | LogicalKind::TimestampLtz { .. }, true) => 214,
+            (LogicalKind::Date, true) => 213,
+            (LogicalKind::Date, false) => 211,
+            (LogicalKind::Time(_), false) => 212,
+            _ => {
+                return Err(PlanError::not_yet(format!(
+                    "native expression: {op:?} of {} and {}",
+                    l.ty(),
+                    r.ty()
+                )));
+            }
+        };
+        self.add(KIND_CALL, code, 3);
+        self.emit(value)?;
+        self.emit(delta)?;
+        let i = self.long(matches!(op, Op::Minus) as i64);
+        self.add(KIND_LIT_BOOL, i, 0);
+        Ok(())
     }
 
     fn cast(&mut self, x: &ScalarExpr, ty: &LogicalType, try_cast: bool) -> PlanResult<()> {

@@ -30,17 +30,21 @@ every recorded corpus case, runs it in-process and compares the result with the 
 from Flink 2.2.1, with the harness's normaliser. Restore cases read `data/` and then
 `data-after-restore/` in one job, with a watermark per row (savepoints come with Task 14).
 
-Measured on 2026-10-30 (fork PR for FC1 Task 10, part 1):
+Measured on 2026-10-30 (fork PRs for FC1 Task 10, parts 1 and 2):
 
 | Corpus | Match |
 |---|---|
-| Nexmark (q6 excluded by the oracle) | 18 of 22 |
-| Flink test programs in FC1's scope | 106 of 180 |
-| Smoke | 0 of 20 (the local executor has no `datagen` source yet) |
+| Nexmark (q6 excluded by the oracle) | 19 of 22 |
+| Flink test programs in FC1's scope | 140 of 180 (FC1's bar: 144) |
+| Smoke | 15 of 20 |
 
-The largest remaining gaps: the `datagen` source in the local executor, `NOT NULL` sink columns
-(`ConstraintEnforcer`), Java UDFs (FC2), subqueries, casts between `TIMESTAMP` and
-`TIMESTAMP_LTZ`, temporal arithmetic, nested columns that are `NOT NULL` inside nullable rows,
-the error-reporting cases (the oracle records the job's error), updates into keyed sinks
-(`SinkMaterializer`), `FROM_UNIXTIME`, legacy group windows (Nexmark q11) and the csv format
-(Nexmark q13).
+Cases whose Flink job fails (`expect_error`) match when Loams Stream fails with Flink's message.
+The largest remaining gaps:
+
+- Java UDFs (FC2).
+- Updates into keyed sinks (`SinkMaterializer`).
+- Casts between `TIMESTAMP` and `TIMESTAMP_LTZ`.
+- Restore cases whose results depend on the watermark resetting at the savepoint (Task 14).
+- Session window changelogs.
+- `FROM_UNIXTIME`, `CURRENT_WATERMARK`, `REGEXP_EXTRACT` and `UPPER`.
+- Legacy group windows (Nexmark q11) and the csv format (Nexmark q13).

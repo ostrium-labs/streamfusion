@@ -287,7 +287,9 @@ pub(crate) fn window_aggregator(
         p.aggregate_kinds.clone(),
     );
     if p.offset_ms != 0 {
-        aggregator.set_assignment_offset(p.offset_ms);
+        // The engine shifts the grid like a time-zone offset (windows start at k*size - shift);
+        // Flink's window offset starts them at k*size + offset.
+        aggregator.set_assignment_offset(-p.offset_ms);
     }
     aggregator.with_memory_budget(p.memory_budget_bytes)
 }
@@ -565,7 +567,8 @@ impl NativeOperator for WindowTvf {
             cumulative,
             None,
             &window_type,
-            self.params.offset_ms,
+            // A grid shift like a time-zone offset; Flink's window offset is the opposite.
+            -self.params.offset_ms,
         )
         .map(some)
     }

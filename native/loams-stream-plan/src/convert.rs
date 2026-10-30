@@ -1153,14 +1153,33 @@ impl<'a> Converter<'a> {
             }
         };
         if let Some(w) = &select.selection {
-            if contains_subquery(w) {
-                return Err(PlanError::not_yet("subqueries (IN, EXISTS, scalar)"));
+            // IN and EXISTS conjuncts become semi and anti joins, as Flink's subquery rules do.
+            let mut rest = vec![];
+            for term in ast_conjuncts(w) {
+                match term {
+                    Expr::Exists { subquery, negated } => {
+                        from = self.exists_join(from, subquery, *negated)?;
+                    }
+                    Expr::InSubquery {
+                        expr,
+                        subquery,
+                        negated,
+                    } => {
+                        from = self.in_join(from, expr, subquery, *negated)?;
+                    }
+                    other => rest.push(other),
+                }
             }
-            let condition = self.expr(&from.scope, w)?;
-            from.rel = Rel::Filter {
-                input: Box::new(from.rel),
-                condition,
-            };
+            for term in rest {
+                if contains_subquery(term) {
+                    return Err(PlanError::not_yet("subqueries (IN, EXISTS, scalar)"));
+                }
+                let condition = self.expr(&from.scope, term)?;
+                from.rel = Rel::Filter {
+                    input: Box::new(from.rel),
+                    condition,
+                };
+            }
         }
         let group_exprs: Vec<&Expr> = match &select.group_by {
             GroupByExpr::Expressions(exprs, modifiers) => {
@@ -1196,6 +1215,87 @@ impl<'a> Converter<'a> {
             return Err(PlanError::invalid("DISTINCT ON is not Flink SQL"));
         }
         Ok(rel)
+    }
+
+    /// `[NOT] EXISTS (SELECT ... FROM r WHERE c)`: a semi (anti) join with `r` on `c`, which may
+    /// reference the outer query.
+    fn exists_join(&mut self, outer: From, subquery: &Query, negated: bool) -> PlanResult<From> {
+        let SetExpr::Select(select) = subquery.body.as_ref() else {
+            return Err(PlanError::not_yet("EXISTS over a set operation"));
+        };
+        if subquery.with.is_some()
+            || !matches!(select.group_by, GroupByExpr::Expressions(ref g, _) if g.is_empty())
+            || select.having.is_some()
+            || select.projection.iter().any(|i| match i {
+                SelectItem::UnnamedExpr(e) | SelectItem::ExprWithAlias { expr: e, .. } => {
+                    contains_aggregate(e)
+                }
+                _ => false,
+            })
+        {
+            return Err(PlanError::not_yet("EXISTS over an aggregating subquery"));
+        }
+        let [first] = select.from.as_slice() else {
+            return Err(PlanError::not_yet("EXISTS over several FROM items"));
+        };
+        let inner = self.table_with_joins(first)?;
+        let mut scope = outer.scope.clone();
+        scope.entries.extend(inner.scope.entries.iter().cloned());
+        let condition = match &select.selection {
+            Some(w) => {
+                if contains_subquery(w) {
+                    return Err(PlanError::not_yet("nested subqueries"));
+                }
+                self.expr(&scope, w)?
+            }
+            None => ScalarExpr::bool(true),
+        };
+        Ok(semi_join(outer, inner.rel, condition, negated))
+    }
+
+    /// `x [NOT] IN (SELECT y ...)`: a semi join on `x = y`, or a null-aware anti join on
+    /// `(x = y) IS NOT FALSE`.
+    fn in_join(
+        &mut self,
+        outer: From,
+        expr: &Expr,
+        subquery: &Query,
+        negated: bool,
+    ) -> PlanResult<From> {
+        let left = self.expr(&outer.scope, expr)?;
+        let inner = self.query(subquery).map_err(|e| match e {
+            PlanError::Invalid(_) | PlanError::Bind(_) => {
+                PlanError::not_yet("correlated IN subqueries")
+            }
+            other => other,
+        })?;
+        if inner.fields().len() != 1 {
+            return Err(PlanError::invalid(
+                "IN subquery must return exactly one column",
+            ));
+        }
+        let n = outer.rel.fields().len();
+        let right = ScalarExpr::input(n, inner.fields()[0].ty.clone());
+        let nullable = left.ty().nullable || right.ty().nullable;
+        let eq = ScalarExpr::call(
+            Op::Eq,
+            vec![left.clone(), right.clone()],
+            bool_type(nullable),
+        );
+        let condition = if negated && nullable {
+            ScalarExpr::call(
+                Op::Or,
+                vec![
+                    eq,
+                    ScalarExpr::call(Op::IsNull, vec![left], bool_type(false)),
+                    ScalarExpr::call(Op::IsNull, vec![right], bool_type(false)),
+                ],
+                bool_type(false),
+            )
+        } else {
+            eq
+        };
+        Ok(semi_join(outer, inner, condition, negated))
     }
 
     /// The select items with wildcards expanded, as (expression, name).
@@ -2372,5 +2472,37 @@ fn distinct(rel: Rel) -> Rel {
         group,
         calls: vec![],
         fields,
+    }
+}
+
+/// The conjuncts of a `WHERE` clause, through `AND` and parentheses.
+fn ast_conjuncts(e: &Expr) -> Vec<&Expr> {
+    match e {
+        Expr::BinaryOp {
+            left,
+            op: BinaryOperator::And,
+            right,
+        } => {
+            let mut out = ast_conjuncts(left);
+            out.extend(ast_conjuncts(right));
+            out
+        }
+        Expr::Nested(inner) => ast_conjuncts(inner),
+        other => vec![other],
+    }
+}
+
+/// A semi (or anti) join keeping `outer`'s fields.
+fn semi_join(outer: From, inner: Rel, condition: ScalarExpr, anti: bool) -> From {
+    let fields = outer.rel.fields().to_vec();
+    From {
+        rel: Rel::Join {
+            left: Box::new(outer.rel),
+            right: Box::new(inner),
+            kind: if anti { JoinKind::Anti } else { JoinKind::Semi },
+            condition,
+            fields,
+        },
+        scope: outer.scope,
     }
 }

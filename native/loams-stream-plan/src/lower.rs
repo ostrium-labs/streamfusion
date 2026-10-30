@@ -22,14 +22,16 @@ use crate::opspec::{
     UpdatingJoinSpec, WindowAggSpec, WindowJoinSpec, WindowRankSpec, WindowShape, WindowTvfSpec,
 };
 use crate::physical::{
-    ConnectorTable, Distribution, Edge, NodeId, PhysicalNode, PhysicalOp, PhysicalPlan,
-    WatermarkSpec,
+    ConnectorTable, Distribution, Edge, EnforcerSpec, LengthEnforcer, NestedEnforcer, NodeId,
+    NotNullEnforcer, PhysicalNode, PhysicalOp, PhysicalPlan, WatermarkSpec,
 };
 
 /// Builds a physical plan.
 #[derive(Debug, Default)]
 pub struct Lowering {
     plan: PhysicalPlan,
+    /// The session configuration (`SET`).
+    config: std::collections::BTreeMap<String, String>,
 }
 
 /// A projection with an optional filter over a base relation (Calcite's `RexProgram`).
@@ -94,6 +96,12 @@ fn names(fields: &[Field]) -> String {
 impl Lowering {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    /// Planning under the session configuration `config`.
+    pub fn with_config(mut self, config: std::collections::BTreeMap<String, String>) -> Self {
+        self.config = config;
+        self
     }
 
     pub fn finish(self) -> PhysicalPlan {
@@ -172,18 +180,69 @@ impl Lowering {
                 ));
             }
         }
-        let not_null: Vec<usize> = table
+        let not_null_columns: Vec<usize> = table
             .fields
             .iter()
             .enumerate()
             .filter(|(i, f)| !f.ty.nullable && self.node(input).fields[*i].ty.nullable)
             .map(|(i, _)| i)
             .collect();
-        if !not_null.is_empty() {
-            return Err(PlanError::not_yet(
-                "ConstraintEnforcer (NOT NULL sink columns)",
+        let setting = |key: &str| {
+            self.config
+                .get(key)
+                .map(|v| v.to_ascii_uppercase())
+                .unwrap_or_default()
+        };
+        let spec = EnforcerSpec {
+            fields: table.fields.clone(),
+            not_null_columns,
+            not_null: if setting("table.exec.sink.not-null-enforcer") == "DROP" {
+                NotNullEnforcer::Drop
+            } else {
+                NotNullEnforcer::Error
+            },
+            length: match setting("table.exec.sink.type-length-enforcer").as_str() {
+                "ERROR" => LengthEnforcer::Error,
+                "TRIM_PAD" => LengthEnforcer::TrimPad,
+                _ => LengthEnforcer::Ignore,
+            },
+            nested: match setting("table.exec.sink.nested-constraint-enforcer").as_str() {
+                "ROWS" => NestedEnforcer::Rows,
+                "ROWS_AND_COLLECTIONS" => NestedEnforcer::RowsAndCollections,
+                _ => NestedEnforcer::Ignore,
+            },
+        };
+        if spec.length == LengthEnforcer::TrimPad
+            && spec.nested == NestedEnforcer::RowsAndCollections
+        {
+            return Err(PlanError::invalid(
+                "Trimming and/or padding is not supported if constraint checking is enabled on types nested in collections.",
             ));
         }
+        let input = if enforces(&spec) {
+            let node = self.node(input);
+            let (fields, mode, key) =
+                (node.fields.clone(), node.changelog, node.upsert_key.clone());
+            let description = format!(
+                "constraints=[NotNullEnforcer(fields=[{}])]",
+                spec.not_null_columns
+                    .iter()
+                    .map(|i| spec.fields[*i].name.as_str())
+                    .collect::<Vec<_>>()
+                    .join(", ")
+            );
+            self.push(
+                "ConstraintEnforcer",
+                description,
+                PhysicalOp::ConstraintEnforcer(spec),
+                Self::forward(input),
+                fields,
+                mode,
+                key,
+            )
+        } else {
+            input
+        };
         let description = format!("table=[{}], fields=[{}]", table.name, names(&table.fields));
         let fields = table.fields.clone();
         Ok(self.push(
@@ -1803,4 +1862,55 @@ fn interval_bounds(
     }
     let (l, r) = times?;
     Some((l, r, lower?, upper?, rest))
+}
+
+/// Whether a sink needs a `ConstraintEnforcer`: a nullable query column into a `NOT NULL` one, a
+/// length-constrained column under a length enforcer, or nested constraints under the nested
+/// enforcer.
+fn enforces(spec: &EnforcerSpec) -> bool {
+    fn constrained(
+        ty: &LogicalType,
+        spec: &EnforcerSpec,
+        depth: usize,
+        in_collection: bool,
+    ) -> bool {
+        let nested_ok = depth == 0
+            || match spec.nested {
+                NestedEnforcer::Ignore => false,
+                NestedEnforcer::Rows => !in_collection,
+                NestedEnforcer::RowsAndCollections => true,
+            };
+        if !nested_ok {
+            return false;
+        }
+        let length = spec.length != LengthEnforcer::Ignore
+            && matches!(
+                ty.kind,
+                LogicalKind::Char(_)
+                    | LogicalKind::Varchar(_)
+                    | LogicalKind::Binary(_)
+                    | LogicalKind::Varbinary(_)
+            )
+            && !matches!(ty.kind, LogicalKind::Varchar(n) | LogicalKind::Varbinary(n) if n == loams_stream_sql::types::MAX_LENGTH);
+        let not_null = depth > 0 && !ty.nullable;
+        length
+            || not_null
+            || match &ty.kind {
+                LogicalKind::Row(fields) => fields
+                    .iter()
+                    .any(|f| constrained(&f.ty, spec, depth + 1, in_collection)),
+                LogicalKind::Array(e) | LogicalKind::Multiset(e) => {
+                    constrained(e, spec, depth + 1, true)
+                }
+                LogicalKind::Map(k, v) => {
+                    constrained(k, spec, depth + 1, true) || constrained(v, spec, depth + 1, true)
+                }
+                _ => false,
+            }
+    }
+    !spec.not_null_columns.is_empty()
+        || spec
+            .fields
+            .iter()
+            .any(|f| constrained(&f.ty, spec, 0, false))
 }

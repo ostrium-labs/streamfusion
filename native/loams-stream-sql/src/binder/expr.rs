@@ -936,7 +936,12 @@ fn arithmetic(
             LogicalType::double()
         }
     } else if let (Some(a), Some(c)) = (integer_rank(&l), integer_rank(&r)) {
-        let rank = a.max(c);
+        // `%` is Calcite's MOD, typed as its second operand (ReturnTypes.NULLABLE_MOD).
+        let rank = if matches!(op, BinaryOperator::Modulo) {
+            c
+        } else {
+            a.max(c)
+        };
         match rank {
             1 => LogicalType::tinyint(),
             2 => LogicalType::smallint(),

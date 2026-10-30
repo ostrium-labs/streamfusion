@@ -76,6 +76,7 @@ enum Task {
     },
     Native(Box<Driver>),
     Union,
+    Enforcer(loams_stream_plan::physical::EnforcerSpec),
     Sink {
         table: ConnectorTable,
         batches: Vec<RecordBatch>,
@@ -109,6 +110,7 @@ pub fn run(plan: &PhysicalPlan, options: &LocalOptions) -> Result<JobOutput, Job
                 Task::Native(Box::new(d))
             }
             PhysicalOp::Union => Task::Union,
+            PhysicalOp::ConstraintEnforcer(spec) => Task::Enforcer(spec.clone()),
             PhysicalOp::Sink(t) => Task::Sink {
                 table: t.clone(),
                 batches: vec![],
@@ -273,6 +275,9 @@ impl Executor<'_> {
                 out = guarded(|| driver.push(input, batch))?;
             }
             Task::Union => forward = Some(batch),
+            Task::Enforcer(spec) => {
+                forward = Some(crate::enforcer::enforce(batch, spec).map_err(JobError)?);
+            }
             Task::Sink { batches, .. } => batches.push(batch),
         }
         if let Some(b) = forward {
@@ -393,10 +398,70 @@ fn read_source(
             }
             Ok(out)
         }
+        "datagen" => datagen(table, options),
         other => Err(JobError(format!(
             "the local executor does not read connector '{other}'"
         ))),
     }
+}
+
+/// A bounded `datagen` source whose fields are all `sequence`s (Flink's `SequenceGenerator`):
+/// field `f` runs from `fields.f.start` to `fields.f.end`; `number-of-rows` caps the count.
+/// Random fields are not deterministic and are refused (FC1 ruling R5: deterministic sources).
+fn datagen(table: &ConnectorTable, options: &LocalOptions) -> Result<Vec<RecordBatch>, JobError> {
+    let mut ranges = vec![];
+    for f in &table.fields {
+        let opt = |k: &str| table.options.get(&format!("fields.{}.{k}", f.name));
+        if opt("kind").map(String::as_str) != Some("sequence") {
+            return Err(JobError(format!(
+                "datagen field '{}' is not a sequence; random datagen fields are not deterministic",
+                f.name
+            )));
+        }
+        let parse = |k: &str| -> Result<i64, JobError> {
+            opt(k)
+                .ok_or_else(|| JobError(format!("datagen field '{}' needs '{k}'", f.name)))?
+                .trim()
+                .parse()
+                .map_err(job_err)
+        };
+        ranges.push((parse("start")?, parse("end")?));
+    }
+    let mut rows = ranges
+        .iter()
+        .map(|(start, end)| (end - start + 1).max(0))
+        .min()
+        .unwrap_or(0);
+    if let Some(n) = table.options.get("number-of-rows") {
+        rows = rows.min(n.trim().parse().map_err(job_err)?);
+    }
+    let columns = columns(table);
+    let mut text = String::new();
+    for i in 0..rows {
+        let mut obj = serde_json::Map::new();
+        for ((name, ty), (start, _)) in columns.iter().zip(&ranges) {
+            let v = start + i;
+            let value = match ty.kind {
+                loams_stream_sql::types::LogicalKind::Char(_)
+                | loams_stream_sql::types::LogicalKind::Varchar(_) => {
+                    serde_json::Value::from(v.to_string())
+                }
+                _ => serde_json::Value::from(v),
+            };
+            obj.insert(name.clone(), value);
+        }
+        text.push_str(&serde_json::Value::Object(obj).to_string());
+        text.push('\n');
+    }
+    let batch = json_format::decode_json(&text, &columns).map_err(job_err)?;
+    let mut out = vec![];
+    let mut offset = 0;
+    while offset < batch.num_rows() {
+        let len = options.batch_rows.min(batch.num_rows() - offset);
+        out.push(batch.slice(offset, len));
+        offset += len;
+    }
+    Ok(out)
 }
 
 /// The largest epoch millisecond of a timestamp column.
