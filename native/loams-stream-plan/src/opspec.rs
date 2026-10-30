@@ -195,6 +195,16 @@ pub struct UpdatingJoinSpec {
     pub memory_budget_bytes: i64,
 }
 
+/// A session window aggregate.
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SessionAggSpec {
+    pub gap_ms: i64,
+    pub value_types: Vec<i64>,
+    pub aggregate_kinds: Vec<i64>,
+    #[serde(default = "unbounded")]
+    pub memory_budget_bytes: i64,
+}
+
 /// The windowing TVF on its own (`WindowTableFunction`).
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WindowTvfSpec {
@@ -255,6 +265,7 @@ pub enum OpSpec {
     WindowTvf(WindowTvfSpec),
     WindowRank(WindowRankSpec),
     WindowJoin(WindowJoinSpec),
+    SessionAgg(SessionAggSpec),
 }
 
 impl OpSpec {
@@ -391,6 +402,12 @@ mod tests {
                 mini_batch: false,
                 left_state_ttl_ms: 0,
                 right_state_ttl_ms: 0,
+                memory_budget_bytes: -1,
+            }),
+            OpSpec::SessionAgg(SessionAggSpec {
+                gap_ms: 5000,
+                value_types: vec![0],
+                aggregate_kinds: vec![3],
                 memory_budget_bytes: -1,
             }),
             OpSpec::WindowTvf(WindowTvfSpec {

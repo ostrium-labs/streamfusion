@@ -34,11 +34,13 @@ Measured on 2026-10-30 (fork PR for FC1 Task 10, part 1):
 
 | Corpus | Match |
 |---|---|
-| Nexmark (q6 excluded by the oracle) | 11 of 22 |
-| Flink test programs in FC1's scope | 54 of 180 |
-| Smoke | 0 of 20 |
+| Nexmark (q6 excluded by the oracle) | 18 of 22 |
+| Flink test programs in FC1's scope | 106 of 180 |
+| Smoke | 0 of 20 (the local executor has no `datagen` source yet) |
 
-The largest remaining gaps: `TO_TIMESTAMP`/`TO_TIMESTAMP_LTZ` and timestamp comparisons in
-expressions, window TVFs outside aggregates (window Top-N, deduplication and joins), updates into
-keyed sinks (`SinkMaterializer`), nested `ROW`/`ARRAY` columns in the json format, window offsets,
-session windows, interval joins and `DATE_FORMAT`.
+The largest remaining gaps: the `datagen` source in the local executor, `NOT NULL` sink columns
+(`ConstraintEnforcer`), Java UDFs (FC2), subqueries, casts between `TIMESTAMP` and
+`TIMESTAMP_LTZ`, temporal arithmetic, nested columns that are `NOT NULL` inside nullable rows,
+the error-reporting cases (the oracle records the job's error), updates into keyed sinks
+(`SinkMaterializer`), `FROM_UNIXTIME`, legacy group windows (Nexmark q11) and the csv format
+(Nexmark q13).

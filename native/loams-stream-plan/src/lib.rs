@@ -31,8 +31,8 @@ use loams_stream_sql::{ExplainDetail, Statement};
 pub use error::{PlanError, PlanResult};
 pub use opspec::{
     CalcSpec, EncodedExpr, GroupAggSpec, IntervalJoinSpec, KeepFirstSpec, KeepLastSpec,
-    OPSPEC_VERSION, OpSpec, SortKey, TopNSpec, UpdatingJoinSpec, WindowAggSpec, WindowJoinSpec,
-    WindowRankSpec, WindowShape, WindowTvfSpec,
+    OPSPEC_VERSION, OpSpec, SessionAggSpec, SortKey, TopNSpec, UpdatingJoinSpec, WindowAggSpec,
+    WindowJoinSpec, WindowRankSpec, WindowShape, WindowTvfSpec,
 };
 pub use physical::PhysicalPlan;
 

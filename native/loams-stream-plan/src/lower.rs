@@ -18,8 +18,8 @@ use crate::logical::{
     AggCall, AggFunc, Field, JoinKind, RankFunc, Rel, SinkPlan, SortKey, WindowKind,
 };
 use crate::opspec::{
-    GroupAggSpec, KeepFirstSpec, KeepLastSpec, OpSpec, TopNSpec, UpdatingJoinSpec, WindowAggSpec,
-    WindowJoinSpec, WindowRankSpec, WindowShape, WindowTvfSpec,
+    GroupAggSpec, IntervalJoinSpec, KeepFirstSpec, KeepLastSpec, OpSpec, SessionAggSpec, TopNSpec,
+    UpdatingJoinSpec, WindowAggSpec, WindowJoinSpec, WindowRankSpec, WindowShape, WindowTvfSpec,
 };
 use crate::physical::{
     ConnectorTable, Distribution, Edge, NodeId, PhysicalNode, PhysicalOp, PhysicalPlan,
@@ -551,7 +551,69 @@ impl Lowering {
                 && ins.iter().any(|i| *i >= left_len)
         });
         if time_bound {
-            return Err(PlanError::not_yet("IntervalJoin"));
+            let Some((left_time, right_time, lower_ms, upper_ms, rest)) =
+                interval_bounds(&rest, &all_fields, left_len)
+            else {
+                return Err(PlanError::not_yet("IntervalJoin with these time bounds"));
+            };
+            if matches!(kind, JoinKind::Semi | JoinKind::Anti) {
+                return Err(PlanError::not_yet("semi and anti interval joins"));
+            }
+            let l = self.rel(left)?;
+            let r = self.rel(right)?;
+            if self.node(l).changelog.is_updating() || self.node(r).changelog.is_updating() {
+                return Err(PlanError::invalid(
+                    "Interval join doesn't support consuming update and delete changes",
+                ));
+            }
+            let predicate = if rest.is_empty() {
+                None
+            } else {
+                Some(encode_predicate(&ScalarExpr::and_all(rest))?)
+            };
+            let spec = IntervalJoinSpec {
+                left_keys: left_keys.clone(),
+                right_keys: right_keys.clone(),
+                left_time,
+                right_time,
+                lower_ms,
+                upper_ms,
+                join_type: join_code(kind),
+                left_fields: arrow_fields(left.fields())?,
+                right_fields: arrow_fields(right.fields())?,
+                predicate,
+                memory_budget_bytes: -1,
+            };
+            let description = format!(
+                "joinType=[{kind:?}], windowBounds=[isRowTime=true, leftLowerBound={lower_ms}, leftUpperBound={upper_ms}, leftTimeIndex={left_time}, rightTimeIndex={right_time}], where=[{}], select=[{}]",
+                render_expr(condition, &all_fields),
+                names(fields)
+            );
+            let dist = |keys: &[usize]| {
+                if keys.is_empty() {
+                    Distribution::Single
+                } else {
+                    Distribution::Hash(keys.to_vec())
+                }
+            };
+            return Ok(self.push(
+                "IntervalJoin",
+                description,
+                PhysicalOp::Native(Box::new(OpSpec::IntervalJoin(spec))),
+                vec![
+                    Edge {
+                        node: l,
+                        distribution: dist(&left_keys),
+                    },
+                    Edge {
+                        node: r,
+                        distribution: dist(&right_keys),
+                    },
+                ],
+                fields.to_vec(),
+                ChangelogMode::INSERT_ONLY,
+                None,
+            ));
         }
         let l = self.rel(left)?;
         let r = self.rel(right)?;
@@ -1115,7 +1177,14 @@ impl Lowering {
             unreachable!("window_input checked the base")
         };
         let width = tvf_input.fields().len();
-        let (shape, offset_ms) = window_shape(window)?;
+        let session_gap = match window {
+            WindowKind::Session { gap_ms } => Some(*gap_ms),
+            _ => None,
+        };
+        let (shape, offset_ms) = match session_gap {
+            Some(_) => (WindowShape::Tumble { size_ms: 0 }, 0),
+            None => window_shape(window)?,
+        };
         // Which group fields are the window's own columns (0 start, 1 end, 2 time).
         let window_column = |e: &ScalarExpr| match e {
             ScalarExpr::Input { index, .. } if *index >= width => Some(*index - width),
@@ -1243,13 +1312,21 @@ impl Lowering {
         let agg = self.push(
             "WindowAggregate",
             description,
-            PhysicalOp::Native(Box::new(OpSpec::WindowAgg(WindowAggSpec {
-                shape,
-                value_types,
-                aggregate_kinds: kinds,
-                offset_ms,
-                memory_budget_bytes: -1,
-            }))),
+            PhysicalOp::Native(Box::new(match session_gap {
+                Some(gap_ms) => OpSpec::SessionAgg(SessionAggSpec {
+                    gap_ms,
+                    value_types,
+                    aggregate_kinds: kinds,
+                    memory_budget_bytes: -1,
+                }),
+                None => OpSpec::WindowAgg(WindowAggSpec {
+                    shape,
+                    value_types,
+                    aggregate_kinds: kinds,
+                    offset_ms,
+                    memory_budget_bytes: -1,
+                }),
+            })),
             vec![Edge {
                 node: pre_node,
                 distribution: if k == 0 {
@@ -1631,4 +1708,99 @@ fn arrow_fields(fields: &[Field]) -> PlanResult<Vec<arrow_schema::Field>> {
                 .map_err(|e| PlanError::not_yet(format!("join over {e}")))
         })
         .collect()
+}
+
+/// `side` as `field + constant` milliseconds: a field, or a field plus or minus a day-time
+/// interval literal.
+fn time_term(e: &ScalarExpr) -> Option<(usize, i64)> {
+    let millis = |e: &ScalarExpr| match e {
+        ScalarExpr::Literal {
+            value: Literal::Millis(ms),
+            ..
+        } => Some(*ms),
+        _ => None,
+    };
+    match e {
+        ScalarExpr::Input { index, .. } => Some((*index, 0)),
+        ScalarExpr::Call {
+            op: Op::Reinterpret | Op::Cast { .. },
+            args,
+            ..
+        } => time_term(&args[0]),
+        ScalarExpr::Call {
+            op: Op::Plus, args, ..
+        } => match (time_term(&args[0]), millis(&args[1]), millis(&args[0])) {
+            (Some((i, c)), Some(ms), _) => Some((i, c + ms)),
+            (_, _, Some(ms)) => time_term(&args[1]).map(|(i, c)| (i, c + ms)),
+            _ => None,
+        },
+        ScalarExpr::Call {
+            op: Op::Minus,
+            args,
+            ..
+        } => match (time_term(&args[0]), millis(&args[1])) {
+            (Some((i, c)), Some(ms)) => Some((i, c - ms)),
+            _ => None,
+        },
+        _ => None,
+    }
+}
+
+/// Splits an interval join's time bounds out of `terms`: the left and right rowtime fields (as
+/// indexes into each side), and `lower <= left.rt - right.rt <= upper`; the other terms stay.
+#[allow(clippy::type_complexity)]
+fn interval_bounds(
+    terms: &[ScalarExpr],
+    fields: &[Field],
+    left_len: usize,
+) -> Option<(usize, usize, i64, i64, Vec<ScalarExpr>)> {
+    let mut lower: Option<i64> = None;
+    let mut upper: Option<i64> = None;
+    let mut times: Option<(usize, usize)> = None;
+    let mut rest = vec![];
+    for t in terms {
+        let bound = match t {
+            ScalarExpr::Call { op, args, .. }
+                if args.len() == 2 && matches!(op, Op::Ge | Op::Gt | Op::Le | Op::Lt) =>
+            {
+                match (time_term(&args[0]), time_term(&args[1])) {
+                    (Some((a, ca)), Some((b, cb)))
+                        if is_rowtime(&fields[a].ty)
+                            && is_rowtime(&fields[b].ty)
+                            && (a < left_len) != (b < left_len) =>
+                    {
+                        // A op B with A = a + ca, B = b + cb, as (left - right) op' v.
+                        let (l, r, op, v) = if a < left_len {
+                            (a, b, op.clone(), cb - ca)
+                        } else {
+                            let flipped = match op {
+                                Op::Ge => Op::Le,
+                                Op::Gt => Op::Lt,
+                                Op::Le => Op::Ge,
+                                _ => Op::Gt,
+                            };
+                            (b, a, flipped, ca - cb)
+                        };
+                        Some((l, r - left_len, op, v))
+                    }
+                    _ => None,
+                }
+            }
+            _ => None,
+        };
+        match bound {
+            Some((l, r, op, v)) if times.is_none_or(|x| x == (l, r)) => {
+                times = Some((l, r));
+                match op {
+                    Op::Ge => lower = Some(lower.map_or(v, |x: i64| x.max(v))),
+                    Op::Gt => lower = Some(lower.map_or(v + 1, |x: i64| x.max(v + 1))),
+                    Op::Le => upper = Some(upper.map_or(v, |x: i64| x.min(v))),
+                    _ => upper = Some(upper.map_or(v - 1, |x: i64| x.min(v - 1))),
+                }
+            }
+            _ => rest.push(t.clone()),
+        }
+    }
+    let (l, r) = times?;
+    Some((l, r, lower?, upper?, rest))
 }

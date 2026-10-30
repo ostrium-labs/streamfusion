@@ -180,6 +180,12 @@ pub fn engine_params(spec: &OpSpec) -> OperatorParams {
             right_state_ttl_ms: s.right_state_ttl_ms,
             memory_budget_bytes: s.memory_budget_bytes,
         }),
+        OpSpec::SessionAgg(s) => OperatorParams::SessionAgg(ops::SessionAggParams {
+            gap_ms: s.gap_ms,
+            value_types: s.value_types.clone(),
+            aggregate_kinds: s.aggregate_kinds.clone(),
+            memory_budget_bytes: s.memory_budget_bytes,
+        }),
         OpSpec::WindowTvf(s) => OperatorParams::WindowTvf(ops::WindowTvfParams {
             time_column: s.time_column,
             shape: shape(s.shape),

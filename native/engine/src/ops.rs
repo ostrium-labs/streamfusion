@@ -190,6 +190,16 @@ pub struct UpdatingJoinParams {
     pub memory_budget_bytes: i64,
 }
 
+/// A session window aggregate (`SESSION` TVF or group window): the window aggregate's
+/// `[ts, value.., key..]` input and `[key.., window_start, window_end, result..]` output.
+#[derive(Debug, Clone, PartialEq)]
+pub struct SessionAggParams {
+    pub gap_ms: i64,
+    pub value_types: Vec<i64>,
+    pub aggregate_kinds: Vec<i64>,
+    pub memory_budget_bytes: i64,
+}
+
 /// The windowing TVF on its own (`WindowTableFunction`): each row fanned out to its windows, with
 /// `window_start`, `window_end` and `window_time` appended in the time column's timestamp layout.
 #[derive(Debug, Clone, PartialEq)]
@@ -482,6 +492,44 @@ pub(crate) fn window_joiner(
     .with_memory_budget(p.memory_budget_bytes)
 }
 
+pub(crate) fn session_aggregator(
+    p: &SessionAggParams,
+) -> Result<crate::session_agg::SessionAggregator, DataFusionError> {
+    crate::session_agg::SessionAggregator::new(
+        p.gap_ms,
+        p.value_types.clone(),
+        p.aggregate_kinds.clone(),
+    )
+    .with_memory_budget(p.memory_budget_bytes)
+}
+
+impl NativeOperator for crate::session_agg::SessionAggregator {
+    fn push(
+        &mut self,
+        input: usize,
+        batch: RecordBatch,
+        _now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        one_input(input)?;
+        self.update(&batch)?;
+        Ok(None)
+    }
+    fn watermark(
+        &mut self,
+        watermark: i64,
+        _now: i64,
+    ) -> Result<Option<RecordBatch>, DataFusionError> {
+        crate::session_agg::SessionAggregator::flush(self, watermark).map(some)
+    }
+    fn flush(&mut self, end: bool, _now: i64) -> Result<Option<RecordBatch>, DataFusionError> {
+        if end {
+            crate::session_agg::SessionAggregator::flush(self, i64::MAX).map(some)
+        } else {
+            Ok(None)
+        }
+    }
+}
+
 /// The stateless windowing TVF.
 struct WindowTvf {
     params: WindowTvfParams,
@@ -604,6 +652,7 @@ pub enum OperatorParams {
     WindowTvf(WindowTvfParams),
     WindowRank(WindowRankParams),
     WindowJoin(WindowJoinParams),
+    SessionAgg(SessionAggParams),
 }
 
 /// What a runtime drives. Every call returns the rows it produces (`None` for none).
@@ -855,5 +904,6 @@ pub fn build(params: &OperatorParams) -> Result<Box<dyn NativeOperator>, DataFus
         OperatorParams::WindowTvf(p) => Box::new(WindowTvf { params: p.clone() }),
         OperatorParams::WindowRank(p) => Box::new(window_ranker(p)?),
         OperatorParams::WindowJoin(p) => Box::new(window_joiner(p)?),
+        OperatorParams::SessionAgg(p) => Box::new(session_aggregator(p)?),
     })
 }

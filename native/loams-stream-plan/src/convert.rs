@@ -1002,12 +1002,10 @@ impl<'a> Converter<'a> {
         let mut input: Option<From> = None;
         let mut descriptor: Option<String> = None;
         let mut intervals: Vec<(Option<String>, i64)> = vec![];
-        let mut partitioned = false;
         for arg in function_args(f) {
             let Some(e) = arg_expr(arg) else { continue };
             let named = arg_name(arg);
             if let Some(t) = table_argument(e) {
-                partitioned |= !t.partition_by.is_empty();
                 input = Some(self.table_operand(t.table)?);
                 continue;
             }
@@ -1070,9 +1068,7 @@ impl<'a> Converter<'a> {
                 offset_ms: get("OFFSET", 2).unwrap_or(0),
             },
             _ => {
-                if partitioned {
-                    return Err(PlanError::not_yet("SESSION windows with PARTITION BY"));
-                }
+                // PARTITION BY keys group the sessions; a session aggregate groups by them too.
                 WindowKind::Session {
                     gap_ms: get("GAP", 0).unwrap_or(0),
                 }
