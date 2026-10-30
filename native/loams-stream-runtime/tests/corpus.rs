@@ -7,10 +7,11 @@ use loams_stream_conformance::case::{Case, Collect, substitute};
 use loams_stream_conformance::normalise::compare;
 use loams_stream_conformance::result::{Column, ResultTable, Row, RowKind};
 use loams_stream_conformance::runner::read_debezium_dir;
-use loams_stream_connectors::format::json::value_text;
+use loams_stream_connectors::format::json::{TimestampFormat, value_text_in};
 use loams_stream_plan::physical::PhysicalOp;
 use loams_stream_plan::{Planned, Planner};
 use loams_stream_runtime::local::{self, LocalOptions};
+use loams_stream_sql::types::{LogicalKind, LogicalType};
 
 fn corpus() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../../dev/corpus")
@@ -65,6 +66,12 @@ fn run_case(case: &Case) -> Result<ResultTable, String> {
             .map_err(|e| e.to_string())
     };
     let mut planner = Planner::new();
+    // The case's configuration, as the runner sets it on the session.
+    for (k, v) in &case.spec.config {
+        planner
+            .plan_script(&format!("SET '{k}' = '{v}';"))
+            .map_err(|e| format!("config: {e}"))?;
+    }
     for stmt in &case.setup {
         planner
             .plan_script(&sub(stmt)?)
@@ -86,7 +93,13 @@ fn run_case(case: &Case) -> Result<ResultTable, String> {
         let columns: Vec<Column> = sink
             .fields
             .iter()
-            .map(|f| Column::new(&f.name, f.ty.to_string()))
+            .map(|f| {
+                let ty = match case.spec.collect {
+                    Collect::Sink => f.ty.to_string(),
+                    Collect::Query => gateway_type(&f.ty),
+                };
+                Column::new(&f.name, ty)
+            })
             .collect();
         match case.spec.collect {
             Collect::Sink => {
@@ -104,7 +117,9 @@ fn run_case(case: &Case) -> Result<ResultTable, String> {
                             .fields
                             .iter()
                             .enumerate()
-                            .map(|(i, f)| value_text(batch.column(i), r, &f.ty))
+                            .map(|(i, f)| {
+                                value_text_in(batch.column(i), r, &f.ty, TimestampFormat::Iso8601)
+                            })
                             .collect::<Result<Vec<_>, _>>()
                             .map_err(|e| e.to_string())?;
                         rows.push(Row::new(RowKind::parse(kind).unwrap(), fields));
@@ -118,9 +133,58 @@ fn run_case(case: &Case) -> Result<ResultTable, String> {
     result
 }
 
+/// A column type as the harness renders the SQL Gateway's JSON logical type.
+fn gateway_type(ty: &LogicalType) -> String {
+    let base = match &ty.kind {
+        LogicalKind::Char(n) => format!("CHAR({n})"),
+        LogicalKind::Varchar(n) => format!("VARCHAR({n})"),
+        LogicalKind::Binary(n) => format!("BINARY({n})"),
+        LogicalKind::Varbinary(n) => format!("VARBINARY({n})"),
+        LogicalKind::Decimal { precision, scale } => format!("DECIMAL({precision}, {scale})"),
+        LogicalKind::Time(p) => format!("TIME({p})"),
+        LogicalKind::Timestamp { precision, .. } => format!("TIMESTAMP({precision})"),
+        LogicalKind::TimestampLtz { precision, .. } => format!("TIMESTAMP_LTZ({precision})"),
+        LogicalKind::TimestampTz(p) => format!("TIMESTAMP({p}) WITH TIME ZONE"),
+        LogicalKind::Array(e) => format!("ARRAY<{}>", gateway_type(e)),
+        LogicalKind::Multiset(e) => format!("MULTISET<{}>", gateway_type(e)),
+        LogicalKind::Map(k, v) => format!("MAP<{}, {}>", gateway_type(k), gateway_type(v)),
+        LogicalKind::Row(fields) => format!(
+            "ROW<{}>",
+            fields
+                .iter()
+                .map(|f| format!("`{}` {}", f.name, gateway_type(&f.ty)))
+                .collect::<Vec<_>>()
+                .join(", ")
+        ),
+        LogicalKind::Boolean => "BOOLEAN".into(),
+        LogicalKind::TinyInt => "TINYINT".into(),
+        LogicalKind::SmallInt => "SMALLINT".into(),
+        LogicalKind::Int => "INTEGER".into(),
+        LogicalKind::BigInt => "BIGINT".into(),
+        LogicalKind::Float => "FLOAT".into(),
+        LogicalKind::Double => "DOUBLE".into(),
+        LogicalKind::Date => "DATE".into(),
+        LogicalKind::Null => "NULL".into(),
+        _ => ty.to_string(),
+    };
+    if ty.nullable {
+        base
+    } else {
+        format!("{base} NOT NULL")
+    }
+}
+
 /// Runs `case` and compares it with its recorded expectation.
 fn check(case: &Case) -> Result<(), String> {
     let expected = case.expected.as_ref().ok_or("no expectation recorded")?;
+    if let Some(error) = &case.spec.expect_error {
+        // Flink failed the job: so must Loams Stream, with Flink's message.
+        return match run_case(case) {
+            Err(e) if e.contains(error.as_str()) => Ok(()),
+            Err(e) => Err(format!("failed differently: {e}")),
+            Ok(_) => Err(format!("expected the error: {error}")),
+        };
+    }
     let actual = run_case(case)?;
     let rules = case.rules(&expected.columns).map_err(|e| e.to_string())?;
     match compare(expected, &actual, &rules) {

@@ -275,6 +275,19 @@ impl Builder {
     }
 }
 
+/// `field` with the data type of `array`, nullable if `array` has nulls.
+fn relaxed(field: &arrow::datatypes::FieldRef, array: &ArrayRef) -> arrow::datatypes::FieldRef {
+    let f = field
+        .as_ref()
+        .clone()
+        .with_data_type(array.data_type().clone());
+    Arc::new(if array.null_count() > 0 {
+        f.with_nullable(true)
+    } else {
+        f
+    })
+}
+
 /// Builds a column of `ty` from JSON values (NULL for `None` or JSON `null`), recursing into
 /// `ROW`, `ARRAY`, `MAP` and `MULTISET` as Flink's converters do: a ROW is an object by field
 /// name, an ARRAY a JSON array, a MAP an object whose keys are converted to the key type.
@@ -315,9 +328,15 @@ fn build_nested(
                     .collect();
                 children.push(build_nested(&column, &f.ty)?);
             }
+            // A NULL in a NOT NULL field is data the sink's constraint enforcer judges, not a
+            // decoding error: the field becomes nullable in the batch.
+            let fields: arrow::datatypes::Fields = arrow_fields
+                .iter()
+                .zip(&children)
+                .map(|(f, c)| relaxed(f, c))
+                .collect();
             Ok(Arc::new(
-                StructArray::try_new(arrow_fields.clone(), children, nulls())
-                    .map_err(|e| err(e.to_string()))?,
+                StructArray::try_new(fields, children, nulls()).map_err(|e| err(e.to_string()))?,
             ))
         }
         (LogicalKind::Array(element), DataType::List(item)) => {
@@ -331,7 +350,7 @@ fn build_nested(
             let child = build_nested(&flat, element)?;
             Ok(Arc::new(
                 ListArray::try_new(
-                    item.clone(),
+                    relaxed(item, &child),
                     OffsetBuffer::from_lengths(lengths),
                     child,
                     nulls(),
@@ -459,6 +478,15 @@ impl RowsBuilder {
         if changelog {
             columns.push(Arc::new(arrow::array::Int8Array::from(self.kinds)));
         }
+        // Nested types may have been relaxed to nullable by the data (see `relaxed`).
+        let schema = Arc::new(Schema::new(
+            schema
+                .fields()
+                .iter()
+                .zip(&columns)
+                .map(|(f, c)| relaxed(f, c))
+                .collect::<Vec<_>>(),
+        ));
         RecordBatch::try_new_with_options(
             schema,
             columns,
@@ -788,6 +816,24 @@ fn date_text(days: i64) -> String {
 
 /// The JSON text of row `row` of `array` (of Flink type `ty`), as Flink's json format writes it.
 pub fn value_text(array: &ArrayRef, row: usize, ty: &LogicalType) -> Result<String, FormatError> {
+    value_text_in(array, row, ty, TimestampFormat::Sql)
+}
+
+/// Flink's `json.timestamp-format.standard`: `SQL` (`yyyy-MM-dd HH:mm:ss`) or `ISO-8601`
+/// (`yyyy-MM-ddTHH:mm:ss`, which the SQL Gateway's JSON results use).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TimestampFormat {
+    Sql,
+    Iso8601,
+}
+
+/// The JSON text of row `row` of `array` in the given timestamp format.
+pub fn value_text_in(
+    array: &ArrayRef,
+    row: usize,
+    ty: &LogicalType,
+    format: TimestampFormat,
+) -> Result<String, FormatError> {
     use arrow::array::AsArray;
     use arrow::datatypes::*;
     if array.is_null(row) {
@@ -860,7 +906,11 @@ pub fn value_text(array: &ArrayRef, row: usize, ty: &LogicalType) -> Result<Stri
             let nanos = s.column(1).as_primitive::<Int32Type>().value(row) as i64;
             let days = millis.div_euclid(86_400_000);
             let ms = millis.rem_euclid(86_400_000);
-            let mut text = format!("{} {}", date_text(days), time_text(ms, nanos));
+            let separator = match format {
+                TimestampFormat::Sql => ' ',
+                TimestampFormat::Iso8601 => 'T',
+            };
+            let mut text = format!("{}{separator}{}", date_text(days), time_text(ms, nanos));
             if matches!(ty.kind, LogicalKind::TimestampLtz { .. }) {
                 text.push('Z');
             }
@@ -881,7 +931,7 @@ pub fn value_text(array: &ArrayRef, row: usize, ty: &LogicalType) -> Result<Stri
                 }
                 write_json_string(&mut out, &f.name);
                 out.push(':');
-                out.push_str(&value_text(s.column(i), row, &f.ty)?);
+                out.push_str(&value_text_in(s.column(i), row, &f.ty, format)?);
             }
             out.push('}');
         }
@@ -893,7 +943,7 @@ pub fn value_text(array: &ArrayRef, row: usize, ty: &LogicalType) -> Result<Stri
                 if i > 0 {
                     out.push(',');
                 }
-                out.push_str(&value_text(&items, i, element)?);
+                out.push_str(&value_text_in(&items, i, element, format)?);
             }
             out.push(']');
         }
@@ -910,7 +960,7 @@ pub fn value_text(array: &ArrayRef, row: usize, ty: &LogicalType) -> Result<Stri
                 if i > 0 {
                     out.push(',');
                 }
-                let key = value_text(entries.column(0), i, &key_ty)?;
+                let key = value_text_in(entries.column(0), i, &key_ty, format)?;
                 // Object keys are strings: a string key as is, any other key as its text.
                 if key.starts_with('"') {
                     out.push_str(&key);
@@ -918,7 +968,7 @@ pub fn value_text(array: &ArrayRef, row: usize, ty: &LogicalType) -> Result<Stri
                     write_json_string(&mut out, &key);
                 }
                 out.push(':');
-                out.push_str(&value_text(entries.column(1), i, &value_ty)?);
+                out.push_str(&value_text_in(entries.column(1), i, &value_ty, format)?);
             }
             out.push('}');
         }

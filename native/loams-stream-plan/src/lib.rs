@@ -112,7 +112,7 @@ impl Planner {
     }
 
     fn lower(&self, sinks: Vec<SinkPlan>) -> PlanResult<PhysicalPlan> {
-        let mut lowering = Lowering::new();
+        let mut lowering = Lowering::new().with_config(self.binder.config().clone());
         for sink in &sinks {
             lowering.sink(sink)?;
         }
