@@ -2326,21 +2326,29 @@ pub extern "system" fn Java_tech_streamfusion_Native_createUpdatingJoiner<'local
             &pred_doubles,
             &pred_strings,
         );
-        let timestamp_precisions = read_i32_array(&env, &key_timestamp_precisions);
-        let joiner = UpdatingJoiner::new(
-            left,
-            right,
-            JoinKind::from_code(join_type),
+        let joiner = crate::ops::updating_joiner(&crate::ops::UpdatingJoinParams {
+            left_keys: left,
+            right_keys: right,
+            join_type,
             left_schema,
             right_schema,
-            predicate,
-        )
-        .with_key_timestamp_precisions(timestamp_precisions)
-        .with_filter_nulls(read_i32_array(&env, &filter_nulls))
-        .with_unique_join_keys(left_join_key_unique != 0, right_join_key_unique != 0)
-        .with_mini_batch(mini_batch != 0)
-        .with_state_ttl(left_state_ttl_millis, right_state_ttl_millis)
-        .with_memory_budget(memory_budget_bytes);
+            predicate: predicate.map(|p| crate::ops::EncodedExpr {
+                kinds: p.kinds,
+                payload: p.payload,
+                child_counts: p.child_counts,
+                longs: p.longs,
+                doubles: p.doubles,
+                strings: p.strings,
+            }),
+            key_timestamp_precisions: read_i32_array(&env, &key_timestamp_precisions),
+            filter_nulls: read_i32_array(&env, &filter_nulls),
+            left_unique: left_join_key_unique != 0,
+            right_unique: right_join_key_unique != 0,
+            mini_batch: mini_batch != 0,
+            left_state_ttl_ms: left_state_ttl_millis,
+            right_state_ttl_ms: right_state_ttl_millis,
+            memory_budget_bytes,
+        });
         boxed_or_throw(&mut env, joiner)
     })
 }

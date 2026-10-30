@@ -125,7 +125,7 @@ impl WindowJoiner {
 
     /// Bounds the buffered rows by the operator's task off-heap budget (negative = unaccounted),
     /// accounting any restored buffers immediately.
-    fn with_memory_budget(mut self, budget_bytes: i64) -> Result<Self, DataFusionError> {
+    pub(crate) fn with_memory_budget(mut self, budget_bytes: i64) -> Result<Self, DataFusionError> {
         if budget_bytes >= 0 {
             self.memory.attach("window-join", budget_bytes, 0)?;
             self.account()?;

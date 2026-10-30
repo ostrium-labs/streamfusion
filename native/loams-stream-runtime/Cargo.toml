@@ -8,11 +8,15 @@ publish = false
 
 [dependencies]
 loams-stream-plan = { path = "../loams-stream-plan" }
+loams-stream-connectors = { path = "../loams-stream-connectors" }
+loams-stream-sql = { path = "../loams-stream-sql" }
 # The engine's operators, without JNI: the standalone binary links no JVM (design 82 D2276).
 streamfusion = { path = "../engine", default-features = false }
 arrow = { workspace = true }
 arrow-schema = { workspace = true }
 datafusion = { workspace = true }
+serde_json = { workspace = true }
 
 [dev-dependencies]
-serde_json = { workspace = true }
+# The corpus cases and the result comparison of the differential harness.
+loams-stream-conformance = { path = "../loams-stream-conformance" }

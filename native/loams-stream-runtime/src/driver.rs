@@ -90,6 +90,7 @@ pub fn engine_params(spec: &OpSpec) -> OperatorParams {
             },
             value_types: s.value_types.clone(),
             aggregate_kinds: s.aggregate_kinds.clone(),
+            offset_ms: s.offset_ms,
             memory_budget_bytes: s.memory_budget_bytes,
         }),
         OpSpec::GroupAgg(s) => OperatorParams::GroupAgg(ops::GroupAggParams {
@@ -163,6 +164,79 @@ pub fn engine_params(spec: &OpSpec) -> OperatorParams {
             predicate: s.predicate.as_ref().map(expr),
             memory_budget_bytes: s.memory_budget_bytes,
         }),
+        OpSpec::UpdatingJoin(s) => OperatorParams::UpdatingJoin(ops::UpdatingJoinParams {
+            left_keys: s.left_keys.clone(),
+            right_keys: s.right_keys.clone(),
+            join_type: s.join_type,
+            left_schema: Arc::new(Schema::new(s.left_fields.clone())),
+            right_schema: Arc::new(Schema::new(s.right_fields.clone())),
+            predicate: s.predicate.as_ref().map(expr),
+            key_timestamp_precisions: s.key_timestamp_precisions.clone(),
+            filter_nulls: s.filter_nulls.clone(),
+            left_unique: s.left_unique,
+            right_unique: s.right_unique,
+            mini_batch: s.mini_batch,
+            left_state_ttl_ms: s.left_state_ttl_ms,
+            right_state_ttl_ms: s.right_state_ttl_ms,
+            memory_budget_bytes: s.memory_budget_bytes,
+        }),
+        OpSpec::SessionAgg(s) => OperatorParams::SessionAgg(ops::SessionAggParams {
+            gap_ms: s.gap_ms,
+            value_types: s.value_types.clone(),
+            aggregate_kinds: s.aggregate_kinds.clone(),
+            memory_budget_bytes: s.memory_budget_bytes,
+        }),
+        OpSpec::WindowTvf(s) => OperatorParams::WindowTvf(ops::WindowTvfParams {
+            time_column: s.time_column,
+            shape: shape(s.shape),
+            offset_ms: s.offset_ms,
+        }),
+        OpSpec::WindowRank(s) => OperatorParams::WindowRank(ops::WindowRankParams {
+            window_start_column: s.window_start_column,
+            window_end_column: s.window_end_column,
+            partition_columns: s.partition_columns.clone(),
+            sort: s
+                .sort
+                .iter()
+                .map(|k| ops::SortKey {
+                    index: k.index,
+                    ascending: k.ascending,
+                    nulls_first: k.nulls_first,
+                })
+                .collect(),
+            limit: s.limit,
+            output_rank_number: s.output_rank_number,
+            keep_last_on_tie: s.keep_last_on_tie,
+            memory_budget_bytes: s.memory_budget_bytes,
+        }),
+        OpSpec::WindowJoin(s) => OperatorParams::WindowJoin(ops::WindowJoinParams {
+            left_keys: s.left_keys.clone(),
+            right_keys: s.right_keys.clone(),
+            left_window_start: s.left_window_start,
+            left_window_end: s.left_window_end,
+            right_window_start: s.right_window_start,
+            right_window_end: s.right_window_end,
+            join_type: s.join_type,
+            left_schema: Arc::new(Schema::new(s.left_fields.clone())),
+            right_schema: Arc::new(Schema::new(s.right_fields.clone())),
+            predicate: s.predicate.as_ref().map(expr),
+            key_timestamp_precisions: s.key_timestamp_precisions.clone(),
+            memory_budget_bytes: s.memory_budget_bytes,
+        }),
+    }
+}
+
+fn shape(s: WindowShape) -> ops::WindowShape {
+    match s {
+        WindowShape::Tumble { size_ms } => ops::WindowShape::Tumble { size_ms },
+        WindowShape::Hop { size_ms, slide_ms } => ops::WindowShape::Hop { size_ms, slide_ms },
+        WindowShape::Cumulate {
+            max_size_ms,
+            step_ms,
+        } => ops::WindowShape::Cumulate {
+            max_size_ms,
+            step_ms,
+        },
     }
 }
 
